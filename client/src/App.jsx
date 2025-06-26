@@ -9,7 +9,7 @@ import Login from './auth/Login'
 import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import HomeLayout from './layouts/HomeLayout'
 import Signup from './auth/Signup'
-import DashboardLayout from './components/UserDashboard/DashboardLayout'
+import DashboardLayout from './components/UserDashboard/layout/DashboardLayout'
 
 const browserRouter = createBrowserRouter([
   {

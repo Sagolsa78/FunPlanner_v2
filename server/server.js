@@ -5,6 +5,7 @@ import passport from 'passport';
 import session from 'express-session'
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
+import eventRoutes from './routes/eventRoutes.js'
 import './config/passport.js'
 import cors from 'cors';
 
@@ -29,6 +30,7 @@ app.use(passport.session());
 
 app.use('/api',authRoutes);
 app.use('/api/auth',authRoutes);
+app.use('/api/events',eventRoutes);
 
 const PORT = process.env.PORT || 5000;
 

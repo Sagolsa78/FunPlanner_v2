@@ -21,6 +21,8 @@ const UserSchema = new mongoose.Schema({
   unique: true,
   sparse: true
 },
+ clients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Client' }],
+  events: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
 })
 
 UserSchema.pre('save',async function (next){

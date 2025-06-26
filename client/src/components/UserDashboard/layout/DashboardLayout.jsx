@@ -8,9 +8,9 @@ import {
   BarChart3,
   MoreHorizontal,
 } from "lucide-react"
-import Sidebar from "./Sidebar"
-import Topbar from "./Topbar"
-import Dashboard from "./Dashboard"
+import Sidebar from "../pages/Sidebar"
+import Topbar from "../pages/Topbar"
+import Dashboard from "../pages/Dashboard"
 
 const DashboardLayout = () => {
   const todoItems = [

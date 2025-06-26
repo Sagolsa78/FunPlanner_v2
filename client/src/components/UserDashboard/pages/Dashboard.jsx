@@ -1,6 +1,10 @@
 import { Calendar, CheckCircle, Clock, Users, ShoppingCart, Plus } from "lucide-react"
+import { useState } from "react"
+import CreateEvent from "../dashboard/CreateEvent";
 
 export default function Dashboard() {
+
+  const[isPopupOpen,setIsPopupOpen]=useState(false);
   const stats = [
     {
       title: "Upcoming",
@@ -74,7 +78,9 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold text-white">Event Dashboard</h1>
             <p className="text-slate-400 mt-1">Manage your upcoming events</p>
           </div>
-          <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded inline-flex items-center">
+          <button
+            onClick={()=>setIsPopupOpen(true)}
+          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded inline-flex items-center">
             <Plus className="w-4 h-4 mr-2" />
             Create New Event
           </button>
@@ -179,6 +185,8 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      <CreateEvent isOpen={isPopupOpen} onClose={() =>setIsPopupOpen(false)}/>
     </div>
+    
   )
 }
