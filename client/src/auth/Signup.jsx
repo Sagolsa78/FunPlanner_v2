@@ -38,7 +38,7 @@ const Signup = () => {
                 withCredentials: true
             })
             if (res.data.success) {
-                navigate('/')
+                navigate('/dashboard')
                 setFormData({
                     fullname: '',
                     username: '',

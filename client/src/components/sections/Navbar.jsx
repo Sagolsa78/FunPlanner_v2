@@ -321,12 +321,6 @@ const NavigationItem = ({ href, children, popupContent }) => {
           {/* Logo */}
           <div className="flex items-center mr-36">
             <a href="/" className="flex items-center space-x-2">
-              {/* <div className="w-6 h-6 bg-white rounded-sm flex items-center justify-center"> */}
-                {/* <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-black">
-                  <path d="M2 2L14 14M2 14L14 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg> */}
-                
-              {/* </div> */}
               <Slack className="w-8 h-8 text-white"/>
               <span className="text-white font-medium font-sans text-lg">Fun Planner</span>
             </a>

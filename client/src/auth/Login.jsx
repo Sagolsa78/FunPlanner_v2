@@ -31,7 +31,7 @@ const Login = () => {
 
         if (response.ok) {
             console.log('Login successful:', data);
-             navigate('/') 
+             navigate('/dashboard') 
         } else {
             console.error('Login failed:', data.message);
         }

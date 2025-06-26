@@ -9,16 +9,12 @@ import Login from './auth/Login'
 import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import HomeLayout from './layouts/HomeLayout'
 import Signup from './auth/Signup'
-import Dashboard from './components/UserDashboard/Dashboard'
+import DashboardLayout from './components/UserDashboard/DashboardLayout'
 
 const browserRouter = createBrowserRouter([
-  // {
-  //   path:'/',
-  //   element:<HomeLayout/>
-  // },
   {
     path:'/',
-    element:<Dashboard/>
+    element:<HomeLayout/>
   },
   {
     path:'/login',
@@ -27,7 +23,11 @@ const browserRouter = createBrowserRouter([
   {
     path:'/signup',
     element:<Signup/>
-  }
+  },
+   {
+    path:'/dashboard',
+    element:<DashboardLayout/>
+  },
 ])
 
 function App() {

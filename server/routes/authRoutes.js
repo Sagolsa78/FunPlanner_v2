@@ -13,7 +13,7 @@ router.get('/google',passport.authenticate('google',{
 
 router.get('/google/callback',
     passport.authenticate('google',{
-        successRedirect: 'http://localhost:5173/',
+        successRedirect: 'http://localhost:5173/dashboard',
         failureRedirect:'/login-failure'}),
 )
 
