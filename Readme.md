@@ -40,7 +40,7 @@ A modern event planning dashboard built with React, Tailwind CSS, and Framer Mot
 ---
 
 ## 🧩 Folder Structure
-
+```
 FunPlanner_v2/
 ├── src/
 │ ├── components/
@@ -56,7 +56,7 @@ FunPlanner_v2/
 ├── public/
 └── tailwind.config.js
 
-
+```
 
 
 
