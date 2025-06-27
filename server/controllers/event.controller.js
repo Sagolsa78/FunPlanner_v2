@@ -5,11 +5,15 @@ export const createEvent = async (req, res) => {
   try {
     const { name, eventType, date, format, sitting, venue } = req.body;
 
-    const userId = req.user?._id;
+   const userId = req.user?._id;
 
-    if (!userId) {
-      return res.status(401).json({ success: false, message: 'Unauthorized: No user ID found' });
-    }
+if (!userId) {
+  return res.status(401).json({
+    success: false,
+    msg: "Unauthorized : User Id not found."
+  });
+}
+
 
     const event = new Event({
       name,

@@ -10,6 +10,7 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import HomeLayout from './layouts/HomeLayout'
 import Signup from './auth/Signup'
 import DashboardLayout from './components/UserDashboard/layout/DashboardLayout'
+import ClientDashboard from './components/UserDashboard/dashboard/Client-dashboard'
 
 const browserRouter = createBrowserRouter([
   {
@@ -27,7 +28,10 @@ const browserRouter = createBrowserRouter([
    {
     path:'/dashboard',
     element:<DashboardLayout/>
-  },
+  },{
+    path:'/client-dashboard',
+    element:<ClientDashboard/>
+  }
 ])
 
 function App() {

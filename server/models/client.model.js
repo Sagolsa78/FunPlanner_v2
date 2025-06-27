@@ -9,4 +9,4 @@ const clientSchema = new mongoose.Schema({
   notes: String,
 });
 
-module.exports = mongoose.model('Client', clientSchema);
+export default mongoose.model('Client', clientSchema);

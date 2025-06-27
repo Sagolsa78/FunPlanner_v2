@@ -16,6 +16,7 @@ import {
   UserPlus,
   Github, Home, Calendar, Users, ClipboardList, ShoppingCart, DollarSign, Settings
 } from "lucide-react"
+import { Link } from "react-router-dom"
 
 const Sidebar = () => {
 
@@ -82,7 +83,7 @@ const Sidebar = () => {
     {
       label: "Clients",
       icon: Users,
-      href: "/clients",
+      href: "/client-dashboard",
       active: false,
     },
   ]
@@ -157,13 +158,14 @@ const Sidebar = () => {
             <ChevronDown className="w-3 h-3 text-gray-400" />
           </div>
           {tryItems.map((item, index) => (
-            <div
+            <Link
               key={index}
+              to={item.href}
               className="flex items-center space-x-3 px-3 py-2 rounded-md cursor-pointer hover:bg-gray-800"
             >
               <item.icon className="w-4 h-4 text-gray-400" />
               <span className="text-sm">{item.label}</span>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
