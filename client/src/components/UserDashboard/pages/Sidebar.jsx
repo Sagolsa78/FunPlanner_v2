@@ -76,7 +76,7 @@ const Sidebar = () => {
      {
       label: "Vendors",
       icon: ShoppingCart,
-      href: "/vendors",
+      href: "/vendor-dashboard",
       active: false,
     },
     

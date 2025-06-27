@@ -11,6 +11,8 @@ import HomeLayout from './layouts/HomeLayout'
 import Signup from './auth/Signup'
 import DashboardLayout from './components/UserDashboard/layout/DashboardLayout'
 import ClientDashboard from './components/UserDashboard/dashboard/Client-dashboard'
+import VendorsDashboard from './components/UserDashboard/dashboard/Vendor-dashboard'
+import ClientProfile from './components/UserDashboard/profiles/Client-profile'
 
 const browserRouter = createBrowserRouter([
   {
@@ -31,6 +33,14 @@ const browserRouter = createBrowserRouter([
   },{
     path:'/client-dashboard',
     element:<ClientDashboard/>
+  },
+  {
+    path:'/vendor-dashboard',
+    element:<VendorsDashboard/>
+  },
+  {
+    path:'/client-profile',
+    element:<ClientProfile/>
   }
 ])
 

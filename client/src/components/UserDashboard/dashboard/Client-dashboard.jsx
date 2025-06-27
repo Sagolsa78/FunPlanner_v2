@@ -1,604 +1,737 @@
 "use client"
 
-import { useState } from "react"
-import {
-    User,
-    Building2,
-    Phone,
-    Mail,
-    Calendar,
-    Eye,
-    Edit,
-    Copy,
-    MessageSquare,
-    DollarSign,
-    FileText,
-    Upload,
-    Download,
-    Plus,
-    UserCheck,
-    Send,
-    FileDown,
-    MoreHorizontal,
-    CheckCircle,
-    Clock,
-    AlertCircle,
-    Paperclip,
-    Tag,
-    Star,
-} from "lucide-react"
-// import { Button } from "@/components/ui/button"
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState, useMemo } from "react"
+import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+
+// Custom SVG Icons (since we can't use external libraries)
+const Icons = {
+  Search: () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+      />
+    </svg>
+  ),
+  Filter: () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z"
+      />
+    </svg>
+  ),
+  Plus: () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+    </svg>
+  ),
+  X: () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  ),
+  Mail: () => (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+      />
+    </svg>
+  ),
+  Phone: () => (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+      />
+    </svg>
+  ),
+  Calendar: () => (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"
+      />
+    </svg>
+  ),
+  Building: () => (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+      />
+    </svg>
+  ),
+  User: () => (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+      />
+    </svg>
+  ),
+  ChevronDown: () => (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+    </svg>
+  ),
+  Grid: () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+      />
+    </svg>
+  ),
+  List: () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+    </svg>
+  ),
+}
 
 export default function ClientDashboard() {
-    const [activeTab, setActiveTab] = useState("all")
-    const [activeLogTab, setActiveLogTab] = useState("all")
-    const [activeFileTab, setActiveFileTab] = useState("all")
+  const [searchTerm, setSearchTerm] = useState("")
+  const [statusFilter, setStatusFilter] = useState("all")
+  const [typeFilter, setTypeFilter] = useState("all")
+  const [viewMode, setViewMode] = useState("grid") // grid or table
+  const [showNewClientModal, setShowNewClientModal] = useState(false)
+  const [newClient, setNewClient] = useState({
+    name: "",
+    contactPerson: "",
+    email: "",
+    phone: "",
+    type: "individual",
+    communicationMethod: "email",
+    notes: "",
+  })
+  const navigate = useNavigate();
 
-    // Sample data
-    const clientData = {
-        name: "Sarah Johnson",
-        company: "TechCorp Solutions",
-        email: "sarah.johnson@techcorp.com",
-        phone: "+1 (555) 123-4567",
-        accountManager: "John Doe",
-        status: "active",
-        joinDate: "Jan 2023",
-        totalSpend: "$45,250",
-        outstandingAmount: "$2,500",
+  // Sample client data
+  const clients = [
+    {
+      id: 1,
+      name: "TechCorp Solutions",
+      contactPerson: "Sarah Johnson",
+      email: "sarah@techcorp.com",
+      phone: "+1 (555) 123-4567",
+      type: "corporate",
+      status: "active",
+      eventsCount: 12,
+      tags: ["VIP", "Corporate"],
+      avatar: null,
+      isNew: false,
+      joinDate: "2023-01-15",
+      lastEvent: "2024-02-20",
+    },
+    {
+      id: 2,
+      name: "Emily & David Wedding",
+      contactPerson: "Emily Chen",
+      email: "emily.chen@gmail.com",
+      phone: "+1 (555) 987-6543",
+      type: "individual",
+      status: "active",
+      eventsCount: 1,
+      tags: ["Wedding", "One-time"],
+      avatar: null,
+      isNew: true,
+      joinDate: "2024-02-01",
+      lastEvent: null,
+    },
+    {
+      id: 3,
+      name: "Green Earth Foundation",
+      contactPerson: "Michael Rodriguez",
+      email: "m.rodriguez@greenearth.org",
+      phone: "+1 (555) 456-7890",
+      type: "nonprofit",
+      status: "prospect",
+      eventsCount: 0,
+      tags: ["Nonprofit", "Environmental"],
+      avatar: null,
+      isNew: false,
+      joinDate: "2024-01-10",
+      lastEvent: null,
+    },
+    {
+      id: 4,
+      name: "Innovation Startup Hub",
+      contactPerson: "Alex Kim",
+      email: "alex@innovationhub.com",
+      phone: "+1 (555) 321-0987",
+      type: "corporate",
+      status: "active",
+      eventsCount: 8,
+      tags: ["Corporate", "Returning", "Tech"],
+      avatar: null,
+      isNew: false,
+      joinDate: "2023-06-20",
+      lastEvent: "2024-01-15",
+    },
+    {
+      id: 5,
+      name: "Local Community Center",
+      contactPerson: "Maria Santos",
+      email: "maria@communitycenter.org",
+      phone: "+1 (555) 654-3210",
+      type: "nonprofit",
+      status: "inactive",
+      eventsCount: 3,
+      tags: ["Community", "Local"],
+      avatar: null,
+      isNew: false,
+      joinDate: "2023-03-10",
+      lastEvent: "2023-12-05",
+    },
+  ]
+
+  // Filter clients based on search and filters
+  const filteredClients = useMemo(() => {
+    return clients.filter((client) => {
+      const matchesSearch =
+        client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        client.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        client.email.toLowerCase().includes(searchTerm.toLowerCase())
+
+      const matchesStatus = statusFilter === "all" || client.status === statusFilter
+      const matchesType = typeFilter === "all" || client.type === typeFilter
+
+      return matchesSearch && matchesStatus && matchesType
+    })
+  }, [searchTerm, statusFilter, typeFilter])
+
+  // Handle client click (simulate navigation)
+//   const handleClientClick = (clientId) => {
+//     // In a real app, you would use react-router-dom
+//     console.log('Navigating to /client-dashboard')
+//     // navigate(`/client-dashboard/${clientId}`)
+//   }
+
+  // Handle new client form submission
+  const handleNewClientSubmit = (e) => {
+    e.preventDefault()
+    console.log("New client:", newClient)
+    setShowNewClientModal(false)
+    setNewClient({
+      name: "",
+      contactPerson: "",
+      email: "",
+      phone: "",
+      type: "individual",
+      communicationMethod: "email",
+      notes: "",
+    })
+  }
+
+  // Get status color
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "active":
+        return "bg-green-100 text-green-800 border-green-200"
+      case "inactive":
+        return "bg-gray-100 text-gray-800 border-gray-200"
+      case "prospect":
+        return "bg-blue-100 text-blue-800 border-blue-200"
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200"
     }
+  }
 
-    const events = [
-        {
-            id: 1,
-            name: "Annual Tech Conference 2024",
-            date: "Mar 15, 2024",
-            status: "upcoming",
-            budget: "$15,000",
-            attendees: 250,
-        },
-        {
-            id: 2,
-            name: "Product Launch Event",
-            date: "Jan 20, 2024",
-            status: "completed",
-            budget: "$8,500",
-            attendees: 120,
-        },
-        {
-            id: 3,
-            name: "Team Building Retreat",
-            date: "Feb 10, 2024",
-            status: "ongoing",
-            budget: "$5,200",
-            attendees: 45,
-        },
-    ]
-
-    const preferences = {
-        eventStyles: ["Corporate", "Modern", "Tech-focused"],
-        preferredVenues: ["Convention Center", "Hotel Ballrooms", "Outdoor Spaces"],
-        dietaryNeeds: ["Vegetarian options", "Gluten-free", "Halal"],
-        specialRequirements: ["AV Equipment", "Live Streaming", "Photography"],
+  // Get tag color
+  const getTagColor = (tag) => {
+    const colors = {
+      VIP: "bg-purple-100 text-purple-800 border-purple-200",
+      Corporate: "bg-blue-100 text-blue-800 border-blue-200",
+      Wedding: "bg-pink-100 text-pink-800 border-pink-200",
+      "One-time": "bg-yellow-100 text-yellow-800 border-yellow-200",
+      Nonprofit: "bg-green-100 text-green-800 border-green-200",
+      Returning: "bg-indigo-100 text-indigo-800 border-indigo-200",
+      Tech: "bg-cyan-100 text-cyan-800 border-cyan-200",
+      Environmental: "bg-emerald-100 text-emerald-800 border-emerald-200",
+      Community: "bg-orange-100 text-orange-800 border-orange-200",
+      Local: "bg-teal-100 text-teal-800 border-teal-200",
     }
+    return colors[tag] || "bg-gray-100 text-gray-800 border-gray-200"
+  }
 
-    const communications = [
-        {
-            id: 1,
-            type: "email",
-            subject: "Event Planning Discussion",
-            date: "Feb 28, 2024",
-            from: "John Doe",
-            hasAttachment: true,
-        },
-        {
-            id: 2,
-            type: "meeting",
-            subject: "Venue Selection Meeting",
-            date: "Feb 25, 2024",
-            from: "Sarah Johnson",
-            hasAttachment: false,
-        },
-        {
-            id: 3,
-            type: "email",
-            subject: "Budget Approval",
-            date: "Feb 22, 2024",
-            from: "Sarah Johnson",
-            hasAttachment: true,
-        },
-    ]
+  // Generate avatar initials
+  const getInitials = (name) => {
+    return name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2)
+  }
 
-    const files = [
-        {
-            id: 1,
-            name: "Event_Contract_2024.pdf",
-            type: "contract",
-            size: "2.4 MB",
-            event: "Annual Tech Conference 2024",
-            uploadDate: "Feb 20, 2024",
-        },
-        {
-            id: 2,
-            name: "Venue_Photos.zip",
-            type: "media",
-            size: "15.2 MB",
-            event: "Product Launch Event",
-            uploadDate: "Jan 15, 2024",
-        },
-        {
-            id: 3,
-            name: "Budget_Breakdown.xlsx",
-            type: "financial",
-            size: "1.1 MB",
-            event: "Team Building Retreat",
-            uploadDate: "Feb 05, 2024",
-        },
-    ]
+  return (
+    <div className="min-h-screen bg-[#151d28]">
+      {/* Header */}
+      <div className="bg-[#1d293d] border-b text-white border-slate-600 px-6 py-4">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+          <div>
+            <h1 className="text-2xl font-semibold text-white">Client Dashboard</h1>
+            <p className="text-slate-200 mt-1">Manage your client relationships</p>
+          </div>
 
-    const getStatusColor = (status) => {
-        switch (status) {
-            case "active":
-                return "bg-green-500"
-            case "inactive":
-                return "bg-red-500"
-            case "upcoming":
-                return "bg-blue-500"
-            case "ongoing":
-                return "bg-yellow-500"
-            case "completed":
-                return "bg-green-500"
-            default:
-                return "bg-gray-500"
-        }
-    }
-
-    const getStatusIcon = (status) => {
-        switch (status) {
-            case "upcoming":
-                return <Clock className="w-4 h-4" />
-            case "ongoing":
-                return <AlertCircle className="w-4 h-4" />
-            case "completed":
-                return <CheckCircle className="w-4 h-4" />
-            default:
-                return <Clock className="w-4 h-4" />
-        }
-    }
-
-    return (
-        <div className="min-h-screen bg-slate-900 text-white p-6">
-            <div className="max-w-7xl mx-auto space-y-6">
-                {/* Header */}
-                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                    <div>
-                        <h1 className="text-3xl font-bold text-white">Client Dashboard</h1>
-                        <p className="text-slate-400 mt-1">Manage client information and events</p>
-                    </div>
-
-                    {/* Global Actions */}
-                    <div className="flex flex-wrap gap-3">
-                        <button className="bg-purple-600 hover:bg-purple-700">
-                            <Plus className="w-4 h-4 mr-2" />
-                            Create Event
-                        </button>
-                        <button variant="outline" className="border-slate-600 text-slate-300 hover:bg-slate-800 bg-transparent">
-                            <UserCheck className="w-4 h-4 mr-2" />
-                            Assign Manager
-                        </button>
-                        <button variant="outline" className="border-slate-600 text-slate-300 hover:bg-slate-800 bg-transparent">
-                            <Send className="w-4 h-4 mr-2" />
-                            Send Email
-                        </button>
-                        <button variant="outline" className="border-slate-600 text-slate-300 hover:bg-slate-800 bg-transparent">
-                            <FileDown className="w-4 h-4 mr-2" />
-                            Export Info
-                        </button>
-                    </div>
-                </div>
-
-                {/* Top Row - Client Overview and Financial Overview */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-                    {/* Client Overview */}
-                    <div className="lg:col-span-2 bg-slate-800 border border-slate-700 rounded-lg p-6">
-                        <div className="flex items-center space-x-2 mb-4">
-                            <User className="w-5 h-5 text-purple-400" />
-                            <h2 className="text-white text-lg font-semibold">Client Overview</h2>
-                        </div>
-                        <div className="flex items-start justify-between">
-                            <div className="space-y-3">
-                                <div>
-                                    <h3 className="text-xl font-semibold text-white">{clientData.name}</h3>
-                                    <div className="flex items-center space-x-2 mt-1">
-                                        <Building2 className="w-4 h-4 text-slate-400" />
-                                        <span className="text-slate-300">{clientData.company}</span>
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="flex items-center space-x-2">
-                                        <Mail className="w-4 h-4 text-slate-400" />
-                                        <span className="text-slate-300 text-sm">{clientData.email}</span>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <Phone className="w-4 h-4 text-slate-400" />
-                                        <span className="text-slate-300 text-sm">{clientData.phone}</span>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center space-x-4">
-                                    <div className="flex items-center space-x-2">
-                                        <span className="text-slate-400 text-sm">Account Manager:</span>
-                                        <span className="text-white text-sm font-medium">{clientData.accountManager}</span>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <span className="text-slate-400 text-sm">Client Since:</span>
-                                        <span className="text-white text-sm">{clientData.joinDate}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center space-x-2">
-                                <div className={`w-3 h-3 rounded-full ${getStatusColor(clientData.status)}`}></div>
-                                <span className="text-sm font-medium capitalize">{clientData.status}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Financial Overview */}
-                    <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
-                        <div className="flex items-center space-x-2 mb-4">
-                            <DollarSign className="w-5 h-5 text-green-400" />
-                            <h2 className="text-white text-lg font-semibold">Financial Overview</h2>
-                        </div>
-
-                        <div className="space-y-3">
-                            <div className="flex justify-between items-center">
-                                <span className="text-slate-400">Total Spend</span>
-                                <span className="text-xl font-bold text-green-400">{clientData.totalSpend}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-slate-400">Outstanding</span>
-                                <span className="text-lg font-semibold text-yellow-400">{clientData.outstandingAmount}</span>
-                            </div>
-                        </div>
-
-                        <div className="space-y-2 pt-4 border-t border-slate-700 mt-4">
-                            <button className="w-full flex items-center justify-center border border-slate-600 text-slate-300 hover:bg-slate-700 px-4 py-2 text-sm rounded">
-                                <Download className="w-4 h-4 mr-2" />
-                                Download Receipts
-                            </button>
-                            <button className="w-full flex items-center justify-center border border-slate-600 text-slate-300 hover:bg-slate-700 px-4 py-2 text-sm rounded">
-                                <FileText className="w-4 h-4 mr-2" />
-                                View Contracts
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-
-
-                {/* Associated Events List */}
-                <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
-                    <div className="flex justify-between items-center mb-4">
-                        <div className="flex items-center space-x-2">
-                            <Calendar className="w-5 h-5 text-blue-400" />
-                            <h2 className="text-white text-lg font-semibold">Associated Events</h2>
-                        </div>
-
-                        <div className="flex space-x-2">
-                            <button
-                                onClick={() => setActiveTab("all")}
-                                className={`px-3 py-1 text-sm rounded ${activeTab === "all"
-                                    ? "bg-purple-600 text-white"
-                                    : "text-slate-400 hover:text-white border border-transparent"
-                                    }`}
-                            >
-                                All
-                            </button>
-                            <button
-                                onClick={() => setActiveTab("upcoming")}
-                                className={`px-3 py-1 text-sm rounded ${activeTab === "upcoming"
-                                    ? "bg-purple-600 text-white"
-                                    : "text-slate-400 hover:text-white border border-transparent"
-                                    }`}
-                            >
-                                Upcoming
-                            </button>
-                            <button
-                                onClick={() => setActiveTab("completed")}
-                                className={`px-3 py-1 text-sm rounded ${activeTab === "completed"
-                                    ? "bg-purple-600 text-white"
-                                    : "text-slate-400 hover:text-white border border-transparent"
-                                    }`}
-                            >
-                                Completed
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        {events.map((event) => (
-                            <div key={event.id} className="flex items-center justify-between p-4 bg-slate-700 rounded-lg">
-                                <div className="flex items-center space-x-4">
-                                    <div className={`p-2 rounded-lg ${getStatusColor(event.status)}/20`}>
-                                        {getStatusIcon(event.status)}
-                                    </div>
-                                    <div>
-                                        <h4 className="font-semibold text-white">{event.name}</h4>
-                                        <div className="flex items-center space-x-4 mt-1">
-                                            <span className="text-slate-400 text-sm">{event.date}</span>
-                                            <span className="text-slate-400 text-sm">Budget: {event.budget}</span>
-                                            <span className="text-slate-400 text-sm">{event.attendees} attendees</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center space-x-2">
-                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(event.status)} text-white`}>
-                                        {event.status}
-                                    </span>
-                                    <button className="p-2 text-slate-400 hover:text-white">
-                                        <Eye className="w-4 h-4" />
-                                    </button>
-                                    <button className="p-2 text-slate-400 hover:text-white">
-                                        <Edit className="w-4 h-4" />
-                                    </button>
-                                    <button className="p-2 text-slate-400 hover:text-white">
-                                        <Copy className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-
-                {/* Middle Row - Preferences and Communication Log */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Client Preferences */}
-                    <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 space-y-4">
-                        <div className="flex items-center space-x-2 mb-2">
-                            <Star className="w-5 h-5 text-yellow-400" />
-                            <h2 className="text-white text-lg font-semibold">Client Preferences</h2>
-                        </div>
-
-                        <div>
-                            <h4 className="font-medium text-white mb-2">Event Styles</h4>
-                            <div className="flex flex-wrap gap-2">
-                                {preferences.eventStyles.map((style, index) => (
-                                    <span key={index} className="px-2 py-1 bg-purple-600/20 text-purple-300 rounded-full text-sm">
-                                        {style}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 className="font-medium text-white mb-2">Preferred Venues</h4>
-                            <div className="flex flex-wrap gap-2">
-                                {preferences.preferredVenues.map((venue, index) => (
-                                    <span key={index} className="px-2 py-1 bg-blue-600/20 text-blue-300 rounded-full text-sm">
-                                        {venue}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 className="font-medium text-white mb-2">Dietary Requirements</h4>
-                            <div className="flex flex-wrap gap-2">
-                                {preferences.dietaryNeeds.map((need, index) => (
-                                    <span key={index} className="px-2 py-1 bg-green-600/20 text-green-300 rounded-full text-sm">
-                                        {need}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 className="font-medium text-white mb-2">Special Requirements</h4>
-                            <div className="flex flex-wrap gap-2">
-                                {preferences.specialRequirements.map((req, index) => (
-                                    <span key={index} className="px-2 py-1 bg-orange-600/20 text-orange-300 rounded-full text-sm">
-                                        {req}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Communication Log */}
-                    <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 space-y-4">
-                        <div className="flex justify-between items-center mb-2">
-                            <div className="flex items-center space-x-2">
-                                <MessageSquare className="w-5 h-5 text-green-400" />
-                                <h2 className="text-white text-lg font-semibold">Communication Log</h2>
-                            </div>
-
-                            <div className="flex space-x-2">
-                                <button
-                                    onClick={() => setActiveLogTab("all")}
-                                    className={`px-3 py-1 text-sm rounded ${activeLogTab === "all"
-                                        ? "bg-purple-600 text-white"
-                                        : "text-slate-400 hover:text-white"
-                                        }`}
-                                >
-                                    All
-                                </button>
-                                <button
-                                    onClick={() => setActiveLogTab("emails")}
-                                    className={`px-3 py-1 text-sm rounded ${activeLogTab === "emails"
-                                        ? "bg-purple-600 text-white"
-                                        : "text-slate-400 hover:text-white"
-                                        }`}
-                                >
-                                    Emails
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="space-y-3">
-                            {communications.map((comm) => (
-                                <div key={comm.id} className="flex items-center justify-between p-3 bg-slate-700 rounded-lg">
-                                    <div className="flex items-center space-x-3">
-                                        <div className={`p-2 rounded-lg ${comm.type === "email" ? "bg-blue-600/20" : "bg-green-600/20"}`}>
-                                            {comm.type === "email" ? (
-                                                <Mail className="w-4 h-4 text-blue-400" />
-                                            ) : (
-                                                <MessageSquare className="w-4 h-4 text-green-400" />
-                                            )}
-                                        </div>
-                                        <div>
-                                            <h5 className="font-medium text-white text-sm">{comm.subject}</h5>
-                                            <div className="flex items-center space-x-2 mt-1">
-                                                <span className="text-slate-400 text-xs">{comm.from}</span>
-                                                <span className="text-slate-500 text-xs">•</span>
-                                                <span className="text-slate-400 text-xs">{comm.date}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-center space-x-2">
-                                        {comm.hasAttachment && <Paperclip className="w-4 h-4 text-slate-400" />}
-                                        <button className="p-2 text-slate-400 hover:text-white">
-                                            <Eye className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-
-                {/* Bottom Row - File Manager and Internal Notes */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* File Manager */}
-                    <div className="lg:col-span-2 bg-slate-800 border border-slate-700 rounded-lg p-6 space-y-4">
-                        <div className="flex justify-between items-center mb-2">
-                            <div className="flex items-center space-x-2">
-                                <FileText className="w-5 h-5 text-orange-400" />
-                                <h2 className="text-white text-lg font-semibold">File Manager</h2>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <button className="flex items-center px-3 py-1 border border-slate-600 text-slate-300 hover:bg-slate-700 text-sm rounded">
-                                    <Upload className="w-4 h-4 mr-2" />
-                                    Upload
-                                </button>
-                                <div className="flex space-x-1">
-                                    <button
-                                        onClick={() => setActiveFileTab("all")}
-                                        className={`px-3 py-1 text-sm rounded ${activeFileTab === "all"
-                                                ? "bg-purple-600 text-white"
-                                                : "text-slate-400 hover:text-white"
-                                            }`}
-                                    >
-                                        All
-                                    </button>
-                                    <button
-                                        onClick={() => setActiveFileTab("contracts")}
-                                        className={`px-3 py-1 text-sm rounded ${activeFileTab === "contracts"
-                                                ? "bg-purple-600 text-white"
-                                                : "text-slate-400 hover:text-white"
-                                            }`}
-                                    >
-                                        Contracts
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-3">
-                            {files.map((file) => (
-                                <div key={file.id} className="flex items-center justify-between p-3 bg-slate-700 rounded-lg">
-                                    <div className="flex items-center space-x-3">
-                                        <div className="p-2 bg-blue-600/20 rounded-lg">
-                                            <FileText className="w-4 h-4 text-blue-400" />
-                                        </div>
-                                        <div>
-                                            <h5 className="font-medium text-white text-sm">{file.name}</h5>
-                                            <div className="flex items-center space-x-2 mt-1 text-xs text-slate-400">
-                                                <span>{file.event}</span>
-                                                <span className="text-slate-500">•</span>
-                                                <span>{file.size}</span>
-                                                <span className="text-slate-500">•</span>
-                                                <span>{file.uploadDate}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-center space-x-2">
-                                        <span
-                                            className={`px-2 py-1 rounded-full text-xs ${file.type === "contract"
-                                                    ? "bg-purple-600/20 text-purple-300"
-                                                    : file.type === "media"
-                                                        ? "bg-green-600/20 text-green-300"
-                                                        : "bg-blue-600/20 text-blue-300"
-                                                }`}
-                                        >
-                                            {file.type}
-                                        </span>
-                                        <button className="p-2 text-slate-400 hover:text-white">
-                                            <Download className="w-4 h-4" />
-                                        </button>
-                                        <button className="p-2 text-slate-400 hover:text-white">
-                                            <MoreHorizontal className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Internal Notes */}
-                    <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 space-y-4">
-                        <div className="flex items-center space-x-2 mb-2">
-                            <Tag className="w-5 h-5 text-red-400" />
-                            <h2 className="text-white text-lg font-semibold">Internal Notes</h2>
-                        </div>
-
-                        <div className="space-y-3">
-                            <div className="p-3 bg-slate-700 rounded-lg">
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-xs text-slate-400">Feb 28, 2024</span>
-                                    <span className="px-2 py-1 bg-yellow-600/20 text-yellow-300 rounded-full text-xs">Priority</span>
-                                </div>
-                                <p className="text-sm text-slate-300">
-                                    Client prefers morning events. Always confirm AV requirements 48hrs before.
-                                </p>
-                            </div>
-
-                            <div className="p-3 bg-slate-700 rounded-lg">
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-xs text-slate-400">Feb 20, 2024</span>
-                                    <span className="px-2 py-1 bg-blue-600/20 text-blue-300 rounded-full text-xs">Info</span>
-                                </div>
-                                <p className="text-sm text-slate-300">
-                                    Excellent communication. Quick to approve budgets and changes.
-                                </p>
-                            </div>
-
-                            <div className="p-3 bg-slate-700 rounded-lg">
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-xs text-slate-400">Jan 15, 2024</span>
-                                    <span className="px-2 py-1 bg-green-600/20 text-green-300 rounded-full text-xs">Success</span>
-                                </div>
-                                <p className="text-sm text-slate-300">
-                                    Previous event exceeded expectations. Client very satisfied with results.
-                                </p>
-                            </div>
-                        </div>
-
-                        <button className="w-full flex items-center justify-center px-3 py-2 border border-slate-600 text-slate-300 hover:bg-slate-700 text-sm rounded">
-                            <Plus className="w-4 h-4 mr-2" />
-                            Add Note
-                        </button>
-                    </div>
-                </div>
-
-            </div>
+          <button
+            onClick={() => setShowNewClientModal(true)}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-sm"
+          >
+            <Icons.Plus />
+            <span>New Client</span>
+          </button>
         </div>
-    )
+      </div>
+
+      <div className="p-6">
+        {/* Search and Filters */}
+        <div className="bg-[#1d293d] rounded-lg border text-white border-slate-600 p-6 mb-6 shadow-sm">
+          <div className="flex flex-col lg:flex-row gap-4">
+            {/* Search */}
+            <div className="flex-1">
+              <div className="relative">
+                <Icons.Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search clients..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* Filters */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              {/* Status Filter */}
+              <div className="relative">
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="appearance-none bg-[#1d293d] border text-white border-slate-600 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                >
+                  <option value="all">All Status</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="prospect">Prospect</option>
+                </select>
+                <Icons.ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-400 pointer-events-none" />
+              </div>
+
+              {/* Type Filter */}
+              <div className="relative">
+                <select
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                  className="appearance-none bg-[#1d293d] text-white border border-slate-600 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                >
+                  <option value="all">All Types</option>
+                  <option value="corporate">Corporate</option>
+                  <option value="individual">Individual</option>
+                  <option value="nonprofit">Nonprofit</option>
+                </select>
+                <Icons.ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-400 pointer-events-none" />
+              </div>
+
+              {/* View Mode Toggle */}
+              <div className="flex border border-slate-600 rounded-lg overflow-hidden">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2 ${viewMode === "grid" ? "bg-slate-700 text-white" : "bg-[#1d293d] text-slate-100 hover:bg-slate-400"} transition-colors`}
+                >
+                  <Icons.Grid />
+                </button>
+                <button
+                  onClick={() => setViewMode("table")}
+                  className={`p-2 ${viewMode === "table" ? "bg-slate-700 text-white" : "bg-[#1d293d] text-slate-100 hover:bg-slate-400"} transition-colors`}
+                >
+                  <Icons.List />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Results Count */}
+        <div className="mb-4">
+          <p className="text-white">
+            Showing {filteredClients.length} of {clients.length} clients
+          </p>
+        </div>
+
+        {/* Client List */}
+        {viewMode === "grid" ? (
+          // Grid View
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredClients.map((client) => (
+              <Link
+                key={client.id}
+                to={'/client-profile'}
+                className="bg-[#1d293d] text-white rounded-lg border border-slate-600 p-6 hover:shadow-lg hover:border-purple-300 transition-all cursor-pointer group"
+              >
+                {/* Header */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    {/* Avatar */}
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                      {getInitials(client.name)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-white truncate group-hover:text-slate-300 transition-colors">
+                        {client.name}
+                      </h3>
+                      <p className="text-sm text-slate-400 truncate">{client.contactPerson}</p>
+                    </div>
+                  </div>
+                  {client.isNew && (
+                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full border border-green-200">
+                      New
+                    </span>
+                  )}
+                </div>
+
+                {/* Contact Info */}
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center space-x-2 text-sm text-slate-100">
+                    <Icons.Mail />
+                    <span className="truncate">{client.email}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm text-slate-100">
+                    <Icons.Phone />
+                    <span>{client.phone}</span>
+                  </div>
+                </div>
+
+                {/* Stats */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2 text-sm text-slate-100">
+                    <Icons.Calendar />
+                    <span>{client.eventsCount} events</span>
+                  </div>
+                  <span
+                    className={`text-xs font-medium px-2 py-1 rounded-full border ${getStatusColor(client.status)}`}
+                  >
+                    {client.status}
+                  </span>
+                </div>
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1">
+                  {client.tags.slice(0, 2).map((tag, index) => (
+                    <span
+                      key={index}
+                      className={`text-xs font-medium px-2 py-1 rounded-full border ${getTagColor(tag)}`}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                  {client.tags.length > 2 && (
+                    <span className="text-xs font-medium px-2 py-1 rounded-full border bg-[#101012] text-slate-100 border-gray-200">
+                      +{client.tags.length - 2}
+                    </span>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          // Table View
+          <div className="bg-[#1d293d] rounded-lg border border-slate-200 overflow-hidden shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-[#1d293d] border-b border-slate-200">
+                  <tr>
+                    <th className="text-left py-3 px-6 text-slate-200 font-medium">Client</th>
+                    <th className="text-left py-3 px-6 text-slate-200 font-medium">Contact</th>
+                    <th className="text-left py-3 px-6 text-slate-200 font-medium">Type</th>
+                    <th className="text-left py-3 px-6 text-slate-200 font-medium">Events</th>
+                    <th className="text-left py-3 px-6 text-slate-200 font-medium">Status</th>
+                    <th className="text-left py-3 px-6 text-slate-200 font-medium">Tags</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredClients.map((client) => (
+                    <tr
+                      key={client.id}
+                      onClick={()=>{navigate('/client-profile')}}
+                      className="border-b border-slate-200 hover:bg-slate-900 cursor-pointer transition-colors"
+                    >
+                      <td className="py-4 px-6">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                            {getInitials(client.name)}
+                          </div>
+                          <div>
+                            <p className="font-medium text-slate-300">{client.name}</p>
+                            <p className="text-sm text-slate-100">{client.contactPerson}</p>
+                          </div>
+                          {client.isNew && (
+                            <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full border border-green-200">
+                              New
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="space-y-1">
+                          <div className="flex items-center space-x-2 text-sm text-slate-100">
+                            <Icons.Mail className="w-3 h-3" />
+                            <span>{client.email}</span>
+                          </div>
+                          <div className="flex items-center space-x-2 text-sm text-slate-100">
+                            <Icons.Phone className="w-3 h-3" />
+                            <span>{client.phone}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="flex items-center space-x-2">
+                          {client.type === "corporate" ? (
+                            <Icons.Building className="text-slate-100" />
+                          ) : (
+                            <Icons.User className="text-slate-100" />
+                          )}
+                          <span className="text-slate-100 capitalize">{client.type}</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <span className="text-slate-100">{client.eventsCount}</span>
+                      </td>
+                      <td className="py-4 px-6">
+                        <span
+                          className={`text-xs font-medium px-2 py-1 rounded-full border ${getStatusColor(client.status)}`}
+                        >
+                          {client.status}
+                        </span>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="flex flex-wrap gap-1">
+                          {client.tags.slice(0, 2).map((tag, index) => (
+                            <span
+                              key={index}
+                              className={`text-xs font-medium px-2 py-1 rounded-full border ${getTagColor(tag)}`}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                          {client.tags.length > 2 && (
+                            <span className="text-xs font-medium px-2 py-1 rounded-full border bg-gray-100 text-gray-600 border-gray-200">
+                              +{client.tags.length - 2}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {filteredClients.length === 0 && (
+          <div className="bg-[#1d293d] rounded-lg border border-slate-200 p-12 text-center">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Icons.User className="w-8 h-8 text-slate-400" />
+            </div>
+            <h3 className="text-lg font-medium text-slate-900 mb-2">No clients found</h3>
+            <p className="text-slate-600 mb-4">Try adjusting your search or filter criteria.</p>
+            <button
+              onClick={() => {
+                setSearchTerm("")
+                setStatusFilter("all")
+                setTypeFilter("all")
+              }}
+              className="text-purple-600 hover:text-purple-700 font-medium"
+            >
+              Clear filters
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* New Client Modal */}
+      {showNewClientModal && (
+        <div className="fixed inset-0 bg-[#1d293d] bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-slate-200">
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl font-semibold text-slate-900">Add New Client</h2>
+                <button
+                  onClick={() => setShowNewClientModal(false)}
+                  className="text-slate-400 hover:text-slate-600 transition-colors"
+                >
+                  <Icons.X />
+                </button>
+              </div>
+            </div>
+
+            <form onSubmit={handleNewClientSubmit} className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Client Name */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Client Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={newClient.name}
+                    onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    placeholder="Company name or individual name"
+                  />
+                </div>
+
+                {/* Contact Person */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Contact Person</label>
+                  <input
+                    type="text"
+                    value={newClient.contactPerson}
+                    onChange={(e) => setNewClient({ ...newClient, contactPerson: e.target.value })}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    placeholder="Primary contact name"
+                  />
+                </div>
+
+                {/* Client Type */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Client Type <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    required
+                    value={newClient.type}
+                    onChange={(e) => setNewClient({ ...newClient, type: e.target.value })}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  >
+                    <option value="individual">Individual</option>
+                    <option value="corporate">Corporate</option>
+                    <option value="nonprofit">Nonprofit</option>
+                  </select>
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Email <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={newClient.email}
+                    onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    placeholder="client@example.com"
+                  />
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Phone</label>
+                  <input
+                    type="tel"
+                    value={newClient.phone}
+                    onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    placeholder="+1 (555) 123-4567"
+                  />
+                </div>
+
+                {/* Communication Method */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Preferred Communication Method
+                  </label>
+                  <div className="flex space-x-4">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="email"
+                        checked={newClient.communicationMethod === "email"}
+                        onChange={(e) => setNewClient({ ...newClient, communicationMethod: e.target.value })}
+                        className="mr-2 text-purple-600 focus:ring-purple-500"
+                      />
+                      Email
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="phone"
+                        checked={newClient.communicationMethod === "phone"}
+                        onChange={(e) => setNewClient({ ...newClient, communicationMethod: e.target.value })}
+                        className="mr-2 text-purple-600 focus:ring-purple-500"
+                      />
+                      Phone
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="both"
+                        checked={newClient.communicationMethod === "both"}
+                        onChange={(e) => setNewClient({ ...newClient, communicationMethod: e.target.value })}
+                        className="mr-2 text-purple-600 focus:ring-purple-500"
+                      />
+                      Both
+                    </label>
+                  </div>
+                </div>
+
+                {/* Notes */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Internal Notes</label>
+                  <textarea
+                    value={newClient.notes}
+                    onChange={(e) => setNewClient({ ...newClient, notes: e.target.value })}
+                    rows="3"
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                    placeholder="Internal comments or special requirements..."
+                  />
+                </div>
+              </div>
+
+              {/* Form Actions */}
+              <div className="flex justify-end space-x-4 mt-6 pt-6 border-t border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setShowNewClientModal(false)}
+                  className="px-4 py-2 text-slate-600 hover:text-slate-800 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition-colors shadow-sm"
+                >
+                  Add Client
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
