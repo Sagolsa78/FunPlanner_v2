@@ -183,22 +183,23 @@ const HeroSection = () => {
           </svg>
         </div>
       </div>
+      
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center min-h-screen text-center">
-          <div className="max-w-4xl mx-auto mb-8">
-            <h1 className="text-4xl md:text-7xl lg:text-5xl text-white mb-4 leading-tight">
+          <div className="max-w-4xl mx-auto mt-20 p-8 mb-8">
+            <h1 className="text-7xl md:text-7xl lg:text-7xl  text-white mb-4 leading-tight">
               Plan Unforgettable
               <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
                 Events with Ease.
               </span>
             </h1>
-            <p className="text-xl md:text-xl text-gray-300 mb-0.5 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-3xl md:text-xl text-gray-300 mb-0.5 max-w-3xl mx-auto leading-relaxed">
               Meet the new standard for modern software development. Streamline issues, sprints, and product roadmaps.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <button className="bg-white text-black px-6 py-3 rounded-md font-medium text-lg hover:bg-gray-100 transition-all duration-200 transform hover:scale-105">
               Get started
             </button>
@@ -212,7 +213,7 @@ const HeroSection = () => {
           </div>
 
           <div className="mb-16">
-            <h4 className="text-xl md:text-xl lg:text-2xl text-white mt-8 mb-8 leading-tight">
+            <h4 className="text-xl md:text-xl lg:text-5xl font-serif text-white mt-20 mb-8 leading-tight">
               Powering event management businesses.
               <span className="block text-gray-400 text-2xl">
                 From local gatherings to global conferences.

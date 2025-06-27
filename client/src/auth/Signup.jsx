@@ -62,7 +62,9 @@ const Signup = () => {
                 <div className="flex items-center space-x-2">
                     <div className="flex items-center px-20 space-x-2">
                         <Slack className="w-8 h-8 text-white" />
-                        <span className="text-white font-medium font-sans text-lg">Fun Planner</span>
+                        <a href="/" className="hover:cursor-pointer">
+                            <span className="text-white font-medium font-sans text-lg">Fun Planner</span>
+                        </a>
                     </div>
                 </div>
                 <div className="flex items-center space-x-3">
@@ -280,7 +282,7 @@ const Signup = () => {
                                     className="mt-1 w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                                 />
                                 <label htmlFor="agreeToTerms" className="text-sm text-gray-600 leading-relaxed">
-                                    I have read and agree to PixelBin's{" "}
+                                    I have read and agree to Fun Planner{" "}
                                     <a href="#" className="text-purple-600 hover:text-purple-700 underline">
                                         Privacy Policy
                                     </a>{" "}

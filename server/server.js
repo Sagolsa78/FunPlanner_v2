@@ -1,11 +1,11 @@
 import express,{json} from 'express';
 import {config} from 'dotenv';
 import cookieParser from 'cookie-parser';
-import passport from 'passport';
+// import passport from 'passport';
 import session from 'express-session'
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
-import './config/passport.js'
+// import './config/passport.js'
 import cors from 'cors';
 
 
@@ -24,8 +24,8 @@ app.use(session({
 }))
 connectDB();
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 app.use('/api',authRoutes);
 app.use('/api/auth',authRoutes);

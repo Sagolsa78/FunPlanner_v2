@@ -4,6 +4,17 @@ A modern event planning dashboard built with React, Tailwind CSS, and Framer Mot
 
 ---
 
+
+## 🌐 Live Demo
+
+[Live Link](https://funplanner-v.onrender.com/)
+
+
+
+![Website-Preview](FunPlanner_v3/client/public/image.png)
+
+---
+
 ## 🚀 Features
 
 - **Interactive Hero Section**  
