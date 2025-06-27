@@ -28,27 +28,42 @@ import {
     Star,
 } from "lucide-react"
 import CreateEvent from "../dashboard/CreateEvent";
-// import { Button } from "@/components/ui/button"
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useEffect } from "react";
+import axios from 'axios'
+import { useParams } from "react-router-dom";
 
 export default function ClientDashboard() {
      const[isPopupOpen,setIsPopupOpen]=useState(false);
     const [activeTab, setActiveTab] = useState("all")
     const [activeLogTab, setActiveLogTab] = useState("all")
     const [activeFileTab, setActiveFileTab] = useState("all")
+    const {id} = useParams();
+    const [client,setClient] = useState([])
+    const [loading, setLoading] = useState(true);
 
-    // Sample data
-    const clientData = {
-        name: "Sarah Johnson",
-        company: "TechCorp Solutions",
-        email: "sarah.johnson@techcorp.com",
-        phone: "+1 (555) 123-4567",
-        accountManager: "John Doe",
-        status: "active",
-        joinDate: "Jan 2023",
-        totalSpend: "$45,250",
-        outstandingAmount: "$2,500",
+   useEffect(() => {
+  const fetchClient = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return console.error("No token found");
+
+    try {
+      const res = await axios.get(`http://localhost:5000/api/clients/client-stats/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setClient(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.error("Failed to load clients", err);
+      setLoading(false);
     }
+  };
+
+  fetchClient();
+}, []);
+
+    
 
     const events = [
         {
@@ -168,7 +183,9 @@ export default function ClientDashboard() {
         }
     }
 
-    return (
+    if(client){
+        console.log(client.name)
+        return (
         <div className="min-h-screen bg-[#161b22] text-white p-6">
             <div className="max-w-7xl mx-auto space-y-6">
                 {/* Header */}
@@ -213,39 +230,39 @@ export default function ClientDashboard() {
                         <div className="flex items-start justify-between">
                             <div className="space-y-3">
                                 <div>
-                                    <h3 className="text-xl font-semibold text-white">{clientData.name}</h3>
+                                    <h3 className="text-xl font-semibold text-white">{client.name}</h3>
                                     <div className="flex items-center space-x-2 mt-1">
                                         <Building2 className="w-4 h-4 text-slate-400" />
-                                        <span className="text-slate-300">{clientData.company}</span>
+                                        <span className="text-slate-300">{client.company}</span>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="flex items-center space-x-2">
                                         <Mail className="w-4 h-4 text-slate-400" />
-                                        <span className="text-slate-300 text-sm">{clientData.email}</span>
+                                        <span className="text-slate-300 text-sm">{client.email}</span>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <Phone className="w-4 h-4 text-slate-400" />
-                                        <span className="text-slate-300 text-sm">{clientData.phone}</span>
+                                        <span className="text-slate-300 text-sm">{client.phone}</span>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center space-x-4">
                                     <div className="flex items-center space-x-2">
                                         <span className="text-slate-400 text-sm">Account Manager:</span>
-                                        <span className="text-white text-sm font-medium">{clientData.accountManager}</span>
+                                        <span className="text-white text-sm font-medium">{client.accountManager}</span>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <span className="text-slate-400 text-sm">Client Since:</span>
-                                        <span className="text-white text-sm">{clientData.joinDate}</span>
+                                        <span className="text-white text-sm">{client.joinDate}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="flex items-center space-x-2">
-                                <div className={`w-3 h-3 rounded-full ${getStatusColor(clientData.status)}`}></div>
-                                <span className="text-sm font-medium capitalize">{clientData.status}</span>
+                                <div className={`w-3 h-3 rounded-full ${getStatusColor(client.status)}`}></div>
+                                <span className="text-sm font-medium capitalize">{client.status}</span>
                             </div>
                         </div>
                     </div>
@@ -260,11 +277,11 @@ export default function ClientDashboard() {
                         <div className="space-y-3">
                             <div className="flex justify-between items-center">
                                 <span className="text-slate-400">Total Spend</span>
-                                <span className="text-xl font-bold text-green-400">{clientData.totalSpend}</span>
+                                <span className="text-xl font-bold text-green-400">{client.totalSpend}</span>
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-slate-400">Outstanding</span>
-                                <span className="text-lg font-semibold text-yellow-400">{clientData.outstandingAmount}</span>
+                                <span className="text-lg font-semibold text-yellow-400">{client.outstandingAmount}</span>
                             </div>
                         </div>
 
@@ -606,4 +623,5 @@ export default function ClientDashboard() {
              <CreateEvent isOpen={isPopupOpen} onClose={() =>setIsPopupOpen(false)}/>
         </div>
     )
+    }
 }

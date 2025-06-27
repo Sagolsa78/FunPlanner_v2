@@ -1,4 +1,4 @@
-import User from '../models/tempUser.js';
+import User from '../models/user.model.js';
 import { compare } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -94,6 +94,7 @@ export const login = async (req, res) => {
             msg: 'Login successfully',
             success: true,
             accesstoken
+            
         })
 
     } catch (error) {

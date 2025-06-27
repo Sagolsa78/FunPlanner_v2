@@ -39,7 +39,7 @@ const browserRouter = createBrowserRouter([
     element:<VendorsDashboard/>
   },
   {
-    path:'/client-profile',
+    path:'/client-profile/:id',
     element:<ClientProfile/>
   }
 ])

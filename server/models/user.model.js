@@ -2,25 +2,10 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
 const UserSchema = new mongoose.Schema({
-    email:{
-        type:String,
-        required:true,
-        unique:true
-    },
-   fullname: {
-    type: String,
-  },
-    password:{
-        type:String,
-        required: function () {
-            return !this.googleId;
-        },
-    },
-    googleId: {
-  type: String,
-  unique: true,
-  sparse: true
-},
+    email:{ type:String, required:true, unique:true },
+   fullname: { type: String,},
+    password:{   type:String,   required: function () {return !this.googleId; },},
+    googleId: { type: String, unique: true, sparse: true},
  clients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Client' }],
   events: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
 })

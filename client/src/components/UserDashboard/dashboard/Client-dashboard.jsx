@@ -1,8 +1,10 @@
 "use client"
 
+import { useEffect } from "react"
 import { useState, useMemo } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import axios from 'axios'
 
 // Custom SVG Icons (since we can't use external libraries)
 const Icons = {
@@ -113,6 +115,7 @@ export default function ClientDashboard() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [typeFilter, setTypeFilter] = useState("all")
   const [viewMode, setViewMode] = useState("grid") // grid or table
+  const[loading,setLoading]=useState(true)
   const [showNewClientModal, setShowNewClientModal] = useState(false)
   const [newClient, setNewClient] = useState({
     name: "",
@@ -123,86 +126,31 @@ export default function ClientDashboard() {
     communicationMethod: "email",
     notes: "",
   })
+  const [clients, setClients] = useState([]);
   const navigate = useNavigate();
+  
+ useEffect(() => {
+  const fetchClients = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return console.error('No token found');
+    try {
+      const response = await axios.get("http://localhost:5000/api/clients/clients-with-stats", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  // Sample client data
-  const clients = [
-    {
-      id: 1,
-      name: "TechCorp Solutions",
-      contactPerson: "Sarah Johnson",
-      email: "sarah@techcorp.com",
-      phone: "+1 (555) 123-4567",
-      type: "corporate",
-      status: "active",
-      eventsCount: 12,
-      tags: ["VIP", "Corporate"],
-      avatar: null,
-      isNew: false,
-      joinDate: "2023-01-15",
-      lastEvent: "2024-02-20",
-    },
-    {
-      id: 2,
-      name: "Emily & David Wedding",
-      contactPerson: "Emily Chen",
-      email: "emily.chen@gmail.com",
-      phone: "+1 (555) 987-6543",
-      type: "individual",
-      status: "active",
-      eventsCount: 1,
-      tags: ["Wedding", "One-time"],
-      avatar: null,
-      isNew: true,
-      joinDate: "2024-02-01",
-      lastEvent: null,
-    },
-    {
-      id: 3,
-      name: "Green Earth Foundation",
-      contactPerson: "Michael Rodriguez",
-      email: "m.rodriguez@greenearth.org",
-      phone: "+1 (555) 456-7890",
-      type: "nonprofit",
-      status: "prospect",
-      eventsCount: 0,
-      tags: ["Nonprofit", "Environmental"],
-      avatar: null,
-      isNew: false,
-      joinDate: "2024-01-10",
-      lastEvent: null,
-    },
-    {
-      id: 4,
-      name: "Innovation Startup Hub",
-      contactPerson: "Alex Kim",
-      email: "alex@innovationhub.com",
-      phone: "+1 (555) 321-0987",
-      type: "corporate",
-      status: "active",
-      eventsCount: 8,
-      tags: ["Corporate", "Returning", "Tech"],
-      avatar: null,
-      isNew: false,
-      joinDate: "2023-06-20",
-      lastEvent: "2024-01-15",
-    },
-    {
-      id: 5,
-      name: "Local Community Center",
-      contactPerson: "Maria Santos",
-      email: "maria@communitycenter.org",
-      phone: "+1 (555) 654-3210",
-      type: "nonprofit",
-      status: "inactive",
-      eventsCount: 3,
-      tags: ["Community", "Local"],
-      avatar: null,
-      isNew: false,
-      joinDate: "2023-03-10",
-      lastEvent: "2023-12-05",
-    },
-  ]
+      setClients(response.data ||[]);
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to load clients", error);
+      setLoading(false);
+    }
+  };
+
+  fetchClients();
+}, []);
+  
 
   // Filter clients based on search and filters
   const filteredClients = useMemo(() => {
@@ -386,7 +334,7 @@ export default function ClientDashboard() {
             {filteredClients.map((client) => (
               <Link
                 key={client.id}
-                to={'/client-profile'}
+                to={`/client-profile/${client.id}`}
                 className="bg-[#1d293d] text-white rounded-lg border border-slate-600 p-6 hover:shadow-lg hover:border-purple-300 transition-all cursor-pointer group"
               >
                 {/* Header */}

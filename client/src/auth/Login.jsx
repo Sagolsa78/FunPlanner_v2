@@ -31,6 +31,7 @@ const Login = () => {
 
         if (response.ok) {
             console.log('Login successful:', data);
+            localStorage.setItem("token", data.accesstoken);
              navigate('/dashboard') 
         } else {
             console.error('Login failed:', data.message);
