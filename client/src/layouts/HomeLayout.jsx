@@ -21,15 +21,18 @@ import React from "react"
 import { Button } from "../components/ui/button2"
 import { Card, CardContent } from "../components/ui/card"
 import { Badge } from "../components/ui/badge"
+import { motion } from "framer-motion";
 
 
-import { Sparkles, MapPin, Calendar, Users, Star, ArrowRight, PartyPopper, Clock, CheckCircle, Github, Twitter, Linkedin, Mail, Slack } from 'lucide-react'
+import { Sparkles, MapPin, Calendar, Users, Star, ArrowRight, PartyPopper, Clock, CheckCircle, Github, Twitter, Linkedin,X, Mail, Slack } from 'lucide-react'
 import { useNavigate } from "react-router-dom"
 
 export default function FunPlannerLanding() {
-    const navigate= useNavigate();
+    const navigate = useNavigate();
 
- 
+
+
+     const [selectedEvent, setSelectedEvent] = useState(null);
 
     //AuthHandler
     const Loginhandler = async () => {
@@ -272,7 +275,8 @@ export default function FunPlannerLanding() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-                        <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-4 rounded-lg text-lg font-medium shadow-lg hover:shadow-purple-500/25 transition-all duration-200">
+                        <Button
+                            onClick={SignupHandler} className="bg-gradient-to-r hover:cursor-pointer from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-4 rounded-lg text-lg font-medium shadow-lg hover:shadow-purple-500/25 transition-all duration-200">
                             Start Planning Free
                             <ArrowRight className="ml-2 w-5 h-5" />
                         </Button>
@@ -306,99 +310,66 @@ export default function FunPlannerLanding() {
                 </div>
             </section>
 
-            {/* Sample Events Section */}
+
+            {/* Featured Events Section */}
             <section className="py-20 px-6 bg-gray-900/30">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl font-bold mb-4">Featured Events</h2>
                         <p className="text-xl text-gray-400">Discover amazing events happening near you</p>
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {sampleEvents.map((event) => (
-                            <Card
-                                key={event.id}
-                                className="bg-gray-800/50 border-gray-700 hover:bg-gray-800/70 transition-all duration-300 group"
-                            >
+                            <Card key={event.id} className="bg-gray-800/50 border-gray-700 hover:bg-gray-800/70 transition-all duration-300 group">
                                 <CardContent className="p-0">
                                     <div className="relative overflow-hidden rounded-t-lg">
-                                        <img
-                                            src={event.image || "/placeholder.svg"}
-                                            alt={event.title}
-                                            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                                        />
+                                        <img src={event.image || "/placeholder.svg"} alt={event.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
                                         <div className="absolute top-4 right-4">
                                             <Badge className="bg-purple-500/90 text-white">{event.price}</Badge>
                                         </div>
                                     </div>
                                     <div className="p-6">
                                         <div className="flex items-center gap-2 mb-3">
-                                            <Badge variant="outline" className="border-gray-600 text-gray-300">
-                                                {event.type}
-                                            </Badge>
+                                            <Badge variant="outline" className="border-gray-600 text-gray-300">{event.type}</Badge>
                                         </div>
                                         <h3 className="text-xl font-semibold text-white mb-3">{event.title}</h3>
                                         <div className="space-y-2 text-gray-400">
-                                            <div className="flex items-center gap-2">
-                                                <MapPin className="w-4 h-4" />
-                                                <span className="text-sm">{event.location}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <Calendar className="w-4 h-4" />
-                                                <span className="text-sm">{event.date}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <Users className="w-4 h-4" />
-                                                <span className="text-sm">{event.attendees} attendees</span>
-                                            </div>
+                                            <div className="flex items-center gap-2"><MapPin className="w-4 h-4" /><span className="text-sm">{event.location}</span></div>
+                                            <div className="flex items-center gap-2"><Calendar className="w-4 h-4" /><span className="text-sm">{event.date}</span></div>
+                                            <div className="flex items-center gap-2"><Users className="w-4 h-4" /><span className="text-sm">{event.attendees} attendees</span></div>
                                         </div>
-                                        <Button className="w-full mt-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
-                                            View Details
-                                        </Button>
+                                        <Button onClick={() => {console.log("hello")}} className="w-full mt-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">View Details</Button>
                                     </div>
                                 </CardContent>
                             </Card>
                         ))}
                     </div>
                 </div>
+
+                {/* Popup Modal */}
+                {selectedEvent && (
+                    <motion.div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedEvent(null)}>
+                        <motion.div className="bg-gray-900 rounded-xl border border-gray-800 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} onClick={(e) => e.stopPropagation()}>
+                            <button className="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/70 rounded-full p-2 transition" onClick={() => setSelectedEvent(null)}>
+                                <X className="h-5 w-5" />
+                            </button>
+                            <div className="p-6">
+                                <img src={selectedEvent.image || "/placeholder.svg"} alt={selectedEvent.title} className="rounded-lg mb-6 w-full" />
+                                <h2 className="text-2xl font-bold text-white mb-2">{selectedEvent.title}</h2>
+                                <p className="text-gray-300 mb-4">{selectedEvent.description}</p>
+                                <ul className="text-gray-400 list-disc list-inside space-y-2">
+                                    <li>Type: {selectedEvent.type}</li>
+                                    <li>Location: {selectedEvent.location}</li>
+                                    <li>Date: {selectedEvent.date}</li>
+                                    <li>Price: {selectedEvent.price}</li>
+                                    <li>Attendees: {selectedEvent.attendees}</li>
+                                </ul>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
             </section>
 
-            {/* Event Locations Section */}
-            <section className="py-20 px-6">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl font-bold mb-4">Popular Venues</h2>
-                        <p className="text-xl text-gray-400">Discover the best locations for your events</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {eventLocations.map((location, index) => (
-                            <Card
-                                key={index}
-                                className="bg-gray-800/30 border-gray-700 hover:bg-gray-800/50 transition-all duration-300 group"
-                            >
-                                <CardContent className="p-0">
-                                    <div className="relative overflow-hidden rounded-t-lg">
-                                        <img
-                                            src={location.image || "/placeholder.svg"}
-                                            alt={location.name}
-                                            className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
-                                        />
-                                    </div>
-                                    <div className="p-4">
-                                        <h3 className="text-lg font-semibold text-white mb-1">{location.name}</h3>
-                                        <p className="text-gray-400 text-sm mb-3">{location.city}</p>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-gray-300">Capacity: {location.capacity}</span>
-                                            <span className="text-purple-400">{location.events} events</span>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </div>
-                </div>
-            </section>
 
             {/* Testimonials Section */}
             <section className="py-20 px-6 bg-gray-900/30 overflow-hidden">
@@ -508,8 +479,10 @@ export default function FunPlannerLanding() {
                     <p className="text-xl text-gray-400 mb-8">
                         Join thousands of event planners who trust FunPlanner to create unforgettable experiences.
                     </p>
-                    <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-4 rounded-lg text-lg font-medium shadow-lg hover:shadow-purple-500/25 transition-all duration-200">
-                        Get Started for Free
+                    <Button
+                        className="bg-gradient-to-r  from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600  hover:cursor-pointer text-white px-8 py-4 rounded-lg text-lg font-medium shadow-lg hover:shadow-purple-500/25 transition-all duration-200"
+                        onClick={SignupHandler}>
+                        Get Started for free
                         <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
                 </div>
