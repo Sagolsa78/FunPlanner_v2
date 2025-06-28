@@ -24,7 +24,7 @@ import { Badge } from "../components/ui/badge"
 import { motion } from "framer-motion";
 
 
-import { Sparkles, MapPin, Calendar, Users, Star, ArrowRight, PartyPopper, Clock, CheckCircle, Github, Twitter, Linkedin,X, Mail, Slack } from 'lucide-react'
+import { Sparkles, MapPin, Calendar, Users, Star, ArrowRight, PartyPopper, Clock, CheckCircle, Github, Twitter, Linkedin, X, Mail, Slack } from 'lucide-react'
 import { useNavigate } from "react-router-dom"
 
 export default function FunPlannerLanding() {
@@ -32,7 +32,7 @@ export default function FunPlannerLanding() {
 
 
 
-     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
     //AuthHandler
     const Loginhandler = async () => {
@@ -312,7 +312,7 @@ export default function FunPlannerLanding() {
 
 
             {/* Featured Events Section */}
-            <section className="py-20 px-6 bg-gray-900/30">
+            <section className=" relative py-20 px-6 bg-gray-900/30">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl font-bold mb-4">Featured Events</h2>
@@ -338,7 +338,10 @@ export default function FunPlannerLanding() {
                                             <div className="flex items-center gap-2"><Calendar className="w-4 h-4" /><span className="text-sm">{event.date}</span></div>
                                             <div className="flex items-center gap-2"><Users className="w-4 h-4" /><span className="text-sm">{event.attendees} attendees</span></div>
                                         </div>
-                                        <Button onClick={() => {console.log("hello")}} className="w-full mt-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">View Details</Button>
+                                        <Button onClick={() => {
+                                            console.log("Button clicked for:", event);
+                                            setSelectedEvent(event);
+                                        }} className="w-full mt-4 hover:cursor-pointer bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">View Details</Button>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -473,7 +476,7 @@ export default function FunPlannerLanding() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-20 px-6 bg-gradient-to-r from-purple-900/20 to-pink-900/20">
+            <section className="relative py-20 px-6 bg-gradient-to-r from-purple-900/20 to-pink-900/20">
                 <div className="max-w-4xl mx-auto text-center">
                     <h2 className="text-4xl font-bold mb-6">Ready to Plan Your Next Event?</h2>
                     <p className="text-xl text-gray-400 mb-8">
