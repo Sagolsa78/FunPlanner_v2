@@ -5,6 +5,6 @@ import isAuthenticated from '../middleware/isAuthenticated.js';
 
 const router = express.Router();
 
-router.post('/create-event', isAuthenticated, createEvent); 
+router.post('/create-event/:id', isAuthenticated, createEvent); 
 
 export default router;

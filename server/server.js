@@ -29,7 +29,7 @@ connectDB();
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/api',authRoutes);
+// app.use('/api',authRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/events',eventRoutes);
 app.use('/api/clients',clientRoutes)

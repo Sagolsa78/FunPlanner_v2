@@ -4,7 +4,7 @@ import Event from '../models/event.model.js'
 export const createClient = async (req, res) => {
     try {
         const { name, email, phone, address, notes } = req.body;
-        const userId = req.user?._id;
+        const userId = req.user._id;
 
         if (!userId) {
             return res.status(401).json({

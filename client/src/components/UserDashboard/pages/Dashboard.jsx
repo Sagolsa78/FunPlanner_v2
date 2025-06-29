@@ -1,6 +1,6 @@
 import { Calendar, CheckCircle, Clock, Users, ShoppingCart, Plus } from "lucide-react"
 import { useState } from "react"
-import CreateEvent from "../dashboard/CreateEvent";
+import CreateEvent from "../pop-ups/CreateEvent";
 
 export default function Dashboard() {
 
@@ -149,36 +149,78 @@ export default function Dashboard() {
         </div>
 
         {/* Your Events */}
-        <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-white text-lg font-semibold">Your Events</h2>
-            <div className="flex space-x-2">
-              {["All", "Upcoming", "Past"].map((label, idx) => (
-                <button
-                  key={idx}
-                  className="text-slate-400 hover:text-white text-sm px-3 py-1 rounded hover:bg-slate-700 transition"
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {events.map((event, index) => (
-              <div
-                key={index}
-                className={`relative p-6 rounded-lg bg-gradient-to-br ${event.gradient} min-h-[200px] flex flex-col justify-between`}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredClients.map((client) => (
+              <Link
+                key={client.id}
+                to={`/client-profile/${client.id}`}
+                className="bg-[#1d293d] text-white rounded-lg border border-slate-600 p-6 hover:shadow-lg hover:border-purple-300 transition-all cursor-pointer group"
               >
-                <div className="absolute top-4 right-4">
-                  <span className="bg-black/20 text-white text-xs px-2 py-1 rounded-full">{event.date}</span>
+                {/* Header */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    {/* Avatar */}
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                      {getInitials(client.name)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-white truncate group-hover:text-slate-300 transition-colors">
+                        {client.name}
+                      </h3>
+                      <p className="text-sm text-slate-400 truncate">{client.contactPerson}</p>
+                    </div>
+                  </div>
+                  {client.isNew && (
+                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full border border-green-200">
+                      New
+                    </span>
+                  )}
                 </div>
-                <div className="mt-8">
-                  <h3 className="text-xl font-bold text-white">{event.title}</h3>
+
+                {/* Contact Info */}
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center space-x-2 text-sm text-slate-100">
+                    <Icons.Mail />
+                    <span className="truncate">{client.email}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm text-slate-100">
+                    <Icons.Phone />
+                    <span>{client.phone}</span>
+                  </div>
                 </div>
-              </div>
+
+                {/* Stats */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2 text-sm text-slate-100">
+                    <Icons.Calendar />
+                    <span>{client.eventsCount} events</span>
+                  </div>
+                  <span
+                    className={`text-xs font-medium px-2 py-1 rounded-full border ${getStatusColor(client.status)}`}
+                  >
+                    {client.status}
+                  </span>
+                </div>
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1">
+                  {client.tags.slice(0, 2).map((tag, index) => (
+                    <span
+                      key={index}
+                      className={`text-xs font-medium px-2 py-1 rounded-full border ${getTagColor(tag)}`}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                  {client.tags.length > 2 && (
+                    <span className="text-xs font-medium px-2 py-1 rounded-full border bg-[#101012] text-slate-100 border-gray-200">
+                      +{client.tags.length - 2}
+                    </span>
+                  )}
+                </div>
+              </Link>
             ))}
           </div>
-        </div>
       </div>
      
     </div>

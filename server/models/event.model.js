@@ -2,13 +2,14 @@ import mongoose from 'mongoose';
 
 const eventSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  client: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   name: {
     type: String,
     required: true,
   },
   eventType: {
     type: String,
-    enum: ['Wedding', 'Conference', 'Birthday', 'Product Launch', 'Festival', 'Other'],
+    enum: ['Wedding', 'Conference', 'Birthday', 'Product Launch', 'Festival','tech', 'Other'],
     required: true,
   },
   date: {
@@ -22,7 +23,7 @@ const eventSchema = new mongoose.Schema({
   },
   sitting: {
     type: String,
-    enum: ['Indoor', 'Outdoor'],
+    enum: ['Indoor', 'Outdoor','theater'],
     required: true,
   },
   venue: {

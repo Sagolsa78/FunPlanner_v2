@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
 const noteSchema = new mongoose.Schema({
-  date:{type:Date,default:Date.now},
+  // date:{type:Date,default:Date.now},
   content:String,
-  category:{type:String,enum:['Priority','Info','Success'],default:'Info'}
+  // category:{type:String,enum:['Priority','Info','Success'],default:'Info'}
 })
 
 const fileSchema = new mongoose.Schema({
@@ -48,7 +48,8 @@ const clientSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: {type: String,required: true},
   phone: {type: String,required: true },
-  address: {type: String, required: true},
+  address: {type: String},
+  notes:{type:String},
   accountManager: {type: String },
   clientSince: {type: Date,default: Date.now,required: true },
   tags: [String],
@@ -57,7 +58,7 @@ const clientSchema = new mongoose.Schema({
   events: [eventSchema],
   preferences: preferencesSchema,
   files: [fileSchema],
-  notes: [noteSchema],
+  // notes: [noteSchema],
   communicationLog: [communicationSchema],
   financialOverview: [financialSchema]
 }, {

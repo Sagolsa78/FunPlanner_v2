@@ -1,9 +1,56 @@
 "use client"
 
 import { Calendar, ChevronDown, X } from "lucide-react"
+import { useState } from "react"
+import axios from "axios"
+import { useParams } from "react-router-dom"
 
 export default function CreateEvent({ isOpen, onClose }) {
   if (!isOpen) return null
+
+  const {id} = useParams();
+  const [eventName, setEventName] = useState("");
+  const [eventType, setEventType] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [format, setFormat] = useState("");
+  const [sitting, setSitting] = useState("");
+  const [location, setLocation] = useState("");
+
+
+  const handleCreateEvent = async (e)=>{
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        `http://localhost:5000/api/events/create-event/${id}`,{
+          name:eventName,
+          eventType,
+          date:eventDate,
+          format,
+          sitting,
+          venue:location,
+        },
+        {
+          headers:{
+            'Content-Type' : 'application/json',
+            Authorization :  `Bearer ${token}`
+          }
+        }
+      );
+
+      console.log("Event created successfully",response.data)
+
+      setEventName('');
+      setEventType('');
+      setEventDate('');
+      setFormat('')
+      setSitting('');
+      setLocation('')
+    } catch (error) {
+      console.error("Error in creating Event :",error)
+    }
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -25,7 +72,8 @@ export default function CreateEvent({ isOpen, onClose }) {
           </div>
         </div>
 
-        <div className="p-6 space-y-8">
+        <form onSubmit={handleCreateEvent}>
+          <div className="p-6 space-y-8">
           {/* Basic Information */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
@@ -41,6 +89,8 @@ export default function CreateEvent({ isOpen, onClose }) {
                 <input
                   type="text"
                   placeholder="Enter event name"
+                  value={eventName}
+                  onChange={(e)=>setEventName(e.target.value)}
                   className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
@@ -50,7 +100,10 @@ export default function CreateEvent({ isOpen, onClose }) {
                   Event Type <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <select className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                  <select 
+                  value={eventType}
+                  onChange={(e)=>setEventType(e.target.value)}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                     <option value="">Select event type</option>
                     <option value="corporate">Corporate</option>
                     <option value="social">Social</option>
@@ -79,6 +132,8 @@ export default function CreateEvent({ isOpen, onClose }) {
                   <input
                     type="date"
                     placeholder="dd-mm-yyyy"
+                    value={eventDate}
+                    onChange={(e)=>setEventDate(e.target.value)}
                     className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                   <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
@@ -90,9 +145,12 @@ export default function CreateEvent({ isOpen, onClose }) {
                   Format <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <select className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                  <select 
+                  value={format}
+                  onChange={(e)=>setFormat(e.target.value)}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                     <option value="">Select format</option>
-                    <option value="in-person">In Person</option>
+                    <option value="Physical">Physical</option>
                     <option value="virtual">Virtual</option>
                     <option value="hybrid">Hybrid</option>
                   </select>
@@ -105,7 +163,10 @@ export default function CreateEvent({ isOpen, onClose }) {
                   Sitting <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <select className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                  <select
+                  value={sitting}
+                  onChange={(e)=>setSitting(e.target.value)}
+                   className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                     <option value="">Select sitting</option>
                     <option value="theater">Theater</option>
                     <option value="classroom">Classroom</option>
@@ -132,6 +193,8 @@ export default function CreateEvent({ isOpen, onClose }) {
               <input
                 type="text"
                 placeholder="Enter venue name or address"
+                value={location}
+                onChange={(e)=>setLocation(e.target.value)}
                 className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               />
             </div>
@@ -182,9 +245,15 @@ export default function CreateEvent({ isOpen, onClose }) {
             <button variant="outline" onClick={onClose} className="border-slate-600 text-slate-300 hover:bg-slate-800">
               Cancel
             </button>
-            <button className="bg-purple-600 hover:bg-purple-700 text-white">Create Event</button>
+            <button
+                                type="submit"
+                                className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-6 rounded-lg transition duration-200"
+                            >
+                                Create Event
+                            </button>
           </div>
         </div>
+        </form>
       </div>
     </div>
   )

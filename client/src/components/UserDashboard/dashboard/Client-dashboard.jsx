@@ -5,6 +5,7 @@ import { useState, useMemo } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import axios from 'axios'
+import CreateClient from "../pop-ups/CreateClient"
 
 // Custom SVG Icons (since we can't use external libraries)
 const Icons = {
@@ -111,6 +112,7 @@ const Icons = {
 }
 
 export default function ClientDashboard() {
+  const [isPopupOpen,setIsPopupOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [typeFilter, setTypeFilter] = useState("all")
@@ -167,12 +169,6 @@ export default function ClientDashboard() {
     })
   }, [searchTerm, statusFilter, typeFilter])
 
-  // Handle client click (simulate navigation)
-//   const handleClientClick = (clientId) => {
-//     // In a real app, you would use react-router-dom
-//     console.log('Navigating to /client-dashboard')
-//     // navigate(`/client-dashboard/${clientId}`)
-//   }
 
   // Handle new client form submission
   const handleNewClientSubmit = (e) => {
@@ -242,7 +238,7 @@ export default function ClientDashboard() {
           </div>
 
           <button
-            onClick={() => setShowNewClientModal(true)}
+            onClick={() => setIsPopupOpen(true)}
             className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-sm"
           >
             <Icons.Plus />
@@ -257,14 +253,14 @@ export default function ClientDashboard() {
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Search */}
             <div className="flex-1">
-              <div className="relative">
-                <Icons.Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
+              <div className="relative items-i ">
+                <Icons.Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 " />
                 <input
                   type="text"
                   placeholder="Search clients..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full pl-10 pr-5 py-2 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent h-10"
                 />
               </div>
             </div>
@@ -518,168 +514,7 @@ export default function ClientDashboard() {
           </div>
         )}
       </div>
-
-      {/* New Client Modal */}
-      {showNewClientModal && (
-        <div className="fixed inset-0 bg-[#1d293d] bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-slate-200">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-slate-900">Add New Client</h2>
-                <button
-                  onClick={() => setShowNewClientModal(false)}
-                  className="text-slate-400 hover:text-slate-600 transition-colors"
-                >
-                  <Icons.X />
-                </button>
-              </div>
-            </div>
-
-            <form onSubmit={handleNewClientSubmit} className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Client Name */}
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Client Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={newClient.name}
-                    onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
-                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    placeholder="Company name or individual name"
-                  />
-                </div>
-
-                {/* Contact Person */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Contact Person</label>
-                  <input
-                    type="text"
-                    value={newClient.contactPerson}
-                    onChange={(e) => setNewClient({ ...newClient, contactPerson: e.target.value })}
-                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    placeholder="Primary contact name"
-                  />
-                </div>
-
-                {/* Client Type */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Client Type <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    required
-                    value={newClient.type}
-                    onChange={(e) => setNewClient({ ...newClient, type: e.target.value })}
-                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  >
-                    <option value="individual">Individual</option>
-                    <option value="corporate">Corporate</option>
-                    <option value="nonprofit">Nonprofit</option>
-                  </select>
-                </div>
-
-                {/* Email */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Email <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={newClient.email}
-                    onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
-                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    placeholder="client@example.com"
-                  />
-                </div>
-
-                {/* Phone */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Phone</label>
-                  <input
-                    type="tel"
-                    value={newClient.phone}
-                    onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
-                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    placeholder="+1 (555) 123-4567"
-                  />
-                </div>
-
-                {/* Communication Method */}
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Preferred Communication Method
-                  </label>
-                  <div className="flex space-x-4">
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        value="email"
-                        checked={newClient.communicationMethod === "email"}
-                        onChange={(e) => setNewClient({ ...newClient, communicationMethod: e.target.value })}
-                        className="mr-2 text-purple-600 focus:ring-purple-500"
-                      />
-                      Email
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        value="phone"
-                        checked={newClient.communicationMethod === "phone"}
-                        onChange={(e) => setNewClient({ ...newClient, communicationMethod: e.target.value })}
-                        className="mr-2 text-purple-600 focus:ring-purple-500"
-                      />
-                      Phone
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        value="both"
-                        checked={newClient.communicationMethod === "both"}
-                        onChange={(e) => setNewClient({ ...newClient, communicationMethod: e.target.value })}
-                        className="mr-2 text-purple-600 focus:ring-purple-500"
-                      />
-                      Both
-                    </label>
-                  </div>
-                </div>
-
-                {/* Notes */}
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Internal Notes</label>
-                  <textarea
-                    value={newClient.notes}
-                    onChange={(e) => setNewClient({ ...newClient, notes: e.target.value })}
-                    rows="3"
-                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-                    placeholder="Internal comments or special requirements..."
-                  />
-                </div>
-              </div>
-
-              {/* Form Actions */}
-              <div className="flex justify-end space-x-4 mt-6 pt-6 border-t border-slate-200">
-                <button
-                  type="button"
-                  onClick={() => setShowNewClientModal(false)}
-                  className="px-4 py-2 text-slate-600 hover:text-slate-800 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition-colors shadow-sm"
-                >
-                  Add Client
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+        <CreateClient isOpen={isPopupOpen} onClose={()=>setIsPopupOpen(false)}/>
     </div>
   )
 }
