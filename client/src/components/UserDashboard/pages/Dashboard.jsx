@@ -1,9 +1,13 @@
 import { Calendar, CheckCircle, Clock, Users, ShoppingCart, Plus } from "lucide-react"
 import { useState } from "react"
 import CreateEvent from "../pop-ups/CreateEvent";
+import { useEffect } from "react";
+import axios from "axios";
 
 export default function Dashboard() {
 
+  const [events, setEvents] = useState([]);
+  const [eventDistribution, setEventDistribution] = useState([]);
  
   const stats = [
     {
@@ -43,30 +47,70 @@ export default function Dashboard() {
     },
   ]
 
-  const eventDistribution = [
-    { category: "Corporate", percentage: 45, color: "bg-purple-500" },
-    { category: "Social", percentage: 25, color: "bg-pink-500" },
-    { category: "Tech", percentage: 20, color: "bg-blue-500" },
-    { category: "Charity", percentage: 10, color: "bg-green-500" },
-  ]
+  // const eventDistribution = [
+  //   { category: "Corporate", percentage: 45, color: "bg-purple-500" },
+  //   { category: "Social", percentage: 25, color: "bg-pink-500" },
+  //   { category: "Tech", percentage: 20, color: "bg-blue-500" },
+  //   { category: "Charity", percentage: 10, color: "bg-green-500" },
+  // ]
 
-  const events = [
-    {
-      title: "Annual Tech Conference",
-      date: "Oct 15, 2023",
-      gradient: "from-purple-500 to-blue-600",
-    },
-    {
-      title: "Product Launch Party",
-      date: "Nov 5, 2023",
-      gradient: "from-green-500 to-teal-600",
-    },
-    {
-      title: "Holiday Gala Dinner",
-      date: "Dec 12, 2023",
-      gradient: "from-orange-500 to-red-600",
-    },
-  ]
+  // const events = [
+  //   {
+  //     title: "Annual Tech Conference",
+  //     date: "Oct 15, 2023",
+  //     gradient: "from-purple-500 to-blue-600",
+  //   },
+  //   {
+  //     title: "Product Launch Party",
+  //     date: "Nov 5, 2023",
+  //     gradient: "from-green-500 to-teal-600",
+  //   },
+  //   {
+  //     title: "Holiday Gala Dinner",
+  //     date: "Dec 12, 2023",
+  //     gradient: "from-orange-500 to-red-600",
+  //   },
+  // ]
+
+  useEffect(()=>{
+    const fetchEvent = async ()=>{
+      const token = localStorage.getItem('token');
+      if(!token) return console.error('No token found');
+
+      try {
+        const res = await axios.get('http://localhost:5000/api/events/all-events',{
+          headers:{
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setEvents(res.data || []);
+        console.log(res.data)
+      } catch (error) {
+        console.error('Failed to load Clients:',error.message)
+      }
+    }
+
+    fetchEvent();
+  },[])
+
+  useEffect(()=>{
+    const fetchDistribution = async ()=>{
+      const token = localStorage.getItem('token');
+      if(!token) return console.log('Token not found')
+
+        try {
+          const res = await axios.get('http://localhost:5000/api/events/events-distribution',{
+            headers:{Authorization:`Bearer ${token}`}
+          })
+
+          setEventDistribution(res.data || []);
+        } catch (error) {
+         console.error('Error fetching event Distribution', error.message) 
+        }
+    }
+    fetchDistribution();
+  },[])
 
   return (
     <div className="min-h-screen bg-[#161b22] text-white p-6">
@@ -75,7 +119,7 @@ export default function Dashboard() {
         {/* Header */}
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-3xl font-bold text-white">Event Dashboard</h1>
+            <h1 className="text-3xl font-bold text-white">Dashboard</h1>
             <p className="text-slate-400 mt-1">Manage your upcoming events</p>
           </div>
           
@@ -149,78 +193,36 @@ export default function Dashboard() {
         </div>
 
         {/* Your Events */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredClients.map((client) => (
-              <Link
-                key={client.id}
-                to={`/client-profile/${client.id}`}
-                className="bg-[#1d293d] text-white rounded-lg border border-slate-600 p-6 hover:shadow-lg hover:border-purple-300 transition-all cursor-pointer group"
+        <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-white text-lg font-semibold">All Events</h2>
+            <div className="flex space-x-2">
+              {["All", "Upcoming", "Past"].map((label, idx) => (
+                <button
+                  key={idx}
+                  className="text-slate-400 hover:text-white text-sm px-3 py-1 rounded hover:bg-slate-700 transition"
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {events.map((event, index) => (
+              <div
+                key={index}
+                className={`relative p-6 rounded-lg bg-gradient-to-br ${event.gradient} min-h-[200px] flex flex-col justify-between`}
               >
-                {/* Header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    {/* Avatar */}
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
-                      {getInitials(client.name)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-white truncate group-hover:text-slate-300 transition-colors">
-                        {client.name}
-                      </h3>
-                      <p className="text-sm text-slate-400 truncate">{client.contactPerson}</p>
-                    </div>
-                  </div>
-                  {client.isNew && (
-                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full border border-green-200">
-                      New
-                    </span>
-                  )}
+                <div className="absolute top-4 right-4">
+                  <span className="bg-black/20 text-white text-xs px-2 py-1 rounded-full">{event.date}</span>
                 </div>
-
-                {/* Contact Info */}
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center space-x-2 text-sm text-slate-100">
-                    <Icons.Mail />
-                    <span className="truncate">{client.email}</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-sm text-slate-100">
-                    <Icons.Phone />
-                    <span>{client.phone}</span>
-                  </div>
+                <div className="mt-8">
+                  <h3 className="text-xl font-bold text-white">{event.name}</h3>
                 </div>
-
-                {/* Stats */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2 text-sm text-slate-100">
-                    <Icons.Calendar />
-                    <span>{client.eventsCount} events</span>
-                  </div>
-                  <span
-                    className={`text-xs font-medium px-2 py-1 rounded-full border ${getStatusColor(client.status)}`}
-                  >
-                    {client.status}
-                  </span>
-                </div>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1">
-                  {client.tags.slice(0, 2).map((tag, index) => (
-                    <span
-                      key={index}
-                      className={`text-xs font-medium px-2 py-1 rounded-full border ${getTagColor(tag)}`}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                  {client.tags.length > 2 && (
-                    <span className="text-xs font-medium px-2 py-1 rounded-full border bg-[#101012] text-slate-100 border-gray-200">
-                      +{client.tags.length - 2}
-                    </span>
-                  )}
-                </div>
-              </Link>
+              </div>
             ))}
           </div>
+        </div>
       </div>
      
     </div>

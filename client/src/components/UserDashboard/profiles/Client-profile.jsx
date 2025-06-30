@@ -34,6 +34,7 @@ import axios from 'axios'
 import { useParams } from "react-router-dom";
 
 export default function ClientDashboard() {
+    const [events, setEvents] = useState([]);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [activeTab, setActiveTab] = useState("all")
     const [activeLogTab, setActiveLogTab] = useState("all")
@@ -66,34 +67,57 @@ export default function ClientDashboard() {
         fetchClient();
     }, []);
 
+    useEffect(() => {
+        const fetchEvents = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) return console.error('No token found');
+            try {
+                const response = await axios.get(`http://localhost:5000/api/events/clients-event-data/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setEvents(response.data || []);
+                console.log(response.data)
+                setLoading(false);
+            } catch (error) {
+                console.error("Failed to load clients", error);
+                setLoading(false);
+            }
+        };
+
+        fetchEvents();
+    }, []);
 
 
-    const events = [
-        {
-            id: 1,
-            name: "Annual Tech Conference 2024",
-            date: "Mar 15, 2024",
-            status: "upcoming",
-            budget: "$15,000",
-            attendees: 250,
-        },
-        {
-            id: 2,
-            name: "Product Launch Event",
-            date: "Jan 20, 2024",
-            status: "completed",
-            budget: "$8,500",
-            attendees: 120,
-        },
-        {
-            id: 3,
-            name: "Team Building Retreat",
-            date: "Feb 10, 2024",
-            status: "ongoing",
-            budget: "$5,200",
-            attendees: 45,
-        },
-    ]
+
+    // const events = [
+    //     {
+    //         id: 1,
+    //         name: "Annual Tech Conference 2024",
+    //         date: "Mar 15, 2024",
+    //         status: "upcoming",
+    //         budget: "$15,000",
+    //         attendees: 250,
+    //     },
+    //     {
+    //         id: 2,
+    //         name: "Product Launch Event",
+    //         date: "Jan 20, 2024",
+    //         status: "completed",
+    //         budget: "$8,500",
+    //         attendees: 120,
+    //     },
+    //     {
+    //         id: 3,
+    //         name: "Team Building Retreat",
+    //         date: "Feb 10, 2024",
+    //         status: "ongoing",
+    //         budget: "$5,200",
+    //         attendees: 45,
+    //     },
+    // ]
 
     const preferences = {
         eventStyles: ["Corporate", "Modern", "Tech-focused"],
@@ -186,7 +210,7 @@ export default function ClientDashboard() {
         }
     }
 
-    const handleEditToggle = () =>{
+    const handleEditToggle = () => {
         setIsEditing(!isEditing)
     }
 
@@ -315,6 +339,7 @@ export default function ClientDashboard() {
                                 <h2 className="text-white text-lg font-semibold">Associated Events</h2>
                             </div>
 
+                            {/* filter */}
                             <div className="flex space-x-2">
                                 <button
                                     onClick={() => setActiveTab("all")}
@@ -580,7 +605,7 @@ export default function ClientDashboard() {
                             </div>
                         </div>
 
-                       
+
 
                         {/* Internal Notes */}
                         <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 space-y-4">

@@ -9,7 +9,7 @@ const eventSchema = new mongoose.Schema({
   },
   eventType: {
     type: String,
-    enum: ['Wedding', 'Conference', 'Birthday', 'Product Launch', 'Festival','tech', 'Other'],
+    enum: [ 'Corporate', 'Social', 'Tech', 'Charity'],
     required: true,
   },
   date: {
@@ -34,6 +34,17 @@ const eventSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
+  budget:{
+    type:Number
+  },
+  attendees:{
+    type:String
+  },
+ status: {
+  type: String,
+  enum: ['upcoming', 'completed', 'cancelled'],
+  default: 'upcoming',
+}
 }, { timestamps: true });
 
 eventSchema.pre('save', function (next) {
