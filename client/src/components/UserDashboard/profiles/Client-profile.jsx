@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -31,7 +32,7 @@ import {
 import CreateEvent from "../pop-ups/CreateEvent";
 import { useEffect } from "react";
 import axios from 'axios'
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export default function ClientDashboard() {
     const [events, setEvents] = useState([]);
@@ -89,35 +90,6 @@ export default function ClientDashboard() {
 
         fetchEvents();
     }, []);
-
-
-
-    // const events = [
-    //     {
-    //         id: 1,
-    //         name: "Annual Tech Conference 2024",
-    //         date: "Mar 15, 2024",
-    //         status: "upcoming",
-    //         budget: "$15,000",
-    //         attendees: 250,
-    //     },
-    //     {
-    //         id: 2,
-    //         name: "Product Launch Event",
-    //         date: "Jan 20, 2024",
-    //         status: "completed",
-    //         budget: "$8,500",
-    //         attendees: 120,
-    //     },
-    //     {
-    //         id: 3,
-    //         name: "Team Building Retreat",
-    //         date: "Feb 10, 2024",
-    //         status: "ongoing",
-    //         budget: "$5,200",
-    //         attendees: 45,
-    //     },
-    // ]
 
     const preferences = {
         eventStyles: ["Corporate", "Modern", "Tech-focused"],
@@ -373,6 +345,11 @@ export default function ClientDashboard() {
 
                         <div className="space-y-4">
                             {events.map((event) => (
+                               <Link 
+                               key={event.id}
+                               to={`/event-profile/${event.id}`}
+                               className="bg-[#1d293d] text-white  border-slate-600  hover:shadow-lg hover:border-purple-300 transition-all cursor-pointer group"
+                               >
                                 <div key={event.id} className="flex items-center justify-between p-4 bg-slate-700 rounded-lg">
                                     <div className="flex items-center space-x-4">
                                         <div className={`p-2 rounded-lg ${getStatusColor(event.status)}/20`}>
@@ -403,6 +380,7 @@ export default function ClientDashboard() {
                                         </button>
                                     </div>
                                 </div>
+                               </Link>
                             ))}
                         </div>
                     </div>

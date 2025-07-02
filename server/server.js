@@ -6,9 +6,11 @@ import session from 'express-session'
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import eventRoutes from './routes/eventRoutes.js'
-import clientRoutes from './routes/clientRoutes.js'
+import clientRoutes from './routes/clientRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js'
 import './config/passport.js'
 import cors from 'cors';
+import vendorRoutes from './routes/vendorRoutes.js';
 
 
 const app = express();
@@ -32,7 +34,9 @@ app.use(passport.session());
 // app.use('/api',authRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/events',eventRoutes);
-app.use('/api/clients',clientRoutes)
+app.use('/api/clients',clientRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/vendors', vendorRoutes);
 
 const PORT = process.env.PORT || 5000;
 

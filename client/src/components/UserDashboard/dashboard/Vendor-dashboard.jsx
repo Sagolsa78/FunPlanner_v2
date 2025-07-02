@@ -1,211 +1,46 @@
 "use client"
 
 import { useState } from "react"
+import CreateVendor from "../pop-ups/CreateVendor"
+import { useEffect } from "react"
+import axios from "axios"
+import {
+  Users, CheckCircle, Clock, Flag, Search, Eye, Edit, Ban, Plus, X, Star, Phone, Mail, File, Upload, ChevronDown
+} from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router-dom"
+export const Icons = {
+  Users, CheckCircle, Clock, Flag, Search, Eye, Edit, Ban, Plus, X, Star, Phone, Mail, File, Upload, ChevronDown,
+};
 
-// Icons as SVG components (since we can't use external icon libraries)
-const Icons = {
-  Users: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
-      />
-    </svg>
-  ),
-  CheckCircle: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
-  ),
-  Clock: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
-  ),
-  Flag: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 2H21l-3 6 3 6h-8.5l-1-2H5a2 2 0 00-2 2zm9-13.5V9"
-      />
-    </svg>
-  ),
-  Search: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-      />
-    </svg>
-  ),
-  Eye: () => (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-      />
-    </svg>
-  ),
-  Edit: () => (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-      />
-    </svg>
-  ),
-  Ban: () => (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L5.636 5.636"
-      />
-    </svg>
-  ),
-  Plus: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-    </svg>
-  ),
-  X: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-    </svg>
-  ),
-  Star: () => (
-    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-    </svg>
-  ),
-  Phone: () => (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-      />
-    </svg>
-  ),
-  Mail: () => (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-      />
-    </svg>
-  ),
-  File: () => (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-      />
-    </svg>
-  ),
-  Upload: () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-      />
-    </svg>
-  ),
-  ChevronDown: () => (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-    </svg>
-  ),
-}
 
 export default function VendorsDashboard() {
+
   const [selectedVendor, setSelectedVendor] = useState(null)
   const [activeTab, setActiveTab] = useState("all")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [showAddVendor, setShowAddVendor] = useState(false)
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [stats, setStats] = useState([]);
+  const [vendors, setVendors] = useState([]);
+  const navigate = useNavigate();
+  const {id} = useParams();
 
-  // Sample data
-  const stats = [
-    { title: "Total Vendors", value: "156", icon: Icons.Users, color: "text-blue-400", bg: "bg-blue-400/10" },
-    { title: "Active Vendors", value: "142", icon: Icons.CheckCircle, color: "text-green-400", bg: "bg-green-400/10" },
-    { title: "Pending Approvals", value: "8", icon: Icons.Clock, color: "text-yellow-400", bg: "bg-yellow-400/10" },
-    { title: "Flagged Vendors", value: "6", icon: Icons.Flag, color: "text-red-400", bg: "bg-red-400/10" },
-  ]
-
-  const vendors = [
-    {
-      id: 1,
-      name: "Elite Catering Co.",
-      category: "Catering",
-      contact: "Sarah Johnson",
-      email: "sarah@elitecatering.com",
-      phone: "+1 (555) 123-4567",
-      status: "active",
-      rating: 4.8,
-      services: ["Corporate Catering", "Wedding Catering", "Event Planning"],
-      recentEvents: ["Tech Conference 2024", "Annual Gala"],
-      documents: [
-        { name: "License.pdf", type: "PDF", size: "2.4 MB", date: "2024-01-15" },
-        { name: "Insurance.pdf", type: "PDF", size: "1.8 MB", date: "2024-01-10" },
-      ],
-    },
-    {
-      id: 2,
-      name: "Sound & Vision AV",
-      category: "Audio/Visual",
-      contact: "Mike Chen",
-      email: "mike@soundvision.com",
-      phone: "+1 (555) 987-6543",
-      status: "pending",
-      rating: 4.5,
-      services: ["Sound Systems", "Lighting", "Video Production"],
-      recentEvents: ["Product Launch", "Conference 2023"],
-      documents: [{ name: "Equipment_List.pdf", type: "PDF", size: "3.2 MB", date: "2024-02-01" }],
-    },
-    {
-      id: 3,
-      name: "Bloom Floral Design",
-      category: "Decoration",
-      contact: "Emma Davis",
-      email: "emma@bloomfloral.com",
-      phone: "+1 (555) 456-7890",
-      status: "active",
-      rating: 4.9,
-      services: ["Floral Arrangements", "Event Decoration", "Wedding Decor"],
-      recentEvents: ["Spring Wedding", "Corporate Event"],
-      documents: [{ name: "Portfolio.pdf", type: "PDF", size: "5.1 MB", date: "2024-01-20" }],
-    },
-  ]
+  // const vendors = [
+  //   {
+  //     id: 3,
+  //     name: "Bloom Floral Design",
+  //     category: "Decoration",
+  //     contact: "Emma Davis",
+  //     email: "emma@bloomfloral.com",
+  //     phone: "+1 (555) 456-7890",
+  //     status: "active",
+  //     rating: 4.9,
+  //     services: ["Floral Arrangements", "Event Decoration", "Wedding Decor"],
+  //     recentEvents: ["Spring Wedding", "Corporate Event"],
+  //     documents: [{ name: "Portfolio.pdf", type: "PDF", size: "5.1 MB", date: "2024-01-20" }],
+  //   },
+  // ]
 
   const communications = [
     {
@@ -293,6 +128,56 @@ export default function VendorsDashboard() {
     return matchesSearch && matchesCategory && matchesTab
   })
 
+  // stats
+
+  //get all vendors
+  useEffect(() => {
+    const filteredVendors = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return console.error('No token found');
+      try {
+        const response = await axios.get('http://localhost:5000/api/vendors/get-all-vendors', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setVendors(response.data || []);
+        console.log(response.data)
+      } catch (error) {
+        console.error("Failed to load clients", error);
+      }
+    };
+
+    filteredVendors();
+  }, []);
+
+  //stats
+  useEffect(() => {
+    const fetchStats = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return console.error('No token found');
+
+      try {
+        const res = await axios.get('http://localhost:5000/api/vendors/get-stats', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = res.data;
+        setStats([
+          { title: "Total Vendors", value: data.totalVendors, icon: Icons.Users, color: "text-blue-400", bg: "bg-blue-400/10" },
+          { title: "Active Vendors", value: data.activeVendors, icon: Icons.CheckCircle, color: "text-green-400", bg: "bg-green-400/10" },
+          { title: "Pending Vendors", value: data.pendingVendors, icon: Icons.Clock, color: "text-yellow-400", bg: "bg-yellow-400/10" },
+          { title: "Flagged Vendors", value: data.flaggedVendors, icon: Icons.Flag, color: "text-red-400", bg: "bg-red-400/10" },
+        ]);
+      } catch (error) {
+        console.error('Error fetching vendor stats:', error);
+      }
+    }
+    fetchStats();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#161b22] text-white">
       {/* Header */}
@@ -303,8 +188,8 @@ export default function VendorsDashboard() {
             <p className="text-slate-400 mt-1">Manage your vendor relationships</p>
           </div>
           <button
-            onClick={() => setShowAddVendor(true)}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+            onClick={() => setIsPopupOpen(true)}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors cursor-pointer"
           >
             <Icons.Plus />
             <span>Add Vendor</span>
@@ -376,11 +261,10 @@ export default function VendorsDashboard() {
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        activeTab === tab
-                          ? "bg-purple-600 text-white"
-                          : "text-slate-400 hover:text-white hover:bg-slate-700"
-                      }`}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === tab
+                        ? "bg-purple-600 text-white"
+                        : "text-slate-400 hover:text-white hover:bg-slate-700"
+                        }`}
                     >
                       {tab.charAt(0).toUpperCase() + tab.slice(1)}
                     </button>
@@ -458,13 +342,12 @@ export default function VendorsDashboard() {
                   {communications.map((comm) => (
                     <div key={comm.id} className="flex items-center space-x-4 p-4 bg-slate-700 rounded-lg">
                       <div
-                        className={`p-2 rounded-lg ${
-                          comm.type === "email"
-                            ? "bg-blue-500/20"
-                            : comm.type === "call"
-                              ? "bg-green-500/20"
-                              : "bg-purple-500/20"
-                        }`}
+                        className={`p-2 rounded-lg ${comm.type === "email"
+                          ? "bg-blue-500/20"
+                          : comm.type === "call"
+                            ? "bg-green-500/20"
+                            : "bg-purple-500/20"
+                          }`}
                       >
                         {comm.type === "email" ? (
                           <Icons.Mail className="text-blue-400" />
@@ -497,11 +380,10 @@ export default function VendorsDashboard() {
                     <div key={note.id} className="p-4 bg-slate-700 rounded-lg">
                       <div className="flex justify-between items-start mb-2">
                         <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            note.tag === "High Priority"
-                              ? "bg-red-500/20 text-red-300"
-                              : "bg-yellow-500/20 text-yellow-300"
-                          }`}
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${note.tag === "High Priority"
+                            ? "bg-red-500/20 text-red-300"
+                            : "bg-yellow-500/20 text-yellow-300"
+                            }`}
                         >
                           {note.tag}
                         </span>
@@ -537,16 +419,26 @@ export default function VendorsDashboard() {
 
           {/* Vendor Details Sidebar */}
           {selectedVendor && (
-            <div className="bg-slate-800 rounded-lg border border-slate-700 h-fit">
+            vendors.map((vendor) => (
+              <div className="bg-slate-800 rounded-lg border border-slate-700 h-fit">
               <div className="p-6 border-b border-slate-700">
                 <div className="flex justify-between items-start">
                   <h2 className="text-xl font-semibold text-white">Vendor Details</h2>
+                  <div className="flex items-center space-x-2">
+                    <Link
+                    key={vendor.id}
+                    to ={`/vendor-profile/${vendor.id}`}
+                    className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                  >
+                    <Eye/>
+                  </Link>
                   <button
                     onClick={() => setSelectedVendor(null)}
-                    className="text-slate-400 hover:text-white transition-colors"
+                    className="text-slate-400 hover:text-white transition-colors cursor-pointer ml-2"
                   >
                     <Icons.X />
                   </button>
+                  </div>
                 </div>
               </div>
 
@@ -630,100 +522,11 @@ export default function VendorsDashboard() {
                 </div>
               </div>
             </div>
+            ))
           )}
         </div>
       </div>
-
-      {/* Add Vendor Modal */}
-      {showAddVendor && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-slate-700">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-white">Add New Vendor</h2>
-                <button
-                  onClick={() => setShowAddVendor(false)}
-                  className="text-slate-400 hover:text-white transition-colors"
-                >
-                  <Icons.X />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Vendor Name</label>
-                  <input
-                    type="text"
-                    className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="Enter vendor name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Category</label>
-                  <select className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
-                    <option>Select category</option>
-                    <option>Catering</option>
-                    <option>Audio/Visual</option>
-                    <option>Decoration</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Contact Person</label>
-                  <input
-                    type="text"
-                    className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="Contact person name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
-                  <input
-                    type="email"
-                    className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="vendor@example.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Phone</label>
-                  <input
-                    type="tel"
-                    className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="+1 (555) 123-4567"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Status</label>
-                  <select className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
-                    <option>Active</option>
-                    <option>Pending</option>
-                    <option>Blocked</option>
-                  </select>
-                </div>
-              </div>
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-slate-300 mb-2">Services Offered</label>
-                <textarea
-                  className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
-                  rows="3"
-                  placeholder="Describe services offered..."
-                />
-              </div>
-              <div className="flex justify-end space-x-4 mt-6">
-                <button
-                  onClick={() => setShowAddVendor(false)}
-                  className="px-4 py-2 text-slate-400 hover:text-white transition-colors"
-                >
-                  Cancel
-                </button>
-                <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition-colors">
-                  Add Vendor
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <CreateVendor isOpen={isPopupOpen} onClose={() => { setIsPopupOpen(false) }} />
     </div>
   )
 }

@@ -74,60 +74,65 @@ export const getAllEventsOfClient = async (req,res) =>{
   }
 }
 
-export const getAllEventWithStats = async (req, res) => {
-  try {
-    const userId = req.user._id;
+export const singleEventWithStats = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const eventId = req.params.id;
+        // const clientId = req.params.clientId;
 
-    const events = await Event.find({ user: userId }).select('name date').lean();
+        
+        const event = await Event.findOne({ _id: eventId,user:userId }).lean();
+        if (!event) {
+  return res.status(404).json({ message: "Event not found" });
+}
+        // const vendor = await Vendor.findOne({ _id: eventIdId, user: userId}).lean();
+        // const client = await Client.findOne({ _id: clientId, user: userId }).lean();
+        // const eventClient = {
+        //   name: client.name,
+        //   email: client.email,
+        //   phone: client.phone || "No phone number provided",
+        //   company: client.address || "No address provided",
+        // }
 
-    const simplifiedEvents = events.map(event => ({
-      id: event._id,
-      name: event.name,
-      date: event.date,
-    }));
 
-    return res.status(200).json(simplifiedEvents);
-  } catch (error) {
-    console.error("Error fetching events:", error.message);
-    return res.status(500).json({ error: "Failed to load events" });
-  }
-};
+        const enrichedEvent = {
+            id: eventId,
+            clientId: event.client,
+            name: event.name,
+            description: event.description|| "No description provided",
+            type: event.eventType,
+            status: event.status,
+            date: event.date,
+            endDate: event.endDate || null, // Assuming endDate is optional
+            time: event.time || null, // Assuming time is optional
+            endTime: event.endTime || null,
+            venue: event.venue,
+            format: event.format, 
+            sitting: event.sitting,
+            venue: event.venue,
+            address:event.venue,
+            capacity:event.attendees,  
+            attendees: event.attendees,
+            budget: event.budget, 
+            spent: event.spent || 0,
+            organizer: event.organizer||"no client data provided",
+            client: event.organizer || "No organizer provided",
+            tags: event.tags || [],
+            slug: event.slug,
+            createdAt: event.createdAt,
+            updatedAt: event.updatedAt,
+            
+        };
 
-export const getEventDistribution = async (req,res) => {
-  try {
-    const userId = req.user._id;
-    const events = await Event.find({user:userId}).select('eventType').lean();
+        res.status(200).json(enrichedEvent);
 
-    const distributionMap = {};
 
-    events.forEach(event =>{
-      const type = event.eventType || 'Unknown';
-      distributionMap[type] = (distributionMap[type] || 0) +1;
-    })
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).json({message:"Failed to fetch the Event"})
+    }
+}
 
-    const total = events.length;
-    const distribution = Object.entries(distributionMap).map(([category,count]) =>{
-      return{
-        category,
-        percentage: ((count/total)*100).toFixed(1),
-        color: getColorForCategory(category),
-      }
-    })
 
-    console.log(distribution)
-    return res.status(200).json(distribution);
-  } catch (error) {
-    console.error(error.message)
-    return res.status(500).json({ error: "Failed to fetch event distribution" });
-  }
-};
 
-const getColorForCategory = (category) => {
-  const colorMap = {
-    Corporate: 'bg-purple-500',
-    Social: 'bg-pink-500',
-    Tech: 'bg-blue-500',
-    Charity: 'bg-green-500',
-  };
-  return colorMap[category] || 'bg-slate-500';
-};
+

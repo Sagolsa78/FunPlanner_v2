@@ -1,85 +1,26 @@
-import { Calendar, CheckCircle, Clock, Users, ShoppingCart, Plus } from "lucide-react"
+import { Calendar, CheckCircle, Clock, Users, ShoppingCart, Plus, ArrowRight } from "lucide-react"
 import { useState } from "react"
 import CreateEvent from "../pop-ups/CreateEvent";
 import { useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
 
   const [events, setEvents] = useState([]);
   const [eventDistribution, setEventDistribution] = useState([]);
- 
-  const stats = [
-    {
-      title: "Upcoming",
-      value: "8",
-      icon: Calendar,
-      iconColor: "text-blue-400",
-      bgColor: "bg-blue-400/10",
-    },
-    {
-      title: "Completed",
-      value: "24",
-      icon: CheckCircle,
-      iconColor: "text-green-400",
-      bgColor: "bg-green-400/10",
-    },
-    {
-      title: "Tasks",
-      value: "12",
-      icon: Clock,
-      iconColor: "text-yellow-400",
-      bgColor: "bg-yellow-400/10",
-    },
-    {
-      title: "Clients",
-      value: "18",
-      icon: Users,
-      iconColor: "text-purple-400",
-      bgColor: "bg-purple-400/10",
-    },
-    {
-      title: "Vendors",
-      value: "32",
-      icon: ShoppingCart,
-      iconColor: "text-blue-400",
-      bgColor: "bg-blue-400/10",
-    },
-  ]
+  const [stats, setStats] = useState([]);
+  const navigate = useNavigate();
+   const visibleEvents = events.slice(0, 3);
 
-  // const eventDistribution = [
-  //   { category: "Corporate", percentage: 45, color: "bg-purple-500" },
-  //   { category: "Social", percentage: 25, color: "bg-pink-500" },
-  //   { category: "Tech", percentage: 20, color: "bg-blue-500" },
-  //   { category: "Charity", percentage: 10, color: "bg-green-500" },
-  // ]
-
-  // const events = [
-  //   {
-  //     title: "Annual Tech Conference",
-  //     date: "Oct 15, 2023",
-  //     gradient: "from-purple-500 to-blue-600",
-  //   },
-  //   {
-  //     title: "Product Launch Party",
-  //     date: "Nov 5, 2023",
-  //     gradient: "from-green-500 to-teal-600",
-  //   },
-  //   {
-  //     title: "Holiday Gala Dinner",
-  //     date: "Dec 12, 2023",
-  //     gradient: "from-orange-500 to-red-600",
-  //   },
-  // ]
-
-  useEffect(()=>{
-    const fetchEvent = async ()=>{
+  useEffect(() => {
+    const fetchEvent = async () => {
       const token = localStorage.getItem('token');
-      if(!token) return console.error('No token found');
+      if (!token) return console.error('No token found');
 
       try {
-        const res = await axios.get('http://localhost:5000/api/events/all-events',{
-          headers:{
+        const res = await axios.get('http://localhost:5000/api/dashboard/all-events', {
+          headers: {
             Authorization: `Bearer ${token}`,
           },
         });
@@ -87,30 +28,95 @@ export default function Dashboard() {
         setEvents(res.data || []);
         console.log(res.data)
       } catch (error) {
-        console.error('Failed to load Clients:',error.message)
+        console.error('Failed to load Clients:', error.message)
       }
     }
 
     fetchEvent();
-  },[])
+  }, [])
 
-  useEffect(()=>{
-    const fetchDistribution = async ()=>{
+
+  // Event Distribution 
+  useEffect(() => {
+    const fetchDistribution = async () => {
       const token = localStorage.getItem('token');
-      if(!token) return console.log('Token not found')
+      if (!token) return console.log('Token not found')
 
-        try {
-          const res = await axios.get('http://localhost:5000/api/events/events-distribution',{
-            headers:{Authorization:`Bearer ${token}`}
-          })
+      try {
+        const res = await axios.get('http://localhost:5000/api/dashboard/events-distribution', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
 
-          setEventDistribution(res.data || []);
-        } catch (error) {
-         console.error('Error fetching event Distribution', error.message) 
-        }
+        setEventDistribution(res.data || []);
+      } catch (error) {
+        console.error('Error fetching event Distribution', error.message)
+      }
     }
     fetchDistribution();
-  },[])
+  }, [])
+
+  // Stats 
+  useEffect(() => {
+    const fetchStats = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return console.error('No token found');
+
+      try {
+        const res = await axios.get('http://localhost:5000/api/dashboard/stats', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = res.data;
+
+        setStats(
+          [
+            {
+              title: "Upcoming",
+              value: "8",
+              icon: Calendar,
+              iconColor: "text-blue-400",
+              bgColor: "bg-blue-400/10",
+            },
+            {
+              title: "Completed",
+              value: "24",
+              icon: CheckCircle,
+              iconColor: "text-green-400",
+              bgColor: "bg-green-400/10",
+            },
+            {
+              title: "Events",
+              value: data.totalEvents,
+              icon: Clock,
+              iconColor: "text-yellow-400",
+              bgColor: "bg-yellow-400/10",
+            },
+            {
+              title: "Clients",
+              value: data.totalClients,
+              icon: Users,
+              iconColor: "text-purple-400",
+              bgColor: "bg-purple-400/10",
+            },
+            {
+              title: "Vendors",
+              value: data.totalVendors,
+              icon: ShoppingCart,
+              iconColor: "text-blue-400",
+              bgColor: "bg-blue-400/10",
+            },
+          ]
+        )
+      } catch (error) {
+        console.error('Failed to load Clients:', error.message)
+      }
+    }
+
+    fetchStats();
+  }, [])
+
 
   return (
     <div className="min-h-screen bg-[#161b22] text-white p-6">
@@ -122,7 +128,7 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold text-white">Dashboard</h1>
             <p className="text-slate-400 mt-1">Manage your upcoming events</p>
           </div>
-          
+
         </div>
 
         {/* Stats Cards */}
@@ -193,39 +199,52 @@ export default function Dashboard() {
         </div>
 
         {/* Your Events */}
-        <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-white text-lg font-semibold">All Events</h2>
-            <div className="flex space-x-2">
-              {["All", "Upcoming", "Past"].map((label, idx) => (
-                <button
-                  key={idx}
-                  className="text-slate-400 hover:text-white text-sm px-3 py-1 rounded hover:bg-slate-700 transition"
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {events.map((event, index) => (
-              <div
-                key={index}
-                className={`relative p-6 rounded-lg bg-gradient-to-br ${event.gradient} min-h-[200px] flex flex-col justify-between`}
-              >
-                <div className="absolute top-4 right-4">
-                  <span className="bg-black/20 text-white text-xs px-2 py-1 rounded-full">{event.date}</span>
-                </div>
-                <div className="mt-8">
-                  <h3 className="text-xl font-bold text-white">{event.name}</h3>
-                </div>
-              </div>
-            ))}
-          </div>
+         <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-white text-lg font-semibold">All Events</h2>
+        <div className="flex space-x-2">
+          {["All", "Upcoming", "Past"].map((label, idx) => (
+            <button
+              key={idx}
+              className="text-slate-400 hover:text-white text-sm px-3 py-1 rounded hover:bg-slate-700 transition"
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </div>
-     
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {visibleEvents.map((event, index) => (
+          <div
+            key={index}
+            className={`relative p-6 rounded-lg bg-gradient-to-br ${event.gradient} min-h-[200px] flex flex-col justify-between`}
+          >
+            <div className="absolute top-4 right-4">
+              <span className="bg-black/20 text-white text-xs px-2 py-1 rounded-full">{event.date}</span>
+            </div>
+            <div className="mt-8">
+              <h3 className="text-xl font-bold text-white">{event.name}</h3>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Show More Button */}
+      {events.length > 3 && (
+        <div className="mt-4 flex justify-end">
+          <button
+            onClick={() => navigate('/event-dashboard')}
+            className="text-sm text-slate-500 hover:text-white px-4 py-2 rounded hover:bg-slate-700 transition cursor-pointer"
+          >
+            Show More <ArrowRight className="ml-2 w-4 h-4" />
+          </button>
+        </div>
+      )}
     </div>
-    
+      </div>
+
+    </div>
+
   )
 }

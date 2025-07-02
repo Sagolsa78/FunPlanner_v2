@@ -13,6 +13,9 @@ import DashboardLayout from './components/UserDashboard/layout/DashboardLayout'
 import ClientDashboard from './components/UserDashboard/dashboard/Client-dashboard'
 import VendorsDashboard from './components/UserDashboard/dashboard/Vendor-dashboard'
 import ClientProfile from './components/UserDashboard/profiles/Client-profile'
+import EventProfile from './components/UserDashboard/profiles/Event-profile'
+import EventDashboard from './components/UserDashboard/dashboard/Event-dashboard'
+import VendorProfile from './components/UserDashboard/profiles/Vendor-profile'
 
 const browserRouter = createBrowserRouter([
   {
@@ -41,6 +44,18 @@ const browserRouter = createBrowserRouter([
   {
     path:'/client-profile/:id',
     element:<ClientProfile/>
+  },
+  {
+    path:'/event-profile/:id',
+    element:<EventProfile/>
+  },
+  {
+    path:'/event-dashboard',
+    element:<EventDashboard/>
+  },
+  {
+    path:'/vendor-profile/:id',
+    element:<VendorProfile/>
   }
 ])
 
