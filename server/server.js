@@ -8,6 +8,7 @@ import authRoutes from './routes/authRoutes.js';
 import eventRoutes from './routes/eventRoutes.js'
 import clientRoutes from './routes/clientRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js'
+import chatRoutes from './routes/chatRoutes.js'
 import './config/passport.js'
 import cors from 'cors';
 import vendorRoutes from './routes/vendorRoutes.js';
@@ -37,7 +38,7 @@ app.use('/api/events',eventRoutes);
 app.use('/api/clients',clientRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/vendors', vendorRoutes);
-
+app.use('/api/message',chatRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT,()=>{

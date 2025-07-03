@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import HeroDashboard from "../HeroDashboard"
 import { motion, AnimatePresence } from 'framer-motion';
 import Popup from "../ui/Popup";
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Calendar, Users, MapPin, Sparkles, Clock, CheckCircle, ArrowRight, Trophy, Star } from 'lucide-react';
 
 const HeroSection = () => {
 
@@ -19,19 +19,53 @@ const HeroSection = () => {
     setIsPopupOpen(false);
   };
 
+   const testimonials = [
+        {
+            name: "Sarah Johnson",
+            role: "Event Coordinator",
+            company: "Creative Events Co.",
+            content:
+                "FunPlanner transformed how we organize events. The intuitive interface and powerful features saved us countless hours.",
+            rating: 5,
+            avatar: "/placeholder.svg?height=60&width=60",
+        },
+        {
+            name: "Michael Chen",
+            role: "Wedding Planner",
+            company: "Dream Weddings",
+            content:
+                "The best event planning tool I've ever used. My clients love the seamless experience and professional results.",
+            rating: 5,
+            avatar: "/placeholder.svg?height=60&width=60",
+        },
+        {
+            name: "Emily Rodriguez",
+            role: "Corporate Events Manager",
+            company: "TechCorp Inc.",
+            content: "FunPlanner's analytics and guest management features are game-changers for corporate event planning.",
+            rating: 5,
+            avatar: "/placeholder.svg?height=60&width=60",
+        },
+        {
+            name: "David Thompson",
+            role: "Festival Organizer",
+            company: "Music Festivals Ltd.",
+            content:
+                "Managing large-scale events has never been easier. The platform handles everything from ticketing to logistics.",
+            rating: 5,
+            avatar: "/placeholder.svg?height=60&width=60",
+        },
+    ]
+    const [currentTestimonial, setCurrentTestimonial] = useState(0)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
+        }, 4000)
+        return () => clearInterval(interval)
+    }, [testimonials.length])
+
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
-      })
-    }
-
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
 
   const logos = [
     'logo1.png',
@@ -49,51 +83,54 @@ const HeroSection = () => {
   ];
 
   const CustomerLogos = () => {
-    const [index, setIndex] = useState(0);
-    const visibleLogos = logos.slice(index, index + 6);
+  const [index, setIndex] = useState(0);
+  const visibleLogos = logos.slice(index, index + 6);
 
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setIndex((prev) => (prev + 6) % logos.length);
-      }, 5000);
-      return () => clearInterval(interval);
-    }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 6) % logos.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
-    return (
-      <div className="relative mt-12 group">
+  return (
+    <div className="relative mt-16 w-fit mx-auto"> {/* <- limits blur overlay area */}
+      <div className="relative group z-10 inline-block">
         <AnimatePresence mode="wait">
           <motion.div
             key={index}
-            className="grid grid-cols-3 gap-y-20 gap-x-28 md:grid-cols-3 relative z-10"
+            className="grid grid-cols-3 gap-y-12 gap-x-16 md:grid-cols-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.2 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
           >
             {visibleLogos.map((logo, i) => (
               <motion.img
                 key={i}
                 src={`/assets/logos/${logo}`}
                 alt={`Client logo ${i}`}
-                className="w-32 h-16 object-contain grayscale hover:grayscale-0 transition duration-500"
+                className="w-24 h-12 object-contain grayscale hover:grayscale-0 transition duration-500 opacity-60 hover:opacity-100"
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
+                animate={{ opacity: 0.6, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ delay: i * 0.1, duration: 1.0, ease: 'easeOut' }}
+                transition={{ delay: i * 0.2, duration: 1.0, ease: "easeOut" }}
               />
             ))}
           </motion.div>
         </AnimatePresence>
 
-        {/* Background blur and hover button */}
-        <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition duration-300 backdrop-blur-md flex items-center justify-center rounded-lg">
-          <button className="text-white px-5 py-2 text-sm md:text-base rounded  bg-white/10 hover:bg-white/20 backdrop-blur-sm shadow-md">
+        {/* Only visible when hovering over logo grid */}
+        <div className="absolute inset-0 z-40 opacity-0 group-hover:opacity-40 transition duration-100 backdrop-blur-sm flex items-center justify-center rounded-lg">
+          <button className="text-black px-6 py-3 text-2xl md:text-base rounded-lg bg-gray-200 hover:bg-gray-100 backdrop-blur-sm shadow-lg border border-white/20 cursor-pointer">
             Meet our customers
           </button>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
+};
+
 
   const cardData = [
     {
@@ -234,33 +271,42 @@ const HeroSection = () => {
 
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <button className="bg-white text-black px-6 py-3 rounded-md font-medium text-lg hover:bg-gray-100 transition-all duration-200 transform hover:scale-105">
-              Get started
+          <motion.div
+            className="flex flex-col sm:flex-row gap-6 mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <button className="group bg-gradient-to-r from-[#2E3192] to-[] text-white px-8 py-4 rounded-xl font-semibold text-2xl
+             hover:from-[#2E3192] hover:to-[] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25
+              flex items-center cursor-pointer">
+              Get Started Free
+              <ArrowRight className="ml-3 w-6 h-6 transition-transform group-hover:translate-x-1" />
             </button>
-            <button className=" text-white  rounded-md font-medium text-lg transition-all duration-200">
-              Watch demo
-            </button>
-          </div>
+          </motion.div>
 
-          <div className="mb-8" >
+          <motion.div
+            className="mb-16"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1.0 }}
+            transition={{ duration: 1, delay: 1.0 }}
+          >
             <HeroDashboard />
-          </div>
-          <div>
-
-            <div className="mb-16">
-              <h4 className="text-xl md:text-xl lg:text-2xl text-white mt-8 mb-8 leading-tight">
-                Powering event management businesses.
-                <span className="block text-gray-400 text-2xl">
-                  From local gatherings to global conferences.
-                </span>
-              </h4 >
-
-              <div className="mb-12 mt-4">
-                <CustomerLogos />
-              </div>
-            </div>
-          </div>
+          </motion.div>
+          <motion.div
+            className="mb-20"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <h4 className="text-2xl md:text-3xl lg:text-4xl text-white mb-4 font-bold">
+              Trusted by Event Professionals
+              <span className="block text-gray-400 text-xl font-normal mt-2">
+                From local gatherings to global conferences
+              </span>
+            </h4>
+            <CustomerLogos />
+          </motion.div>
 
           <div className="mt-20 mb-24 px-4 sm:px-8 md:px-16 lg:px-32 flex flex-col md:flex-row justify-between items-center md:items-start text-center md:text-left">
             <h4 className="text-white text-3xl md:text-5xl font-bold mb-12 md:mb-0 md:mr-12 lg:mr-24 w-full md:w-2/5 lg:w-1/2">
@@ -290,26 +336,105 @@ const HeroSection = () => {
 
 
           {/* Stats or Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl mx-auto">
-            <div className="group">
-              <div className="text-3xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors duration-200">
-                10,000+
+          <section id="services" className="py-20 px-6">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold text-slate-50 mb-4">Why Choose FunPlanner?</h2>
+                <p className="text-xl text-gray-400">Everything you need to create amazing events</p>
               </div>
-              <div className="text-gray-400">Teams</div>
-            </div>
-            <div className="group">
-              <div className="text-3xl font-bold text-white mb-2 group-hover:text-pink-400 transition-colors duration-200">
-                99.9%
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[
+                  {
+                    icon: Calendar,
+                    title: "Smart Scheduling",
+                    description: "AI-powered scheduling that finds the perfect time for everyone",
+                  },
+                  {
+                    icon: Users,
+                    title: "Guest Management",
+                    description: "Effortlessly manage RSVPs, dietary requirements, and special requests",
+                  },
+                  {
+                    icon: MapPin,
+                    title: "Venue Discovery",
+                    description: "Find and book the perfect venue from our curated selection",
+                  },
+                  {
+                    icon: Sparkles,
+                    title: "Custom Themes",
+                    description: "Beautiful templates and themes for every type of event",
+                  },
+                  {
+                    icon: Clock,
+                    title: "Real-time Updates",
+                    description: "Keep everyone informed with instant notifications and updates",
+                  },
+                  {
+                    icon: CheckCircle,
+                    title: "Task Management",
+                    description: "Stay organized with comprehensive task lists and reminders",
+                  },
+                ].map((feature, index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-800/30 border border-gray-700 hover:bg-gray-800/50 transition-all duration-300 rounded-lg p-6 text-center group"
+                  >
+                    <div className="w-16 h-16 bg-gradient-to-r from-[#2E3192] to-[] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <feature.icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
+                    <p className="text-gray-400">{feature.description}</p>
+                  </div>
+                ))}
               </div>
-              <div className="text-gray-400">Uptime</div>
             </div>
-            <div className="group">
-              <div className="text-3xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors duration-200">
-                10ms
+          </section>
+
+          <section className="py-20 px-6 bg-gray-900/30 overflow-hidden">
+  <div className="max-w-7xl mx-auto">
+    <div className="text-center mb-16">
+      <h2 className="text-4xl font-bold mb-4 text-white">What Our Users Say</h2>
+      <p className="text-xl text-gray-400">Join thousands of satisfied event planners</p>
+    </div>
+
+    <div className="relative overflow-hidden">
+      {/* Gradient overlays for vintage effect */}
+      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
+      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black via-black/80 to-transparent z-10"></div>
+
+      <div className="flex animate-scroll">
+        {[...testimonials, ...testimonials].map((testimonial, index) => (
+          <div
+            key={index}
+            className="flex-shrink-0 w-96 mx-4 bg-gray-800/40 border border-gray-700 backdrop-blur-sm rounded-lg p-6"
+          >
+            <div className="flex items-center mb-4">
+              <img
+                src={testimonial.avatar || "/placeholder.svg"}
+                alt={testimonial.name}
+                className="w-12 h-12 rounded-full mr-4"
+              />
+              <div>
+                <h4 className="text-white font-semibold">{testimonial.name}</h4>
+                <p className="text-gray-400 text-sm">{testimonial.role}</p>
+                <p className="text-gray-500 text-xs">{testimonial.company}</p>
               </div>
-              <div className="text-gray-400">Response time</div>
             </div>
+            <div className="flex mb-3">
+              {[...Array(testimonial.rating)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+              ))}
+            </div>
+            <p className="text-gray-300 text-sm leading-relaxed">{testimonial.content}</p>
           </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+
         </div>
       </div>
 

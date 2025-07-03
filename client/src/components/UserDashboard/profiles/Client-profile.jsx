@@ -27,7 +27,8 @@ import {
     Paperclip,
     Tag,
     Star,
-    Pencil
+    Pencil,
+    UserRoundPen
 } from "lucide-react"
 import CreateEvent from "../pop-ups/CreateEvent";
 import { useEffect } from "react";
@@ -390,9 +391,14 @@ export default function ClientDashboard() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {/* Client Preferences */}
                         <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 space-y-4">
-                            <div className="flex items-center space-x-2 mb-2">
+                            <div className="flex justify-between items-center mb-4">
+                                <div className="flex items-center space-x-2 mb-2">
                                 <Star className="w-5 h-5 text-yellow-400" />
-                                <h2 className="text-white text-lg font-semibold">Client Preferences</h2>
+                                <h2 className="text-white text-lg font-semibold ">Client Preferences</h2>
+                            </div>
+                            <button className="text-slate-400 hover:text-white p-2 rounded-lg cursor-pointer">
+                                <UserRoundPen />
+                            </button>
                             </div>
 
                             <div>

@@ -1,4 +1,3 @@
-// controllers/event.controller.js
 import Event from '../models/event.model.js';
 import Client from '../models/client.model.js';
 
@@ -85,16 +84,6 @@ export const singleEventWithStats = async (req, res) => {
         if (!event) {
   return res.status(404).json({ message: "Event not found" });
 }
-        // const vendor = await Vendor.findOne({ _id: eventIdId, user: userId}).lean();
-        // const client = await Client.findOne({ _id: clientId, user: userId }).lean();
-        // const eventClient = {
-        //   name: client.name,
-        //   email: client.email,
-        //   phone: client.phone || "No phone number provided",
-        //   company: client.address || "No address provided",
-        // }
-
-
         const enrichedEvent = {
             id: eventId,
             clientId: event.client,

@@ -29,12 +29,20 @@ import {
   Mic,
   Shield,
   Heart,
+  PencilLine,
+  UserRoundPlus,
+  UserCheck,
 } from "lucide-react"
 import { useEffect, useState } from "react"
+import AssignVendor from "../pop-ups/AssignVendor"
 
 // This component fetches data for a single event using eventId
 export default function EventProfile({ onBack }) {
 
+  const [assignVendor, setAssignVendor] = useState(false)
+  const [loading, setLoading] = useState(true)
+  // Initialize event state with default values
+  // This ensures that the component can render without crashing if data is not yet available
   const [event, setEvent] = useState({
     name: "",
     description: "",
@@ -70,6 +78,7 @@ export default function EventProfile({ onBack }) {
   })
   const { id } = useParams();
 
+  //get event data from the server
   useEffect(() => {
     const fetchEvent = async () => {
       const token = localStorage.getItem("token");
@@ -81,7 +90,7 @@ export default function EventProfile({ onBack }) {
             Authorization: `Bearer ${token}`,
           },
         });
-        
+
         if (!res.data || !res.data.name) {
           console.warn("Event data is missing or malformed:", res.data);
         }
@@ -95,207 +104,6 @@ export default function EventProfile({ onBack }) {
 
     fetchEvent();
   }, []);
-
-  // Sample event data - in a real app, this would come from props or API
-  // const event = {
-  //   id: eventId || 1,
-  //   name: "Annual Tech Conference 2024",
-  //   description:
-  //     "Join us for the most anticipated technology conference of the year, featuring industry leaders, innovative workshops, and networking opportunities. This three-day event will showcase the latest trends in AI, blockchain, and sustainable technology.",
-  //   type: "Corporate",
-  //   status: "upcoming",
-  //   date: "2024-03-15",
-  //   endDate: "2024-03-17",
-  //   time: "09:00 AM",
-  //   endTime: "06:00 PM",
-  //   venue: "Grand Convention Center",
-  //   address: "123 Convention Blvd, New York, NY 10001",
-  //   capacity: 500,
-  //   registeredAttendees: 387,
-  //   budget: 75000,
-  //   spent: 45000,
-  //   organizer: {
-  //     name: "Sarah Johnson",
-  //     email: "sarah@techcorp.com",
-  //     phone: "+1 (555) 123-4567",
-  //     company: "TechCorp Solutions",
-  //   },
-  //   client: {
-  //     name: "TechCorp Solutions",
-  //     contactPerson: "Michael Chen",
-  //     email: "michael@techcorp.com",
-  //     phone: "+1 (555) 987-6543",
-  //   },
-  //   tags: ["Technology", "Corporate", "Networking", "Innovation"],
-  //   vendors: [
-  //     {
-  //       id: 1,
-  //       name: "Elite Catering Co.",
-  //       service: "Catering",
-  //       contact: "Sarah Wilson",
-  //       status: "confirmed",
-  //       cost: 15000,
-  //     },
-  //     {
-  //       id: 2,
-  //       name: "Sound & Vision AV",
-  //       service: "Audio/Visual",
-  //       contact: "Mike Chen",
-  //       status: "confirmed",
-  //       cost: 12000,
-  //     },
-  //     {
-  //       id: 3,
-  //       name: "Bloom Floral Design",
-  //       service: "Decoration",
-  //       contact: "Emma Davis",
-  //       status: "pending",
-  //       cost: 8000,
-  //     },
-  //     {
-  //       id: 4,
-  //       name: "Pro Security Services",
-  //       service: "Security",
-  //       contact: "John Smith",
-  //       status: "confirmed",
-  //       cost: 5000,
-  //     },
-  //   ],
-  //   timeline: [
-  //     {
-  //       id: 1,
-  //       title: "Event Planning Started",
-  //       date: "2024-01-15",
-  //       time: "10:00 AM",
-  //       status: "completed",
-  //       description: "Initial planning meeting with client",
-  //     },
-  //     {
-  //       id: 2,
-  //       title: "Venue Booking Confirmed",
-  //       date: "2024-01-22",
-  //       time: "02:30 PM",
-  //       status: "completed",
-  //       description: "Grand Convention Center booked for March 15-17",
-  //     },
-  //     {
-  //       id: 3,
-  //       title: "Vendor Contracts Signed",
-  //       date: "2024-02-05",
-  //       time: "11:15 AM",
-  //       status: "completed",
-  //       description: "Catering and AV vendors confirmed",
-  //     },
-  //     {
-  //       id: 4,
-  //       title: "Marketing Campaign Launch",
-  //       date: "2024-02-10",
-  //       time: "09:00 AM",
-  //       status: "completed",
-  //       description: "Registration opened to public",
-  //     },
-  //     {
-  //       id: 5,
-  //       title: "Final Headcount Confirmation",
-  //       date: "2024-03-10",
-  //       time: "05:00 PM",
-  //       status: "pending",
-  //       description: "Confirm final attendee numbers with vendors",
-  //     },
-  //     {
-  //       id: 6,
-  //       title: "Event Setup",
-  //       date: "2024-03-14",
-  //       time: "08:00 AM",
-  //       status: "upcoming",
-  //       description: "Setup begins day before event",
-  //     },
-  //   ],
-  //   documents: [
-  //     {
-  //       id: 1,
-  //       name: "Event Contract.pdf",
-  //       type: "pdf",
-  //       size: "2.4 MB",
-  //       uploadDate: "2024-01-20",
-  //       category: "Contract",
-  //     },
-  //     {
-  //       id: 2,
-  //       name: "Venue Floor Plan.pdf",
-  //       type: "pdf",
-  //       size: "1.8 MB",
-  //       uploadDate: "2024-01-25",
-  //       category: "Venue",
-  //     },
-  //     {
-  //       id: 3,
-  //       name: "Catering Menu.pdf",
-  //       type: "pdf",
-  //       size: "3.2 MB",
-  //       uploadDate: "2024-02-01",
-  //       category: "Catering",
-  //     },
-  //     {
-  //       id: 4,
-  //       name: "Event Photos Reference.zip",
-  //       type: "zip",
-  //       size: "25.7 MB",
-  //       uploadDate: "2024-02-05",
-  //       category: "Media",
-  //     },
-  //     {
-  //       id: 5,
-  //       name: "Insurance Certificate.pdf",
-  //       type: "pdf",
-  //       size: "0.9 MB",
-  //       uploadDate: "2024-01-30",
-  //       category: "Insurance",
-  //     },
-  //     {
-  //       id: 6,
-  //       name: "Marketing Materials.zip",
-  //       type: "zip",
-  //       size: "18.3 MB",
-  //       uploadDate: "2024-02-08",
-  //       category: "Marketing",
-  //     },
-  //   ],
-  //   tasks: [
-  //     {
-  //       id: 1,
-  //       title: "Confirm final menu with caterer",
-  //       assignee: "Sarah Johnson",
-  //       dueDate: "2024-03-08",
-  //       status: "pending",
-  //       priority: "high",
-  //     },
-  //     {
-  //       id: 2,
-  //       title: "Test AV equipment setup",
-  //       assignee: "Mike Rodriguez",
-  //       dueDate: "2024-03-12",
-  //       status: "pending",
-  //       priority: "high",
-  //     },
-  //     {
-  //       id: 3,
-  //       title: "Send welcome emails to attendees",
-  //       assignee: "Emma Wilson",
-  //       dueDate: "2024-03-10",
-  //       status: "completed",
-  //       priority: "medium",
-  //     },
-  //     {
-  //       id: 4,
-  //       title: "Coordinate security briefing",
-  //       assignee: "John Davis",
-  //       dueDate: "2024-03-13",
-  //       status: "pending",
-  //       priority: "medium",
-  //     },
-  //   ],
-  // }
 
   // Get status color
   const getStatusColor = (status) => {
@@ -654,7 +462,15 @@ export default function EventProfile({ onBack }) {
 
           {/* Vendors */}
           <div className="bg-slate-800 rounded-lg border border-slate-700 p-6 shadow-sm">
-            <h2 className="text-xl font-semibold text-white mb-4">Vendors</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-white mb-4">Vendors</h2>
+              <button 
+              onClick={() => setAssignVendor(true)}
+              variant="outline" className="border-slate-600 text-slate-300 hover:bg-slate-800 bg-transparent">
+                <UserRoundPlus className="w-4 h-4 mr-2" />
+                Assign Vendor
+              </button>
+            </div>
             {event.vendors && event.vendors.length > 0 ? (
               <div className="space-y-4">
                 {event.vendors.map((vendor) => (
@@ -803,6 +619,7 @@ export default function EventProfile({ onBack }) {
           </div>
         </div>
       </div>
+      <AssignVendor isOpen={assignVendor} onClose={() => setAssignVendor(false)} />
     </div>
   )
 }
