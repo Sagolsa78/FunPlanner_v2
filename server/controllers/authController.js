@@ -106,3 +106,19 @@ export const login = async (req, res) => {
     }
 
 }
+
+export const checkAuth = async (req, res) => {
+  try {
+
+    res.status(200).json({
+      success: true,
+      user: req.user,
+    });
+  } catch (error) {
+    console.error('Error in auth controller:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+    });
+  }
+};

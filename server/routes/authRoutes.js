@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { signup,login } from '../controllers/authController.js';
+import { signup,login, checkAuth } from '../controllers/authController.js';
 import passport from 'passport';
 import isAuthenticated from '../middleware/isAuthenticated.js';
 
@@ -20,5 +20,7 @@ router.get('/google/callback',
 router.get('login-failure',(req,res)=>{
     res.send('Login failed')
 })
+
+router.get('/check', isAuthenticated, checkAuth)
 
 export default router;
