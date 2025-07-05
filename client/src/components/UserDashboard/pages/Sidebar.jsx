@@ -39,7 +39,7 @@ const Sidebar = () => {
     {
       label: "Inbox",
       icon: Inbox,
-      href: "/inbox",
+      href: "/chat-app",
       active: false,
     }
   ]
@@ -94,15 +94,16 @@ const Sidebar = () => {
         {/* Main Navigation */}
         <div className="p-4">
           {sidebarItems.map((item, index) => (
-            <div
+            <Link
               key={index}
+              to={item.href}
               className={`flex items-center space-x-3 px-3 py-2 rounded-md cursor-pointer hover:bg-gray-800 ${
                 item.active ? "bg-gray-800" : ""
               }`}
             >
               <item.icon className="w-4 h-4 text-gray-400" />
               <span className="text-sm">{item.label}</span>
-            </div>
+            </Link>
           ))}
         </div>
 

@@ -1,13 +1,13 @@
 import express from "express";
 import isAuthenticated from "../middleware/isAuthenticated.js";
-import { getMessages, getUsersforSidebar, sendMessage } from "../controllers/chat.controller.js";
-import e from "express";
+import { getMessages, getUsersForSidebar, sendMessage } from "../controllers/chat.controller.js";
 
 const router = express.Router();
 
+router.get('/getUsers',isAuthenticated, getUsersForSidebar);
+router.get('/getChats/:id', isAuthenticated, getMessages);
+router.post('/sendChat/:id',isAuthenticated,sendMessage);
 
-router.get('/users',isAuthenticated, getUsersforSidebar);
-router.get('/:id', isAuthenticated, getMessages);
-router.post('/send',isAuthenticated,sendMessage);
+
 
 export default router;
