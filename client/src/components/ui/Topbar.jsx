@@ -1,7 +1,7 @@
 import { Bell, Slack, ChevronDown } from "lucide-react";
 import { useSelector } from "react-redux";
 
-const ChatTopbar = () => {
+const Topbar = () => {
   const authUser = useSelector((state) => state.auth.authUser);
 
   return (
@@ -46,4 +46,4 @@ const ChatTopbar = () => {
   );
 };
 
-export default ChatTopbar;
+export default Topbar;

@@ -15,6 +15,7 @@ import EventProfile from './components/UserDashboard/profiles/Event-profile';
 import EventDashboard from './components/UserDashboard/dashboard/Event-dashboard';
 import VendorProfile from './components/UserDashboard/profiles/Vendor-profile';
 import ChatAppLayout from './chat/layout/ChatAppLayout';
+import TodoLayout from './layouts/TodoLayout';
 
 function App() {
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ function App() {
     { path: '/event-dashboard', element: authUser ? <EventDashboard /> : <HomeLayout /> },
     { path: '/vendor-profile/:id', element: <VendorProfile /> },
     { path: '/chat-app', element: authUser ? <ChatAppLayout /> : <HomeLayout /> },
+    { path: '/todo', element: authUser ? <TodoLayout /> : <HomeLayout /> },
   ]);
 
   return <RouterProvider router={browserRouter} />;

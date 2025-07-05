@@ -17,6 +17,7 @@ import clientRoutes from './routes/clientRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import vendorRoutes from './routes/vendorRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import todoRoutes from './routes/todoRoutes.js';
 
 // Middleware
 app.use(cors({
@@ -43,6 +44,7 @@ app.use('/api/clients', clientRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/vendors', vendorRoutes);
 app.use('/api/chat', chatRoutes);
+app.use("/api/todos", todoRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;
