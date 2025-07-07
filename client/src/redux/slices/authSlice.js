@@ -6,13 +6,16 @@ export const checkAuth = createAsyncThunk(
   "auth/checkAuth",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axiosInstance.get("/auth/check");
+      const res = await axiosInstance.get("/auth/check", {
+        withCredentials: true, // ✅ Include cookies
+      });
       return res.data.user;
     } catch (error) {
       return rejectWithValue(error.response?.data);
     }
   }
 );
+
 
 
 
