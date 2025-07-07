@@ -36,18 +36,6 @@ app.use(cors({
   credentials: true
 }));
 
-// Optional: Explicitly handle preflight (not always needed, but safe)
-app.options('*', cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
-
 
 app.use(express.json());
 app.use(cookieParser());
