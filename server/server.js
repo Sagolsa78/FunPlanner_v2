@@ -26,10 +26,24 @@ const allowedOrigins = [
 ]
 
 app.use(cors({
-  origin: allowedOrigins,
-
-  credentials: true,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like curl, Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
 }));
+
+// IMPORTANT: Handle preflight (OPTIONS) requests
+app.options('*', cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(session({
