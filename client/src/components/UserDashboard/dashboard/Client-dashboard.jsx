@@ -228,7 +228,7 @@ export default function ClientDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#151d28]">
+    <div className="min-h-screen bg-black">
       {/* Header */}
       <div className="bg-[#1d293d] border-b text-white border-slate-600 px-6 py-4">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">

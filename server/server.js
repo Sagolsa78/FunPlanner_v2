@@ -19,9 +19,14 @@ import vendorRoutes from './routes/vendorRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import todoRoutes from './routes/todoRoutes.js';
 
-// Middleware
+const allowedOrigins = [
+  "https://fun-planner-v2-67nnhbl55-omguptatech-gmailcoms-projects.vercel.app/",
+  'http://localhost:5173'
+]
+
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: allowedOrigins,
+
   credentials: true,
 }));
 app.use(express.json());

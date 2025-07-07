@@ -5,10 +5,11 @@ import HeroDashboard from "../HeroDashboard"
 import { motion, AnimatePresence } from 'framer-motion';
 import Popup from "../ui/Popup";
 import { PlusCircle, Calendar, Users, MapPin, Sparkles, Clock, CheckCircle, ArrowRight, Trophy, Star, ArrowRightCircle } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
 
-
+  const navigate = useNavigate();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleOpenPopup = () => {
@@ -183,72 +184,6 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen bg-black overflow-hidden">
-      {/* Animated Background Grid */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 opacity-20">
-          <svg className="w-full h-full" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Grid Lines */}
-            <defs>
-              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-
-            {/* Animated Lines */}
-            <g className="animate-pulse">
-              <path
-                d="M0,400 Q300,200 600,400 T1200,400"
-                stroke="rgba(255,255,255,0.1)"
-                strokeWidth="1"
-                fill="none"
-                style={{
-                  transform: `translate(${mousePosition.x * 0.1}px, ${mousePosition.y * 0.1}px)`,
-                }}
-              />
-              <path
-                d="M0,300 Q400,100 800,300 T1200,300"
-                stroke="rgba(255,255,255,0.05)"
-                strokeWidth="1"
-                fill="none"
-                style={{
-                  transform: `translate(${mousePosition.x * -0.05}px, ${mousePosition.y * 0.05}px)`,
-                }}
-              />
-            </g>
-
-            {/* Geometric Shapes */}
-            <circle
-              cx="200"
-              cy="200"
-              r="2"
-              fill="rgba(255,255,255,0.3)"
-              style={{
-                transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`,
-              }}
-            />
-            <circle
-              cx="800"
-              cy="300"
-              r="1.5"
-              fill="rgba(255,255,255,0.2)"
-              style={{
-                transform: `translate(${mousePosition.x * -0.03}px, ${mousePosition.y * 0.03}px)`,
-              }}
-            />
-            <circle
-              cx="1000"
-              cy="150"
-              r="1"
-              fill="rgba(255,255,255,0.4)"
-              style={{
-                transform: `translate(${mousePosition.x * 0.04}px, ${mousePosition.y * -0.02}px)`,
-              }}
-            />
-          </svg>
-        </div>
-      </div>
-
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center min-h-screen text-center">
@@ -275,7 +210,9 @@ const HeroSection = () => {
           >
             <button className="group bg-gradient-to-r from-[#2E3192] to-[] text-white px-8 py-4 rounded-xl font-semibold text-2xl
              hover:from-[#2E3192] hover:to-[] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25
-              flex items-center cursor-pointer">
+              flex items-center cursor-pointer"
+              
+              >
               Get Started Free
               <ArrowRight className="ml-3 w-6 h-6 transition-transform group-hover:translate-x-1" />
             </button>

@@ -422,26 +422,26 @@ export default function VendorsDashboard() {
           {selectedVendor && (
             vendors.map((vendor) => (
               <div className="bg-slate-800 rounded-lg border border-slate-700 h-fit">
-                <div className="p-6 border-b border-slate-700">
-                  <div className="flex justify-between items-start">
-                    <h2 className="text-xl font-semibold text-white">Vendor Details</h2>
-                    <div className="flex items-center space-x-2">
-                      <Link
-                        key={vendor.id}
-                        to={`/vendor-profile/${vendor.id}`}
-                        className="text-slate-400 hover:text-white transition-colors cursor-pointer"
-                      >
-                        <Eye />
-                      </Link>
-                      <button
-                        onClick={() => setSelectedVendor(null)}
-                        className="text-slate-400 hover:text-white transition-colors cursor-pointer ml-2"
-                      >
-                        <Icons.X />
-                      </button>
-                    </div>
+              <div className="p-6 border-b border-slate-700">
+                <div className="flex justify-between items-start">
+                  <h2 className="text-xl font-semibold text-white">Vendor Details</h2>
+                  <div className="flex items-center space-x-2">
+                    <Link
+                    key={vendor.id}
+                    to ={`/vendor-profile/${vendor.id}`}
+                    className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                  >
+                    <Eye/>
+                  </Link>
+                  <button
+                    onClick={() => setSelectedVendor(null)}
+                    className="text-slate-400 hover:text-white transition-colors cursor-pointer ml-2"
+                  >
+                    <Icons.X />
+                  </button>
                   </div>
                 </div>
+              </div>
 
                 <div className="p-6 space-y-6">
                   {/* Contact Info */}
