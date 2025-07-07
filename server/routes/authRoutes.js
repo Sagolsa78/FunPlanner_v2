@@ -13,14 +13,13 @@ router.get('/google',passport.authenticate('google',{
 
 router.get('/google/callback',
     passport.authenticate('google',{
-        successRedirect: 'http://localhost:5173/dashboard',
+        successRedirect:   "https://fun-planner-v2-agxf80um1-omguptatech-gmailcoms-projects.vercel.app",
         failureRedirect:'/login-failure'}),
 )
 
-router.get('login-failure',(req,res)=>{
-    res.send('Login failed')
-})
-
+router.get('/login-failure', (req, res) => {
+  res.send('Login failed');
+});
 router.get('/check', isAuthenticated, checkAuth)
 
 export default router;
