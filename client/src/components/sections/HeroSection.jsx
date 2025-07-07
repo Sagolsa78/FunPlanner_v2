@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import HeroDashboard from "../HeroDashboard"
 import { motion, AnimatePresence } from 'framer-motion';
 import Popup from "../ui/Popup";
-import { PlusCircle, Calendar, Users, MapPin, Sparkles, Clock, CheckCircle, ArrowRight, Trophy, Star } from 'lucide-react';
+import { PlusCircle, Calendar, Users, MapPin, Sparkles, Clock, CheckCircle, ArrowRight, Trophy, Star, ArrowRightCircle } from 'lucide-react';
 
 const HeroSection = () => {
 
@@ -19,51 +19,51 @@ const HeroSection = () => {
     setIsPopupOpen(false);
   };
 
-   const testimonials = [
-        {
-            name: "Sarah Johnson",
-            role: "Event Coordinator",
-            company: "Creative Events Co.",
-            content:
-                "FunPlanner transformed how we organize events. The intuitive interface and powerful features saved us countless hours.",
-            rating: 5,
-            avatar: "/placeholder.svg?height=60&width=60",
-        },
-        {
-            name: "Michael Chen",
-            role: "Wedding Planner",
-            company: "Dream Weddings",
-            content:
-                "The best event planning tool I've ever used. My clients love the seamless experience and professional results.",
-            rating: 5,
-            avatar: "/placeholder.svg?height=60&width=60",
-        },
-        {
-            name: "Emily Rodriguez",
-            role: "Corporate Events Manager",
-            company: "TechCorp Inc.",
-            content: "FunPlanner's analytics and guest management features are game-changers for corporate event planning.",
-            rating: 5,
-            avatar: "/placeholder.svg?height=60&width=60",
-        },
-        {
-            name: "David Thompson",
-            role: "Festival Organizer",
-            company: "Music Festivals Ltd.",
-            content:
-                "Managing large-scale events has never been easier. The platform handles everything from ticketing to logistics.",
-            rating: 5,
-            avatar: "/placeholder.svg?height=60&width=60",
-        },
-    ]
-    const [currentTestimonial, setCurrentTestimonial] = useState(0)
+  const testimonials = [
+    {
+      name: "Sarah Johnson",
+      role: "Event Coordinator",
+      company: "Creative Events Co.",
+      content:
+        "FunPlanner transformed how we organize events. The intuitive interface and powerful features saved us countless hours.",
+      rating: 5,
+      avatar: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      name: "Michael Chen",
+      role: "Wedding Planner",
+      company: "Dream Weddings",
+      content:
+        "The best event planning tool I've ever used. My clients love the seamless experience and professional results.",
+      rating: 5,
+      avatar: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      name: "Emily Rodriguez",
+      role: "Corporate Events Manager",
+      company: "TechCorp Inc.",
+      content: "FunPlanner's analytics and guest management features are game-changers for corporate event planning.",
+      rating: 5,
+      avatar: "/placeholder.svg?height=60&width=60",
+    },
+    {
+      name: "David Thompson",
+      role: "Festival Organizer",
+      company: "Music Festivals Ltd.",
+      content:
+        "Managing large-scale events has never been easier. The platform handles everything from ticketing to logistics.",
+      rating: 5,
+      avatar: "/placeholder.svg?height=60&width=60",
+    },
+  ]
+  const [currentTestimonial, setCurrentTestimonial] = useState(0)
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
-        }, 4000)
-        return () => clearInterval(interval)
-    }, [testimonials.length])
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [testimonials.length])
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
@@ -83,107 +83,103 @@ const HeroSection = () => {
   ];
 
   const CustomerLogos = () => {
-  const [index, setIndex] = useState(0);
-  const visibleLogos = logos.slice(index, index + 6);
+    const [index, setIndex] = useState(0);
+    const visibleLogos = logos.slice(index, index + 6);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 6) % logos.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setIndex((prev) => (prev + 6) % logos.length);
+      }, 5000);
+      return () => clearInterval(interval);
+    }, []);
 
-  return (
-    <div className="relative mt-16 w-fit mx-auto"> {/* <- limits blur overlay area */}
-      <div className="relative group z-10 inline-block">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={index}
-            className="grid grid-cols-3 gap-y-12 gap-x-16 md:grid-cols-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-          >
-            {visibleLogos.map((logo, i) => (
-              <motion.img
-                key={i}
-                src={`/assets/logos/${logo}`}
-                alt={`Client logo ${i}`}
-                className="w-24 h-12 object-contain grayscale hover:grayscale-0 transition duration-500 opacity-60 hover:opacity-100"
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 0.6, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ delay: i * 0.2, duration: 1.0, ease: "easeOut" }}
-              />
-            ))}
-          </motion.div>
-        </AnimatePresence>
+    return (
+      <div className="relative mt-16 w-fit mx-auto"> {/* <- limits blur overlay area */}
+        <div className="relative group z-10 inline-block">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={index}
+              className="grid grid-cols-3 gap-y-12 gap-x-16 md:grid-cols-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+            >
+              {visibleLogos.map((logo, i) => (
+                <motion.img
+                  key={i}
+                  src={`/assets/logos/${logo}`}
+                  alt={`Client logo ${i}`}
+                  className="w-24 h-12 object-contain grayscale hover:grayscale-0 transition duration-500 opacity-60 hover:opacity-100"
+                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  animate={{ opacity: 0.6, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ delay: i * 0.2, duration: 1.0, ease: "easeOut" }}
+                />
+              ))}
+            </motion.div>
+          </AnimatePresence>
 
-        {/* Only visible when hovering over logo grid */}
-        <div className="absolute inset-0 z-40 opacity-0 group-hover:opacity-40 transition duration-100 backdrop-blur-sm flex items-center justify-center rounded-lg">
-          <button className="text-black px-6 py-3 text-2xl md:text-base rounded-lg bg-gray-200 hover:bg-gray-100 backdrop-blur-sm shadow-lg border border-white/20 cursor-pointer">
-            Meet our customers
-          </button>
+          {/* Only visible when hovering over logo grid */}
+          <div className="absolute inset-0 z-40 opacity-0 group-hover:opacity-40 transition duration-100 backdrop-blur-sm flex items-center justify-center rounded-lg">
+            <button className="text-black px-6 py-3 text-2xl md:text-base rounded-lg bg-gray-200 hover:bg-gray-100 backdrop-blur-sm shadow-lg border border-white/20 cursor-pointer">
+              Meet our customers
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
 
   const cardData = [
     {
       id: 1,
       image: 'HeroSection3.2.png',
-      statement: 'Seamlessly manage large-scale conferences and corporate events.',
+      statement: 'Gain insights into your event landscape with real-time distribution tracking.',
     },
     {
       id: 2,
-      image: 'HeroSection2.5.png',
-      statement: 'Organize stunning weddings and private celebrations with ease.',
+      image: 'TaskManager.png',
+      statement: 'Stay organized and manage your event workflow effortlessly.',
     },
     {
       id: 3,
-      image: 'HeroSection3.2.png',
-      statement: 'Coordinate vibrant festivals and public gatherings efficiently.',
+      image: 'ChatBox.png',
+      statement: 'Chat in real-time to keep your entire team aligned.',
     },
   ];
 
   const Card = ({ imageSrc, statement, onIconClick }) => {
     return (
-      <div className="relative bg-[#141516] rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col w-full max-w-sm mx-auto">
-        {/* Image with dilution effect */}
-        <div className="relative h-48 md:h-56 lg:h-64 overflow-hidden rounded-t-xl">
+      <div className="bg-[#1a1b1e] rounded-2xl shadow-md overflow-hidden flex flex-col w-full max-w-sm mx-auto border border-[#2a2b2e] transition hover:shadow-purple-600/80">
+        {/* Image Container */}
+        <div className="w-full aspect-[6/4] bg-black overflow-hidden">
           <img
             src={imageSrc}
             alt="Card Visual"
-            className="w-full h-full object-cover filter brightness-[2.2]" // Darken the image
-            style={{ opacity: 0.7 }} // Allow dark background to show through for blending
-            onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/333333/FFFFFF?text=Image+Placeholder'; }}
+            className="w-fit h-fit object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          {/* Optional: Add a subtle gradient overlay for more blending */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#141516] to-transparent opacity-50"></div>
         </div>
 
-        <div className="p-5 flex-grow flex flex-col justify-between items-center text-center">
-          {/* Statement */}
-          <p className="text-white text-lg font-medium leading-relaxed mb-6">
+        {/* Content Section */}
+        <div className="p-5 flex flex-col items-center justify-between  text-center gap-4">
+          <p className="text-white text-lg font-semibold leading-snug">
             {statement}
           </p>
 
-          {/* Encircled Plus Icon */}
+
           <button
             onClick={onIconClick}
-            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-purple-500 text-purple-400 hover:text-white hover:bg-purple-600 hover:border-purple-600 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-[#141516]"
-            aria-label="Open details"
-          >
-            <PlusCircle size={28} strokeWidth={2.5} />
+            className="w-12 h-12 bg-gradient-to-r from-[#2E3192] to-[] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+            <ArrowRightCircle className="w-8 h-8 text-white cursor-pointer" />
           </button>
         </div>
       </div>
     );
   };
+
+
 
   return (
     <section className="relative min-h-screen bg-black overflow-hidden">
@@ -320,8 +316,8 @@ const HeroSection = () => {
 
 
           {/* Main Container for Cards */}
-          <div className="container mb-28 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
-            {cardData.map((card, index) => (
+          <div className="container mb-12 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 ">
+            {cardData.map((card) => (
               <Card
                 key={card.id}
                 imageSrc={`/assets/dashboard-slices/${card.image}`}
@@ -330,6 +326,7 @@ const HeroSection = () => {
               />
             ))}
           </div>
+
 
           {/* Render the Popup component */}
           <Popup isOpen={isPopupOpen} onClose={handleClosePopup} />
@@ -391,55 +388,62 @@ const HeroSection = () => {
             </div>
           </section>
 
-          <section className="py-20 px-6 bg-gray-900/30 overflow-hidden">
-  <div className="max-w-7xl mx-auto">
-    <div className="text-center mb-16">
-      <h2 className="text-4xl font-bold mb-4 text-white">What Our Users Say</h2>
-      <p className="text-xl text-gray-400">Join thousands of satisfied event planners</p>
-    </div>
+          {/* testimonials */}
 
-    <div className="relative overflow-hidden">
-      {/* Gradient overlays for vintage effect */}
-      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
-      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black via-black/80 to-transparent z-10"></div>
+          <section className="py-20 px-6 bg-gray-900/30 overflow-hidden relative">
+            {/* Gradient overlays */}
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black via-black/80 to-transparent z-10"></div>
 
-      <div className="flex animate-scroll">
-        {[...testimonials, ...testimonials].map((testimonial, index) => (
-          <div
-            key={index}
-            className="flex-shrink-0 w-96 mx-4 bg-gray-800/40 border border-gray-700 backdrop-blur-sm rounded-lg p-6"
-          >
-            <div className="flex items-center mb-4">
-              <img
-                src={testimonial.avatar || "/placeholder.svg"}
-                alt={testimonial.name}
-                className="w-12 h-12 rounded-full mr-4"
-              />
-              <div>
-                <h4 className="text-white font-semibold">{testimonial.name}</h4>
-                <p className="text-gray-400 text-sm">{testimonial.role}</p>
-                <p className="text-gray-500 text-xs">{testimonial.company}</p>
+            <div className="max-w-7xl mx-auto relative z-20">
+              <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold mb-4 text-white">What Our Users Say</h2>
+                <p className="text-xl text-gray-400">Join thousands of satisfied event planners</p>
+              </div>
+
+              <div className="overflow-hidden">
+                <motion.div
+                  className="flex space-x-6"
+                  animate={{ x: ["0%", "-50%"] }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 30,
+                    ease: "linear",
+                  }}
+                >
+                  {[...testimonials, ...testimonials].map((testimonial, index) => (
+                    <div
+                      key={index}
+                      className="flex-shrink-0 w-96 bg-gray-800/40 border border-gray-700 backdrop-blur-sm rounded-lg p-6 hover:bg-gray-800/60 transition-all duration-300"
+                    >
+                      <div className="flex items-center mb-4">
+                        <img
+                          src={testimonial.avatar || "/placeholder.svg"}
+                          alt={testimonial.name}
+                          className="w-12 h-12 rounded-full mr-4"
+                        />
+                        <div>
+                          <h4 className="text-white font-semibold">{testimonial.name}</h4>
+                          <p className="text-gray-400 text-sm">{testimonial.role}</p>
+                          <p className="text-gray-500 text-xs">{testimonial.company}</p>
+                        </div>
+                      </div>
+                      <div className="flex mb-3">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                        ))}
+                      </div>
+                      <p className="text-gray-300 text-sm leading-relaxed">{testimonial.content}</p>
+                    </div>
+                  ))}
+                </motion.div>
               </div>
             </div>
-            <div className="flex mb-3">
-              {[...Array(testimonial.rating)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-              ))}
-            </div>
-            <p className="text-gray-300 text-sm leading-relaxed">{testimonial.content}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
+          </section>
 
 
         </div>
       </div>
-
-      {/* Bottom Gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-900 to-transparent"></div>
     </section>
   )
 }

@@ -119,13 +119,13 @@ const Sidebar = () => {
               to={item.href}
               className="flex items-center space-x-3 px-3 py-2 rounded-md cursor-pointer hover:bg-gray-800"
             >
-              <item.icon className="w-4 h-4 text-gray-400" />
+              <item.icon className="w-4 h-4 text-gray-400 " />
               <span className="text-sm">{item.label}</span>
             </Link>
           ))}
         </div>
 
-        {/* Your teams Section */}
+        {/* Your teams Section
         <div className="px-2 mt-6">
           <div className="flex items-center justify-between px-3 py-2">
             <span className="text-xs text-gray-400 font-medium">Your teams</span>
@@ -151,13 +151,13 @@ const Sidebar = () => {
               <span className="text-sm">{item.label}</span>
             </div>
           ))}
-        </div>
+        </div> */}
 
         {/* Try Section */}
         <div className="px-2 mt-6">
           <div className="flex items-center justify-between px-3 py-2">
             <span className="text-xs text-gray-400 font-medium">Connections</span>
-            <ChevronDown className="w-3 h-3 text-gray-400" />
+            
           </div>
           {tryItems.map((item, index) => (
             <Link

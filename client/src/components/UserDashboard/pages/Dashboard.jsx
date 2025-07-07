@@ -74,14 +74,14 @@ export default function Dashboard() {
           [
             {
               title: "Upcoming",
-              value: "8",
+              value: data.totalEvents,
               icon: Calendar,
               iconColor: "text-blue-400",
               bgColor: "bg-blue-400/10",
             },
             {
               title: "Completed",
-              value: "24",
+              value: "0",
               icon: CheckCircle,
               iconColor: "text-green-400",
               bgColor: "bg-green-400/10",
@@ -119,132 +119,129 @@ export default function Dashboard() {
 
 
   return (
-    <div className="min-h-screen bg-[#161b22] text-white p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+  <div className="min-h-screen bg-[#0f1117] text-white p-6">
+    <div className="max-w-7xl mx-auto space-y-8">
 
-        {/* Header */}
-        <div className="flex justify-between items-start">
-          <div>
-            <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-            <p className="text-slate-400 mt-1">Manage your upcoming events</p>
-          </div>
-
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {stats.map((stat, index) => (
-            <div key={index} className="bg-slate-800 border border-slate-700 rounded-lg p-6">
-              <div className="flex items-center space-x-3">
-                <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                  <stat.icon className={`w-5 h-5 ${stat.iconColor}`} />
-                </div>
-                <div>
-                  <p className="text-slate-400 text-sm">{stat.title}</p>
-                  <p className="text-2xl font-bold text-white">{stat.value}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Analytics and Distribution */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-          {/* Event Analytics */}
-          <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 lg:col-span-2">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-white text-lg font-semibold">Event Analytics</h2>
-              <div className="flex space-x-2">
-                {["Month", "Quarter", "Year"].map((label, idx) => (
-                  <button
-                    key={idx}
-                    className="text-slate-400 hover:text-white text-sm px-3 py-1 rounded hover:bg-slate-700 transition"
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="h-64 flex items-center justify-center text-slate-500">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-slate-700 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <Calendar className="w-8 h-8" />
-                </div>
-                <p>Analytics chart would go here</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Event Distribution */}
-          <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
-            <h2 className="text-white text-lg font-semibold mb-4">Event Distribution</h2>
-            <div className="space-y-4">
-              {eventDistribution.map((item, index) => (
-                <div key={index} className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-300">{item.category}</span>
-                    <span className="text-slate-400">{item.percentage}%</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div
-                      className={`h-2 rounded-full ${item.color}`}
-                      style={{ width: `${item.percentage}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Your Events */}
-         <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-white text-lg font-semibold">All Events</h2>
-        <div className="flex space-x-2">
-          {["All", "Upcoming", "Past"].map((label, idx) => (
-            <button
-              key={idx}
-              className="text-slate-400 hover:text-white text-sm px-3 py-1 rounded hover:bg-slate-700 transition"
-            >
-              {label}
-            </button>
-          ))}
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+          <p className="text-slate-400 mt-1">Track and manage your events efficiently</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {visibleEvents.map((event, index) => (
-          <div
-            key={index}
-            className={`relative p-6 rounded-lg bg-gradient-to-br ${event.gradient} min-h-[200px] flex flex-col justify-between`}
-          >
-            <div className="absolute top-4 right-4">
-              <span className="bg-black/20 text-white text-xs px-2 py-1 rounded-full">{event.date}</span>
-            </div>
-            <div className="mt-8">
-              <h3 className="text-xl font-bold text-white">{event.name}</h3>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-5">
+        {stats.map((stat, index) => (
+          <div key={index} className="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-md hover:shadow-lg transition">
+            <div className="flex items-center space-x-4">
+              <div className={`p-3 rounded-full ${stat.bgColor}`}>
+                <stat.icon className={`w-6 h-6 ${stat.iconColor}`} />
+              </div>
+              <div>
+                <p className="text-sm text-slate-400">{stat.title}</p>
+                <p className="text-xl font-semibold text-white">{stat.value}</p>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Show More Button */}
-      {events.length > 3 && (
-        <div className="mt-4 flex justify-end">
-          <button
-            onClick={() => navigate('/event-dashboard')}
-            className="text-sm text-slate-500 hover:text-white px-4 py-2 rounded hover:bg-slate-700 transition cursor-pointer"
-          >
-            Show More <ArrowRight className="ml-2 w-4 h-4" />
-          </button>
+      {/* Analytics + Distribution */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        {/* Event Analytics */}
+        <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 lg:col-span-2">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-white text-lg font-semibold">Event Analytics</h2>
+            <div className="flex space-x-2">
+              {["Month", "Quarter", "Year"].map((label, idx) => (
+                <button
+                  key={idx}
+                  className="text-sm px-3 py-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition"
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="h-64 flex items-center justify-center text-slate-500 border border-dashed border-slate-600 rounded-lg">
+            <div className="text-center">
+              <Calendar className="w-8 h-8 mx-auto mb-2" />
+              <p>Analytics chart placeholder</p>
+            </div>
+          </div>
         </div>
-      )}
-    </div>
+
+        {/* Event Distribution */}
+        <div className="bg-slate-800 border border-slate-700 rounded-xl p-6">
+          <h2 className="text-white text-lg font-semibold mb-4">Event Distribution</h2>
+          <div className="space-y-5">
+            {eventDistribution.map((item, index) => (
+              <div key={index}>
+                <div className="flex justify-between text-sm text-slate-300 mb-1">
+                  <span>{item.category}</span>
+                  <span>{item.percentage}%</span>
+                </div>
+                <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
+                  <div
+                    className={`h-2 ${item.color} rounded-full transition-all`}
+                    style={{ width: `${item.percentage}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
-    </div>
+      {/* Your Events */}
+      <div className="bg-slate-800 border border-slate-700 rounded-xl p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-white text-lg font-semibold">All Events</h2>
+          <div className="flex space-x-2">
+            {["All", "Upcoming", "Past"].map((label, idx) => (
+              <button
+                key={idx}
+                className="text-sm text-slate-400 hover:text-white px-3 py-1 rounded-md hover:bg-slate-700 transition"
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
 
-  )
+        {/* Event Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {visibleEvents.map((event, index) => (
+            <div
+              key={index}
+              className={`relative p-5 rounded-xl bg-gradient-to-br ${event.gradient} min-h-[180px] flex flex-col justify-between shadow-md`}
+            >
+              <span className="absolute top-4 right-4 bg-black/30 text-xs px-2 py-1 rounded-full">
+                {event.date}
+              </span>
+              <div className="mt-6">
+                <h3 className="text-lg font-bold">{event.name}</h3>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Show More */}
+        {events.length > 3 && (
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={() => navigate('/event-dashboard')}
+              className="flex items-center gap-1 text-sm text-slate-400 hover:text-white px-4 py-2 rounded-md hover:bg-slate-700 transition"
+            >
+              Show More <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+);
+
 }

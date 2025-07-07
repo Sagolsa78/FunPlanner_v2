@@ -2,6 +2,16 @@ import Client from '../models/client.model.js';
 import Event from '../models/event.model.js'
 import Vendor from '../models/vendor.model.js';
 
+const getColorForCategory = (category) => {
+  const colorMap = {
+    Corporate: 'bg-purple-500',
+    Social: 'bg-pink-500',
+    Tech: 'bg-blue-500',
+    Charity: 'bg-green-500',
+  };
+  return colorMap[category] || 'bg-slate-500';
+};
+
 export const getDashboardStats = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -48,16 +58,6 @@ export const getEventDistribution = async (req,res) => {
     console.error(error.message)
     return res.status(500).json({ error: "Failed to fetch event distribution" });
   }
-};
-
-const getColorForCategory = (category) => {
-  const colorMap = {
-    Corporate: 'bg-purple-500',
-    Social: 'bg-pink-500',
-    Tech: 'bg-blue-500',
-    Charity: 'bg-green-500',
-  };
-  return colorMap[category] || 'bg-slate-500';
 };
 
 export const getAllEventWithStats = async (req, res) => {

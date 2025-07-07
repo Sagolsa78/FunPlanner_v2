@@ -24,7 +24,7 @@ export default function VendorsDashboard() {
   const [stats, setStats] = useState([]);
   const [vendors, setVendors] = useState([]);
   const navigate = useNavigate();
-  const {id} = useParams();
+  const { id } = useParams();
 
   // const vendors = [
   //   {
@@ -311,12 +311,13 @@ export default function VendorsDashboard() {
                         </td>
                         <td className="py-4 px-6">
                           <div className="flex space-x-2">
-                            <button
-                              onClick={() => setSelectedVendor(vendor)}
-                              className="p-2 text-slate-400 hover:text-white hover:bg-slate-600 rounded-lg transition-colors"
+                            <Link
+                              key={vendor.id}
+                              to={`/vendor-profile/${vendor.id}`}
+                              className="text-slate-400 hover:text-white transition-colors cursor-pointer"
                             >
-                              <Icons.Eye />
-                            </button>
+                              <Eye />
+                            </Link>
                             <button className="p-2 text-slate-400 hover:text-white hover:bg-slate-600 rounded-lg transition-colors">
                               <Icons.Edit />
                             </button>
@@ -421,107 +422,107 @@ export default function VendorsDashboard() {
           {selectedVendor && (
             vendors.map((vendor) => (
               <div className="bg-slate-800 rounded-lg border border-slate-700 h-fit">
-              <div className="p-6 border-b border-slate-700">
-                <div className="flex justify-between items-start">
-                  <h2 className="text-xl font-semibold text-white">Vendor Details</h2>
-                  <div className="flex items-center space-x-2">
-                    <Link
-                    key={vendor.id}
-                    to ={`/vendor-profile/${vendor.id}`}
-                    className="text-slate-400 hover:text-white transition-colors cursor-pointer"
-                  >
-                    <Eye/>
-                  </Link>
-                  <button
-                    onClick={() => setSelectedVendor(null)}
-                    className="text-slate-400 hover:text-white transition-colors cursor-pointer ml-2"
-                  >
-                    <Icons.X />
-                  </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-6 space-y-6">
-                {/* Contact Info */}
-                <div>
-                  <h3 className="font-semibold text-white mb-3">{selectedVendor.name}</h3>
-                  <div className="space-y-2 text-sm">
-                    <p className="text-slate-300">Contact: {selectedVendor.contact}</p>
-                    <p className="text-slate-300">Email: {selectedVendor.email}</p>
-                    <p className="text-slate-300">Phone: {selectedVendor.phone}</p>
-                    <p className="text-slate-300">Category: {selectedVendor.category}</p>
+                <div className="p-6 border-b border-slate-700">
+                  <div className="flex justify-between items-start">
+                    <h2 className="text-xl font-semibold text-white">Vendor Details</h2>
+                    <div className="flex items-center space-x-2">
+                      <Link
+                        key={vendor.id}
+                        to={`/vendor-profile/${vendor.id}`}
+                        className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                      >
+                        <Eye />
+                      </Link>
+                      <button
+                        onClick={() => setSelectedVendor(null)}
+                        className="text-slate-400 hover:text-white transition-colors cursor-pointer ml-2"
+                      >
+                        <Icons.X />
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                {/* Services */}
-                <div>
-                  <h4 className="font-medium text-white mb-2">Services Offered</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedVendor.services.map((service, index) => (
-                      <span key={index} className="px-2 py-1 bg-purple-500/20 text-purple-300 rounded-full text-xs">
-                        {service}
-                      </span>
-                    ))}
+                <div className="p-6 space-y-6">
+                  {/* Contact Info */}
+                  <div>
+                    <h3 className="font-semibold text-white mb-3">{selectedVendor.name}</h3>
+                    <div className="space-y-2 text-sm">
+                      <p className="text-slate-300">Contact: {selectedVendor.contact}</p>
+                      <p className="text-slate-300">Email: {selectedVendor.email}</p>
+                      <p className="text-slate-300">Phone: {selectedVendor.phone}</p>
+                      <p className="text-slate-300">Category: {selectedVendor.category}</p>
+                    </div>
                   </div>
-                </div>
 
-                {/* Recent Events */}
-                <div>
-                  <h4 className="font-medium text-white mb-2">Recent Events</h4>
-                  <div className="space-y-2">
-                    {selectedVendor.recentEvents.map((event, index) => (
-                      <div key={index} className="p-2 bg-slate-700 rounded text-sm text-slate-300">
-                        {event}
-                      </div>
-                    ))}
+                  {/* Services */}
+                  <div>
+                    <h4 className="font-medium text-white mb-2">Services Offered</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedVendor.services.map((service, index) => (
+                        <span key={index} className="px-2 py-1 bg-purple-500/20 text-purple-300 rounded-full text-xs">
+                          {service}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                {/* Rating */}
-                <div>
-                  <h4 className="font-medium text-white mb-2">Rating & Feedback</h4>
-                  <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1">{renderStars(selectedVendor.rating)}</div>
-                    <span className="text-slate-300">{selectedVendor.rating}/5.0</span>
-                  </div>
-                </div>
-
-                {/* File Manager */}
-                <div>
-                  <div className="flex justify-between items-center mb-3">
-                    <h4 className="font-medium text-white">Documents</h4>
-                    <button className="text-purple-400 hover:text-purple-300 transition-colors">
-                      <Icons.Upload className="w-4 h-4" />
-                    </button>
-                  </div>
-                  <div className="space-y-2">
-                    {selectedVendor.documents.map((doc, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-slate-700 rounded-lg">
-                        <div className="flex items-center space-x-3">
-                          <Icons.File className="text-slate-400" />
-                          <div>
-                            <p className="text-sm font-medium text-white">{doc.name}</p>
-                            <p className="text-xs text-slate-400">
-                              {doc.size} • {doc.date}
-                            </p>
-                          </div>
+                  {/* Recent Events */}
+                  <div>
+                    <h4 className="font-medium text-white mb-2">Recent Events</h4>
+                    <div className="space-y-2">
+                      {selectedVendor.recentEvents.map((event, index) => (
+                        <div key={index} className="p-2 bg-slate-700 rounded text-sm text-slate-300">
+                          {event}
                         </div>
-                        <button className="text-slate-400 hover:text-white transition-colors">
-                          <Icons.Eye />
-                        </button>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
 
-                  {/* Upload Area */}
-                  <div className="mt-4 border-2 border-dashed border-slate-600 rounded-lg p-6 text-center">
-                    <Icons.Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                    <p className="text-sm text-slate-400">Drag & drop files here or click to browse</p>
+                  {/* Rating */}
+                  <div>
+                    <h4 className="font-medium text-white mb-2">Rating & Feedback</h4>
+                    <div className="flex items-center space-x-2">
+                      <div className="flex space-x-1">{renderStars(selectedVendor.rating)}</div>
+                      <span className="text-slate-300">{selectedVendor.rating}/5.0</span>
+                    </div>
+                  </div>
+
+                  {/* File Manager */}
+                  <div>
+                    <div className="flex justify-between items-center mb-3">
+                      <h4 className="font-medium text-white">Documents</h4>
+                      <button className="text-purple-400 hover:text-purple-300 transition-colors">
+                        <Icons.Upload className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <div className="space-y-2">
+                      {selectedVendor.documents.map((doc, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-slate-700 rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <Icons.File className="text-slate-400" />
+                            <div>
+                              <p className="text-sm font-medium text-white">{doc.name}</p>
+                              <p className="text-xs text-slate-400">
+                                {doc.size} • {doc.date}
+                              </p>
+                            </div>
+                          </div>
+                          <button className="text-slate-400 hover:text-white transition-colors">
+                            <Icons.Eye />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Upload Area */}
+                    <div className="mt-4 border-2 border-dashed border-slate-600 rounded-lg p-6 text-center">
+                      <Icons.Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+                      <p className="text-sm text-slate-400">Drag & drop files here or click to browse</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
             ))
           )}
         </div>

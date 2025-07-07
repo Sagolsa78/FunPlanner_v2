@@ -1,9 +1,11 @@
+// src/App.jsx
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { checkAuth } from './redux/slices/authSlice';
 import { Loader } from 'lucide-react';
 
+// Routes
 import Login from './auth/Login';
 import Signup from './auth/Signup';
 import HomeLayout from './layouts/HomeLayout';
@@ -17,14 +19,16 @@ import VendorProfile from './components/UserDashboard/profiles/Vendor-profile';
 import ChatAppLayout from './chat/layout/ChatAppLayout';
 import TodoLayout from './layouts/TodoLayout';
 
+// Protected Route Wrapper
+import ProtectedRoute from './components/ProtectedRoute';
+
 function App() {
   const dispatch = useDispatch();
-  const { authUser, isCheckingAuth } = useSelector((state) => state.auth);
+  const { isCheckingAuth } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    dispatch(checkAuth()); // ✅ correct place
+    dispatch(checkAuth());
   }, [dispatch]);
-  
 
   if (isCheckingAuth) {
     return (
@@ -38,15 +42,63 @@ function App() {
     { path: '/', element: <HomeLayout /> },
     { path: '/login', element: <Login /> },
     { path: '/signup', element: <Signup /> },
-    { path: '/dashboard', element: authUser ? <DashboardLayout /> : <HomeLayout /> },
-    { path: '/client-dashboard', element: authUser ? <ClientDashboard /> : <HomeLayout /> },
-    { path: '/vendor-dashboard', element: authUser ? <VendorsDashboard /> : <HomeLayout /> },
+
+    {
+      path: '/dashboard',
+      element: (
+        <ProtectedRoute>
+          <DashboardLayout />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/client-dashboard',
+      element: (
+        <ProtectedRoute>
+          <ClientDashboard />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/vendor-dashboard',
+      element: (
+        <ProtectedRoute>
+          <VendorsDashboard />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/event-dashboard',
+      element: (
+        <ProtectedRoute>
+          <EventDashboard />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/chat-app',
+      element: (
+        <ProtectedRoute>
+          <ChatAppLayout />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/todo',
+      element: (
+        <ProtectedRoute>
+          <TodoLayout />
+        </ProtectedRoute>
+      ),
+    },
+
+    // These are public or semi-protected, depending on your auth logic
     { path: '/client-profile/:id', element: <ClientProfile /> },
     { path: '/event-profile/:id', element: <EventProfile /> },
-    { path: '/event-dashboard', element: authUser ? <EventDashboard /> : <HomeLayout /> },
     { path: '/vendor-profile/:id', element: <VendorProfile /> },
-    { path: '/chat-app', element: authUser ? <ChatAppLayout /> : <HomeLayout /> },
-    { path: '/todo', element: authUser ? <TodoLayout /> : <HomeLayout /> },
+
+    // Fallback route for 404
+    { path: '*', element: <div className="text-center p-10">404 - Page Not Found</div> },
   ]);
 
   return <RouterProvider router={browserRouter} />;

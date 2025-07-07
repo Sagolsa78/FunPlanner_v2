@@ -13,16 +13,15 @@ const eventSchema = new mongoose.Schema({
   budget:{type:Number},
   attendees:{ type:String },
  status: {type: String, enum: ['upcoming', 'completed', 'cancelled'],default: 'upcoming',},
-  vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor', required: true },
-  time: { type: String, required: true },
-  endTime: { type: String, required: true },
-  endDate: { type: Date, required: true },  
+  vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor', required: false },
+  time: { type: String, required: false },
+  endTime: { type: String, required: false },
+  endDate: { type: Date, required: false },  
   description: { type: String, default: 'No description provided' },
   tags: { type: [String], default: [] },
   spent: { type: Number, default: 0 },
   organizer: { type: String, default: 'No organizer provided' },
   
-
 }, { timestamps: true });
 
 eventSchema.pre('save', function (next) {

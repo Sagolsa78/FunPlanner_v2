@@ -48,17 +48,16 @@ const Footer = () => {
   }
 
   const socialLinks = [
-    { name: "Twitter", icon: Twitter, href: "#twitter", color: "hover:text-blue-400" },
-    { name: "Facebook", icon: Facebook, href: "#facebook", color: "hover:text-blue-600" },
-    { name: "Instagram", icon: Instagram, href: "#instagram", color: "hover:text-pink-500" },
-    { name: "LinkedIn", icon: LinkedIn, href: "#linkedin", color: "hover:text-blue-500" },
+    { name: "Twitter", icon: Twitter, href: "https://x.com/low_Key_noob?t=Chyfvl5S2X_2FbZlBDSp3A&s=08", color: "hover:text-blue-400" },
+    { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/omgupta7632?igsh=MWRjMjExMG5kY2h3NA==", color: "hover:text-pink-500" },
+    { name: "LinkedIn", icon: LinkedIn, href: "https://www.linkedin.com/in/omxdev?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", color: "hover:text-blue-500" },
   ]
 
   return (
     <footer className="bg-gradient-to-b from-gray-900 to-black border-t border-gray-800">
       {/* Newsletter Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-3xl p-8 md:p-12 border border-purple-500/20 backdrop-blur-sm">
+        <div className="bg-gradient-to-r from-[#000128] to-[] rounded-3xl p-8 md:p-12 border border-purple-500/20 backdrop-blur-sm">
           <div className="text-center max-w-3xl mx-auto">
             <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">Stay Updated with Event Planning Tips</h3>
             <p className="text-gray-300 text-lg mb-8">
@@ -70,7 +69,7 @@ const Footer = () => {
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-3 bg-white/10 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent backdrop-blur-sm"
               />
-              <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 flex items-center justify-center group">
+              <button className="bg-gradient-to-r from-[#2E3192] to-[] text-white px-6 py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 flex items-center justify-center group">
                 Subscribe
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </button>
@@ -85,10 +84,10 @@ const Footer = () => {
           {/* Company Info */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="p-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl">
-                <Slack className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-white font-bold text-xl">Fun Planner</span>
+              <a href="/" className="flex items-center space-x-2">
+                <Slack className="w-8 h-8 text-white" />
+                <span className="text-white font-bold text-xl">Fun Planner</span>
+              </a>
             </div>
             <p className="text-gray-400 mb-6 leading-relaxed">
               The ultimate event planning platform that combines AI-powered insights with intuitive design. Make every
@@ -99,15 +98,15 @@ const Footer = () => {
             <div className="space-y-3 mb-6">
               <div className="flex items-center text-gray-400">
                 <Mail className="w-4 h-4 mr-3 text-purple-400" />
-                <span>hello@funplanner.com</span>
+                <span>omgupta.tech@gmail.com</span>
               </div>
               <div className="flex items-center text-gray-400">
                 <Phone className="w-4 h-4 mr-3 text-purple-400" />
-                <span>+1 (555) 123-4567</span>
+                <span>+91 7268823424</span>
               </div>
               <div className="flex items-center text-gray-400">
                 <MapPin className="w-4 h-4 mr-3 text-purple-400" />
-                <span>San Francisco, CA</span>
+                <span>Lucknow, India</span>
               </div>
             </div>
 

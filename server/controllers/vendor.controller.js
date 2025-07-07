@@ -70,8 +70,9 @@ export const getVendorStats = async (req, res) => {
 export const getAllVendorsWithStats = async (req, res) => {
     try {
         const userId = req.user._id;
+        const vendorId = req.params.id;
 
-        const vendors = await Vendor.find({ user: userId }).lean();
+        const vendors = await Vendor.find({ vendor:vendorId ,user: userId }).lean();
 
         const simplifiedVendors = vendors.map(vendor => ({
             id: vendor._id,
