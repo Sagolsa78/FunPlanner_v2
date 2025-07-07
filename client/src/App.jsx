@@ -46,49 +46,38 @@ function App() {
     {
       path: '/dashboard',
       element: (
-        <ProtectedRoute>
           <DashboardLayout />
-        </ProtectedRoute>
+        
       ),
     },
     {
       path: '/client-dashboard',
       element: (
-        <ProtectedRoute>
           <ClientDashboard />
-        </ProtectedRoute>
       ),
     },
     {
       path: '/vendor-dashboard',
       element: (
-        <ProtectedRoute>
           <VendorsDashboard />
-        </ProtectedRoute>
       ),
     },
     {
       path: '/event-dashboard',
       element: (
-        <ProtectedRoute>
           <EventDashboard />
-        </ProtectedRoute>
       ),
     },
     {
       path: '/chat-app',
       element: (
-        <ProtectedRoute>
           <ChatAppLayout />
-        </ProtectedRoute>
       ),
     },
     {
       path: '/todo',
       element: (
-        <ProtectedRoute>
           <TodoLayout />
-        </ProtectedRoute>
       ),
     },
 
