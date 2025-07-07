@@ -21,28 +21,33 @@ import todoRoutes from './routes/todoRoutes.js';
 
 const allowedOrigins = [
   "https://fun-planner-v2-67nnhbl55-omguptatech-gmailcoms-projects.vercel.app",
-  "fun-planner-v2-git-master-omguptatech-gmailcoms-projects.vercel.app",
-  'http://localhost:5173'
-]
+  "https://fun-planner-v2-git-master-omguptatech-gmailcoms-projects.vercel.app",
+  "http://localhost:5173"
+];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like curl, Postman)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
     } else {
-      return callback(new Error('Not allowed by CORS'));
+      callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true
 }));
 
-// IMPORTANT: Handle preflight (OPTIONS) requests
+// Optional: Explicitly handle preflight (not always needed, but safe)
 app.options('*', cors({
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
+
 
 app.use(express.json());
 app.use(cookieParser());
