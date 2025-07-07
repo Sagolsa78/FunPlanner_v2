@@ -4,6 +4,8 @@ config();
 
 import { app, server } from './utils/socket.js';
 import connectDB from './config/db.js';
+import MongoStore from 'connect-mongo';
+
 
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -45,6 +47,16 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI, // from your .env
+    collectionName: 'sessions',
+  }),
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', // set true in production (HTTPS)
+    sameSite: 'none', // required for cross-origin (Vercel <-> Render)
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
+  }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
