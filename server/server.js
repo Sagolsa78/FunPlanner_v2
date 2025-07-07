@@ -20,7 +20,7 @@ import chatRoutes from './routes/chatRoutes.js';
 import todoRoutes from './routes/todoRoutes.js';
 
 const allowedOrigins = [
-  "https://fun-planner-v2-67nnhbl55-omguptatech-gmailcoms-projects.vercel.app",
+  "https://fun-planner-v2-agxf80um1-omguptatech-gmailcoms-projects.vercel.app/",
   "https://fun-planner-v2-git-master-omguptatech-gmailcoms-projects.vercel.app",
   "http://localhost:5173"
 ];
