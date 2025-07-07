@@ -36,6 +36,8 @@ app.use(cors({
   credentials: true
 }));
 
+app.options('/*splat', cors());
+
 
 app.use(express.json());
 app.use(cookieParser());
