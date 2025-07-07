@@ -41,7 +41,7 @@ export default function CreateEvent({ isOpen, onClose }) {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        `http://localhost:5000/api/events/create-event/${id}`, {
+        `${import.meta.env.VITE_BACKEND_URL}/api/events/create-event/${id}`, {
         name: eventName,
         eventType,
         date: eventDate,

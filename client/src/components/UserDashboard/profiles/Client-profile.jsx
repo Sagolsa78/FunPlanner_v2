@@ -53,7 +53,7 @@ export default function ClientDashboard() {
             if (!token) return console.error("No token found");
 
             try {
-                const res = await axios.get(`http://localhost:5000/api/clients/client-stats/${id}`, {
+                const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/clients/client-stats/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -74,7 +74,7 @@ export default function ClientDashboard() {
             const token = localStorage.getItem('token');
             if (!token) return console.error('No token found');
             try {
-                const response = await axios.get(`http://localhost:5000/api/events/clients-event-data/${id}`, {
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/events/clients-event-data/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

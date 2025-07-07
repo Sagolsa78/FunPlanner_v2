@@ -23,7 +23,7 @@ export default function CreateVendor({ isOpen, onClose }) {
       const token = localStorage.getItem("token");
       if (!token) return res.status(401).json({ message: "Unauthorized" });
 
-      const response = await axios.post('http://localhost:5000/api/vendors/add-vendor', {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/vendors/add-vendor`, {
         name: vendorName,
         category: vendorCategory,
         contactPerson: ContactPerson,

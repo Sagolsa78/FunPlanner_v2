@@ -47,7 +47,6 @@ export default function VendorProfile() {
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
 
-  // Sample vendor data - in a real app, this would come from props or API
 //   const vendor = {
 //     id: vendorId || 1,
 //     name: "Elite Catering Solutions",
@@ -251,7 +250,7 @@ export default function VendorProfile() {
               if (!token) return console.error("No token found");
   
               try {
-                  const res = await axios.get(`http://localhost:5000/api/vendors/vendor-stats/${id}`, {
+                  const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/vendors/vendor-stats/${id}`, {
                       headers: {
                           Authorization: `Bearer ${token}`,
                       },

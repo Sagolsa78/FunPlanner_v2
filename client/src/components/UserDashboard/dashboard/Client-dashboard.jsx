@@ -136,7 +136,7 @@ export default function ClientDashboard() {
     const token = localStorage.getItem('token');
     if (!token) return console.error('No token found');
     try {
-      const response = await axios.get("http://localhost:5000/api/clients/clients-with-stats", {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/clients/clients-with-stats`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -31,7 +31,7 @@ const Signup = () => {
     const signupHandler = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/signup', formData, {
+            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, formData, {
                 headers: {
                     "Content-Type": 'application/json'
                 },
@@ -52,7 +52,7 @@ const Signup = () => {
         }
     }
     const googleSignupHandler = ()=>{
-        window.location.href = 'http://localhost:5000/api/auth/google';
+        window.location.href = `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`;
     }
 
     return (

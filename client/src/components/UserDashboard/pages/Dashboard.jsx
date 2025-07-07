@@ -19,7 +19,7 @@ export default function Dashboard() {
       if (!token) return console.error('No token found');
 
       try {
-        const res = await axios.get('http://localhost:5000/api/dashboard/all-events', {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/all-events`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -43,7 +43,7 @@ export default function Dashboard() {
       if (!token) return console.log('Token not found')
 
       try {
-        const res = await axios.get('http://localhost:5000/api/dashboard/events-distribution', {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/events-distribution`, {
           headers: { Authorization: `Bearer ${token}` }
         })
 
@@ -62,7 +62,7 @@ export default function Dashboard() {
       if (!token) return console.error('No token found');
 
       try {
-        const res = await axios.get('http://localhost:5000/api/dashboard/stats', {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/stats`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

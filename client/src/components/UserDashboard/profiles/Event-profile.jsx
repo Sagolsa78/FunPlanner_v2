@@ -85,7 +85,7 @@ export default function EventProfile({ onBack }) {
       if (!token) return console.error("No token found");
 
       try {
-        const res = await axios.get(`http://localhost:5000/api/events/event-stats/${id}`, {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/events/event-stats/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -21,7 +21,7 @@ export default function CreateClient({ isOpen, onClose }) {
             const token = localStorage.getItem("token");
 
             const response = await axios.post(
-                'http://localhost:5000/api/clients/create-client',
+                `${import.meta.env.VITE_BACKEND_URL}/api/clients/create-client`,
                 {
                     name: clientName,
                     email,

@@ -136,7 +136,7 @@ export default function VendorsDashboard() {
       const token = localStorage.getItem('token');
       if (!token) return console.error('No token found');
       try {
-        const response = await axios.get('http://localhost:5000/api/vendors/get-all-vendors', {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/vendors/get-all-vendors`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -159,7 +159,7 @@ export default function VendorsDashboard() {
       if (!token) return console.error('No token found');
 
       try {
-        const res = await axios.get('http://localhost:5000/api/vendors/get-stats', {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/vendors/get-stats`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
