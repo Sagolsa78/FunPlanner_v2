@@ -9,11 +9,7 @@ export const checkAuth = createAsyncThunk(
       const res = await axiosInstance.get("/auth/check", {
         withCredentials: true, // ✅ Include cookies
       });
-      console.log('Cookies:', req.cookies);
-console.log('Session ID:', req.sessionID);
-console.log('Session:', req.session);
-console.log('User:', req.user);
-console.log('Authenticated:', req.isAuthenticated());
+      
       return res.data.user;
     } catch (error) {
       return rejectWithValue(error.response?.data);
@@ -49,7 +45,7 @@ const authSlice = createSlice({
         state.isCheckingAuth = false;
         state.authUser = null;
       });
-      
+
   },
 });
 
