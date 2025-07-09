@@ -24,33 +24,26 @@ import todoRoutes from './routes/todoRoutes.js';
 const allowedOrigins = [
   "https://fun-planner.vercel.app",
   "https://fun-planner-v2-git-master-omguptatech-gmailcoms-projects.vercel.app",
-  "http://localhost:5173"
+  "http://localhost:5173",
 ];
 
-// app.use(cors({
-//   origin: function (origin, callback) {
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-//   credentials: true,
-// }));
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
 };
 
+// ✅ CORS for all routes
 app.use(cors(corsOptions));
 
-app.options('/*', cors(corsOptions)); // ✅ wildcard path works correctly
+// ✅ Allow preflight for all paths (Express 5 compatible)
+app.options('*', cors(corsOptions));
+ // ✅ wildcard path works correctly
 
 
 
