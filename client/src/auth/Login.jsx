@@ -10,40 +10,42 @@ const Login = () => {
     const [password, setPassword] = useState("");
 
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
-    
+
     const loginHandler = async (e) => {
-    e.preventDefault();
+        e.preventDefault();
 
-    try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
-            method: 'POST',
-            credentials: 'include', // send & receive cookies
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email,
-                password
-            }),
-        });
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
+                method: 'POST',
+                credentials: 'include', // send & receive cookies
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                }),
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (response.ok) {
-            console.log('Login successful:', data);
-            localStorage.setItem("token", data.accesstoken);
-             navigate('/dashboard') 
-        } else {
-            console.error('Login failed:', data.message);
+            if (response.ok) {
+                console.log('Login successful:', data);
+                localStorage.setItem("token", data.accesstoken);
+                localStorage.setItem('refreshToken', data.refreshtoken);
+
+                navigate('/dashboard')
+            } else {
+                console.error('Login failed:', data.message);
+            }
+
+        } catch (error) {
+            console.error('Login error:', error.message);
         }
-
-    } catch (error) {
-        console.error('Login error:', error.message);
-    }
-};
+    };
 
 
-    const googleloginHandler = ()=>{
+    const googleloginHandler = () => {
         window.location.href = `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`;
     }
     return (
@@ -51,7 +53,7 @@ const Login = () => {
             {/* Header */}
             <header className="flex justify-between items-center px-8 py-4 border-b border-gray-800">
                 <div className="flex items-center px-20 space-x-2">
-                    <Slack className="w-8 h-8 text-white"/>
+                    <Slack className="w-8 h-8 text-white" />
                     <span className="text-white font-medium font-sans text-lg">Fun Planner</span>
                 </div>
                 <div className="flex items-center space-x-3">
@@ -135,9 +137,9 @@ const Login = () => {
                         {/* Social Buttons */}
                         <div className="space-y-3 mb-6">
 
-                            <button 
-                            onClick={googleloginHandler}
-                            className="w-full flex items-center justify-center space-x-3 bg-white border border-gray-300 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors">
+                            <button
+                                onClick={googleloginHandler}
+                                className="w-full flex items-center justify-center space-x-3 bg-white border border-gray-300 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors">
                                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                                     <path
                                         fill="#4285F4"

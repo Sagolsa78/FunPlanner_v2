@@ -52,8 +52,8 @@ app.use(session({
     collectionName: 'sessions',
   }),
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // set true in production (HTTPS)
-    sameSite: 'none', // required for cross-origin (Vercel <-> Render)
+    secure: true,
+    sameSite: 'None', // required for cross-origin (Vercel <-> Render)
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   }
