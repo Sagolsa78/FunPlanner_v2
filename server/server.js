@@ -27,7 +27,6 @@ const allowedOrigins = [
   "http://localhost:5173"
 ];
 
-// ✅ Middleware Order: CORS FIRST
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -36,11 +35,21 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  credentials: true,
 }));
 
-// ✅ OPTIONS preflight for all routes
-app.options('*', cors());
+// ✅ Must be added for preflight (OPTIONS) to work:
+app.options('*', cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+
 
 // ✅ Core middlewares
 app.use(express.json());
