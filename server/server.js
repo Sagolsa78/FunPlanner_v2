@@ -2,10 +2,9 @@ import express from 'express';
 import { config } from 'dotenv';
 config();
 
-import { app, server } from './utils/socket.js';
+import { app, server } from './utils/socket.js'; // assumes `app` is express instance
 import connectDB from './config/db.js';
 import MongoStore from 'connect-mongo';
-
 
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -21,12 +20,14 @@ import vendorRoutes from './routes/vendorRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import todoRoutes from './routes/todoRoutes.js';
 
+// ✅ CORS Allowed Origins (no trailing slashes!)
 const allowedOrigins = [
-  "https://fun-planner.vercel.app/",
+  "https://fun-planner.vercel.app",
   "https://fun-planner-v2-git-master-omguptatech-gmailcoms-projects.vercel.app",
   "http://localhost:5173"
 ];
 
+// ✅ Middleware Order: CORS FIRST
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -38,43 +39,48 @@ app.use(cors({
   credentials: true
 }));
 
-app.options('/*splat', cors());
+// ✅ OPTIONS preflight for all routes
+app.options('*', cors());
 
-
+// ✅ Core middlewares
 app.use(express.json());
 app.use(cookieParser());
+
+// ✅ Session + MongoStore + secure cookie settings
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI, // from your .env
+    mongoUrl: process.env.MONGO_URI,
     collectionName: 'sessions',
   }),
   cookie: {
-    secure: true,
-    sameSite: 'None', // required for cross-origin (Vercel <-> Render)
+    secure: process.env.NODE_ENV === 'production', // ⚠️ True only in production/https
+    sameSite: 'None', // ✅ Required for cross-origin cookies
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24, // 1 day
+    maxAge: 24 * 60 * 60 * 1000 // 1 day
   }
 }));
+
+// ✅ Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// DB connection
+// ✅ Connect to MongoDB
 connectDB();
 
-// Routes
+// ✅ Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/vendors', vendorRoutes);
 app.use('/api/chat', chatRoutes);
-app.use("/api/todos", todoRoutes);
+app.use('/api/todos', todoRoutes);
 
-// Start server
+// ✅ Start the server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`Server & Socket.io running on port ${PORT}`);
+  console.log(`✅ Server & Socket.io running on port ${PORT}`);
 });
