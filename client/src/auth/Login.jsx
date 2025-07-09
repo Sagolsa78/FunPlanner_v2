@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Slack } from "lucide-react";
+import axios from "axios";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -15,32 +16,35 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
-                method: 'POST',
-                credentials: 'include', // send & receive cookies
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
+            const response = await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
+                {
                     email,
-                    password
-                }),
-            });
+                    password,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    withCredentials: true, // 👈 enables sending/receiving cookies
+                }
+            );
 
-            const data = await response.json();
+            const data = response.data;
 
-            if (response.ok) {
-                console.log('Login successful:', data);
-                localStorage.setItem("token", data.accesstoken);
-                localStorage.setItem('refreshToken', data.refreshtoken);
+            console.log('Login successful:', data);
 
-                navigate('/dashboard')
-            } else {
-                console.error('Login failed:', data.message);
-            }
+            localStorage.setItem("token", data.accesstoken);
+            localStorage.setItem('refreshToken', data.refreshtoken);
+
+            navigate('/dashboard');
 
         } catch (error) {
-            console.error('Login error:', error.message);
+            if (error.response) {
+                console.error('Login failed:', error.response.data.message || error.response.data.msg);
+            } else {
+                console.error('Login error:', error.message);
+            }
         }
     };
 
