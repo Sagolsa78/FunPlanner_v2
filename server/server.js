@@ -26,7 +26,6 @@ const allowedOrigins = [
   "https://fun-planner-v2-git-master-omguptatech-gmailcoms-projects.vercel.app",
   "http://localhost:5173",
 ];
-
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -36,14 +35,12 @@ const corsOptions = {
     }
   },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 };
-
-// ✅ CORS for all routes
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // ✅ Good
 
-// ✅ Allow preflight for all paths (Express 5 compatible)
-app.options('*', cors(corsOptions));
- // ✅ wildcard path works correctly
 
 
 
@@ -67,11 +64,6 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000 // 1 day
   }
 }));
-
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  next();
-});
 
 // ✅ Passport
 app.use(passport.initialize());
