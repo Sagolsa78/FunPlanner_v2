@@ -20,7 +20,6 @@ import vendorRoutes from './routes/vendorRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import todoRoutes from './routes/todoRoutes.js';
 
-// ✅ CORS Allowed Origins (no trailing slashes!)
 const allowedOrigins = [
   "https://fun-planner.vercel.app",
   "https://fun-planner-v2-git-master-omguptatech-gmailcoms-projects.vercel.app",
@@ -40,20 +39,10 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// app.options('*', cors(corsOptions)); // ✅ Good
-app.use((req, res, next) => {
-  console.log("🟡 Origin received:", req.headers.origin);
-  next();
-});
 
-
-
-
-// ✅ Core middlewares
 app.use(express.json());
 app.use(cookieParser());
 
-// ✅ Session + MongoStore + secure cookie settings
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -70,14 +59,11 @@ app.use(session({
   }
 }));
 
-// ✅ Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// ✅ Connect to MongoDB
 connectDB();
 
-// ✅ Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/clients', clientRoutes);
@@ -86,8 +72,7 @@ app.use('/api/vendors', vendorRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/todos', todoRoutes);
 
-// ✅ Start the server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`✅ Server & Socket.io running on port ${PORT}`);
+  console.log(`Server & Socket.io running on port ${PORT}`);
 });
