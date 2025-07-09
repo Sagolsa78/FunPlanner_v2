@@ -22,7 +22,7 @@ import chatRoutes from './routes/chatRoutes.js';
 import todoRoutes from './routes/todoRoutes.js';
 
 const allowedOrigins = [
-  "https://fun-planner.vercel.app",
+  "https://fun-planner.vercel.app/",
   "https://fun-planner-v2-git-master-omguptatech-gmailcoms-projects.vercel.app",
   "http://localhost:5173"
 ];
