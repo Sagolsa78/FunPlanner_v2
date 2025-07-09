@@ -24,19 +24,19 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const dispatch = useDispatch();
-  const { isCheckingAuth } = useSelector((state) => state.auth);
+  // const { isCheckingAuth } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    dispatch(checkAuth());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(checkAuth());
+  // }, [dispatch]);
 
-  if (isCheckingAuth) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader className="size-10 animate-spin" />
-      </div>
-    );
-  }
+  // if (isCheckingAuth) {
+  //   return (
+  //     <div className="flex items-center justify-center h-screen">
+  //       <Loader className="size-10 animate-spin" />
+  //     </div>
+  //   );
+  // }
 
   const browserRouter = createBrowserRouter([
     { path: '/', element: <HomeLayout /> },
