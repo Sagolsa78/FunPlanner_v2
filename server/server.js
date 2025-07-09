@@ -38,17 +38,8 @@ app.use(cors({
   credentials: true,
 }));
 
-// ✅ Must be added for preflight (OPTIONS) to work:
-app.options('*', cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-}));
+app.options('/*', cors(corsOptions)); // ✅ wildcard path works correctly
+
 
 
 // ✅ Core middlewares
