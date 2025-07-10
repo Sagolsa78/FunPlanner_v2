@@ -46,6 +46,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.options('*', cors(corsOptions), (req, res) => {
+  res.sendStatus(204);
+});
+
 
 
 
