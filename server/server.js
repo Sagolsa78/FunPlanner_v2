@@ -23,7 +23,7 @@ dotenv.config();
 
 // ✅ CORS Allowed Origins (no trailing slashes!)
 const allowedOrigins = [
-  process.env.VITE_FRONTEND_URL,
+  process.env.FRONTEND_URL,
   "http://localhost:5173",
 ];
 
