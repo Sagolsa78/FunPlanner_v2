@@ -22,10 +22,10 @@ import todoRoutes from './routes/todoRoutes.js';
 
 // ✅ CORS Allowed Origins (no trailing slashes!)
 const allowedOrigins = [
-  "https://fun-planner.vercel.app",
-  "https://fun-planner-v2-git-master-omguptatech-gmailcoms-projects.vercel.app",
+  import.meta.env.VITE_FRONTEND_URL,
   "http://localhost:5173",
 ];
+
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
