@@ -45,10 +45,10 @@ app.use((req, res, next) => {
   console.log("🟡 Origin received:", req.headers.origin);
   next();
 });
-
-app.options('*', cors(corsOptions), (req, res) => {
+app.options(/^\/.*$/, cors(corsOptions), (req, res) => {
   res.sendStatus(204);
 });
+
 
 
 
