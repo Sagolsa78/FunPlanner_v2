@@ -12,7 +12,7 @@ export const fetchTodos = createAsyncThunk('todos/fetchTodos', async (_, thunkAP
 });
 
 // ➕ Add a new todo
-export const createTodo = createAsyncThunk('todos/createTodo', async ({ text, priority }, thunkAPI) => {
+export const createTodo = createAsyncThunk(`todos/createTodo/${id}`, async ({ text, priority }, thunkAPI) => {
   try {
     const res = await axiosInstance.post('/todos', { text, priority });
     return res.data;

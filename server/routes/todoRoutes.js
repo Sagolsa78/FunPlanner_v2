@@ -13,7 +13,7 @@ const router = express.Router();
 router.use(isAuthenticated); // protect all routes
 
 router.get("/", getTodos);
-router.post("/", createTodo);
+router.post("/createTodo/:id", createTodo);
 router.patch("/:id/toggle", toggleTodo);
 router.delete("/:id", deleteTodo);
 
