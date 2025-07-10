@@ -4,7 +4,9 @@ import { axiosInstance } from '../../lib/axios'
 // 📥 Fetch all todos
 export const fetchTodos = createAsyncThunk('todos/fetchTodos', async (_, thunkAPI) => {
   try {
-    const res = await axiosInstance.get('/todos');
+    const res = await axiosInstance.get('/todos',{
+      withCredentials:true,
+    });
     return res.data;
   } catch (err) {
     return thunkAPI.rejectWithValue(err.response?.data?.error || 'Failed to fetch todos');
