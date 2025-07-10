@@ -20,6 +20,8 @@ import vendorRoutes from './routes/vendorRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import todoRoutes from './routes/todoRoutes.js';
 
+dotenv.config();
+
 // ✅ CORS Allowed Origins (no trailing slashes!)
 const allowedOrigins = [
   import.meta.env.VITE_FRONTEND_URL,
