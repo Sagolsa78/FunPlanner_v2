@@ -13,10 +13,17 @@ export const getTodos = async (req, res) => {
 // Create a new todo
 export const createTodo = async (req, res) => {
   try {
+    const userId = req.user._id;
     const { text, priority } = req.body;
 
+    if (!userId) {
+  return res.status(401).json({
+    success: false,
+    msg: "Unauthorized : User Id not found."
+  });
+}
     const newTodo = await Todo.create({
-      userId: req.user._id,
+      user:userId,
       text,
       priority: priority || "normal",
     });
