@@ -14,7 +14,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "@tailwindcss/vite": "^4.1.10",
     "axios": "^1.10.0",
-    "framer-motion": "^12.19.1",
+    "framer-motion": "^12.23.3",
     "lucide-react": "^0.522.0",
     "motion": "^12.18.1",
     "next": "^15.3.4",
@@ -24,6 +24,9 @@
     "react-phone-number-input": "^3.4.12",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.2",
+    "react-spinner": "^0.2.7",
+    "react-spinners": "^0.17.0",
+    "react-toastify": "^11.0.5",
     "router": "^2.2.0",
     "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.1.10"

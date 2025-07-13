@@ -3,18 +3,19 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Slack } from "lucide-react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const[isLoading,setIsLoading]=useState(false);
+
 
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-    const loginHandler = async (e) => {
-        e.preventDefault();
-
+    const apicall = async () => {
         try {
             const response = await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
@@ -36,16 +37,28 @@ const Login = () => {
 
             localStorage.setItem("token", data.accesstoken);
             localStorage.setItem('refreshToken', data.refreshtoken);
-
+            toast.success("User Login Successfull");
             navigate('/dashboard');
 
         } catch (error) {
             if (error.response) {
+                toast.error("Got an Error! Please Try Again")
                 console.error('Login failed:', error.response.data.message || error.response.data.msg);
             } else {
+                toast.error("Got an Error! Please Try Again")
                 console.error('Login error:', error.message);
             }
         }
+
+    }
+
+    const loginHandler = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        await apicall();
+        setIsLoading(false)
+
+
     };
 
 
@@ -216,9 +229,12 @@ const Login = () => {
 
                             <button
                                 type="submit"
-                                className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-md font-medium transition mt-2"
+                                disabled={isLoading}
+                               className={`w-full py-2 px-4 border hover:cursor-pointer border-transparent rounded-md shadow-sm text-sm font-medium text-white ${isLoading ? "bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-700"
+                                } `}
+                             
                             >
-                                Log In
+                                   {isLoading ? "Logging in..." : "Login"}
                             </button>
                         </form>
 

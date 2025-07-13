@@ -20,6 +20,19 @@ const HeroSection = () => {
     setIsPopupOpen(false);
   };
 
+
+
+   const loginHandler = async ()=>{
+    try {
+      navigate('/login')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+
+
+
   const testimonials = [
     {
       name: "Sarah Johnson",
@@ -211,6 +224,7 @@ const HeroSection = () => {
             <button className="group bg-gradient-to-r from-[#2E3192] to-[] text-white px-8 py-4 rounded-xl font-semibold text-2xl
              hover:from-[#2E3192] hover:to-[] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25
               flex items-center cursor-pointer"
+              onClick={loginHandler}
               
               >
               Get Started Free
@@ -329,16 +343,16 @@ const HeroSection = () => {
 
           <section className="py-20 px-6 bg-gray-900/30 overflow-hidden relative">
             {/* Gradient overlays */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black via-black/80 to-transparent z-10"></div>
 
-            <div className="max-w-7xl mx-auto relative z-20">
+            <div className="lg:max-w-7xl md:max-w-5xl sm max-w-3xl mx-auto relative z-20">
               <div className="text-center mb-16">
                 <h2 className="text-4xl font-bold mb-4 text-white">What Our Users Say</h2>
                 <p className="text-xl text-gray-400">Join thousands of satisfied event planners</p>
               </div>
 
-              <div className="overflow-hidden">
+              <div className="overflow-hidden ">
+                <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black/80 to-transparent z-10"></div>
+                <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black/80 to-transparent z-10"></div>
                 <motion.div
                   className="flex space-x-6"
                   animate={{ x: ["0%", "-50%"] }}

@@ -4,9 +4,11 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Slack } from "lucide-react"
 import axios from 'axios'
+import { toast } from "react-toastify"
 
 const Signup = () => {
     const navigate = useNavigate();
+    const [Loading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState({
         firstname: "",
@@ -28,8 +30,7 @@ const Signup = () => {
         }))
     }
 
-    const signupHandler = async (e) => {
-        e.preventDefault();
+    const apicall = async () => {
         try {
             const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, formData, {
                 headers: {
@@ -37,105 +38,73 @@ const Signup = () => {
                 },
                 withCredentials: true
             })
+
             if (res.data.success) {
-                navigate('/dashboard')
+                // alert("User created successfully")
+                toast.success("User Created Successfully")
+                navigate('/login')
                 setFormData({
                     fullname: '',
-                    username: '',
+                    lastname: '',
                     email: '',
                     password: ''
                 })
+
             }
         } catch (error) {
             console.log(error)
-            
+            toast.error("An error occurred "+error.message);
+
+
         }
     }
-    const googleSignupHandler = ()=>{
+
+    const signupHandler = async (e) => {
+        e.preventDefault();
+        if (!formData.agreeToTerms) {
+            toast.error("please tick the checkbox")
+            return;
+
+        }
+        setIsLoading(true);
+        apicall();
+        setIsLoading(false)
+
+    }
+    const googleSignupHandler = () => {
         window.location.href = `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`;
     }
 
     return (
         <div className="min-h-screen bg-[#0b0b0f] text-gray-100">
             {/* Header */}
-            <header className="flex justify-between items-center px-8 py-4 border-b border-gray-800">
-                <div className="flex items-center space-x-2">
-                    <div className="flex items-center px-20 space-x-2">
-                        <Slack className="w-8 h-8 text-white" />
-                        <span className="text-white font-medium font-sans text-lg">Fun Planner</span>
+            <header className="w-full bg-[#0d0d10] border-b border-gray-800 shadow-sm">
+                <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center px-2 sm:px-6 lg:px-8 py-2">
+
+                    {/* Logo Section */}
+                    <div className="flex items-center gap-3 hover:cursor-pointer hover:opacity-90 transition-opacity duration-200" onClick={()=>{
+                        navigate("/")
+                    }}>
+                        <Slack className="w-7 h-7 text-purple-500" />
+                        <span className="text-white text-xl font-semibold tracking-tight" >Fun Planner</span>
                     </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                    <span className="text-gray-600">Already have an account?</span>
-                    <button
-                        onClick={() => { navigate('/login') }}
-                        className="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors cursor-pointer">
-                        Login
-                    </button>
+
+                    {/* CTA for login */}
+                    <div className="mt-4 sm:mt-0 flex items-center space-x-3 text-sm sm:text-base">
+                        <span className="text-gray-400  font-sans-serif whitespace-nowrap">Already have an account?</span>
+                        <button
+                            onClick={() => navigate('/login')}
+                            className="bg-gradient-to-tr hover:cursor-pointer from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 py-2 rounded-md font-medium transition-all duration-300 shadow hover:shadow-lg"
+                        >
+                            Login
+                        </button>
+                    </div>
                 </div>
             </header>
 
+
             {/* Main Content */}
             <div className="flex flex-col lg:flex-row w-full min-h-[calc(100vh-80px)]">
-                {/* Left Side - Features */}
-                <div className="flex-1 px-10 py-16 lg:px-16 max-w-3xl">
-                    <h1 className="text-4xl font-bold text-white mb-12 leading-tight">
-                        Plan, Organize & Host <br /> Unforgettable Events
-                    </h1>
-
-                    <div className="space-y-10">
-                        {[
-                            {
-                                title: "Smart Scheduling & Reminders",
-                                desc: "Automate event scheduling, send timely reminders to guests, and avoid last-minute surprises with our intuitive calendar system.",
-                                icon: (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M8 7V3m8 4V3m-9 8h10m-11 4h12m-5 4h5a2 2 0 002-2V7a2 2 0 00-2-2h-1"
-                                    />
-                                ),
-                            },
-                            {
-                                title: "Vendor & Guest Management",
-                                desc: "Easily track RSVPs, assign tasks to vendors, and manage guest lists in one central dashboard to ensure smooth coordination.",
-                                icon: (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M17 20h5v-2a4 4 0 00-5-4M9 20H4v-2a4 4 0 015-4m1-4a4 4 0 100-8 4 4 0 000 8zm8 0a4 4 0 100-8 4 4 0 000 8z"
-                                    />
-                                ),
-                            },
-                            {
-                                title: "Real-Time Collaboration Tools",
-                                desc: "Work with your team, clients, or co-hosts in real-time. Share notes, chat, and update event progress without switching platforms.",
-                                icon: (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-                                    />
-                                ),
-                            },
-                        ].map(({ title, desc, icon }, idx) => (
-                            <div key={idx} className="flex items-start space-x-4">
-                                <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        {icon}
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-semibold text-white mb-1">{title}</h3>
-                                    <p className="text-gray-400 leading-relaxed">{desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
 
 
                 {/* Right Side - Signup Form */}
@@ -147,7 +116,7 @@ const Signup = () => {
                         <div className="space-y-3 mb-6">
 
                             <button className="w-full flex items-center justify-center space-x-3 bg-white border border-gray-300 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors"
-                             onClick={googleSignupHandler}
+                                onClick={googleSignupHandler}
                             >
                                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                                     <path
@@ -277,7 +246,7 @@ const Signup = () => {
                                     name="agreeToTerms"
                                     checked={formData.agreeToTerms}
                                     onChange={handleInputChange}
-                                    className="mt-1 w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                                    className="mt-1 w-4 h-4 hover:cursor-pointer text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                                 />
                                 <label htmlFor="agreeToTerms" className="text-sm text-gray-600 leading-relaxed">
                                     I have read and agree to PixelBin's{" "}
@@ -294,14 +263,81 @@ const Signup = () => {
                             {/* Sign Up Button */}
                             <button
                                 type="submit"
-                                disabled={!formData.agreeToTerms}
-                                className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled={Loading}
+                                className={`w-full py-2 px-4 border hover:cursor-pointer border-transparent rounded-md shadow-sm text-sm font-medium text-white ${Loading ? "bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-700"
+                                    } `}
+
                             >
-                                Sign Up
+                                {Loading ? "Signing Up..." : "Sign Up"}
+
                             </button>
                         </form>
                     </div>
                 </div>
+
+
+                {/* Left Side - Features */}
+                <div className="flex-1 px-10 py-16 lg:px-16 max-w-3xl">
+                    <h1 className="text-4xl font-bold text-white mb-12 leading-tight">
+                        Plan, Organize & Host <br /> Unforgettable Events
+                    </h1>
+
+                    <div className="space-y-10">
+                        {[
+                            {
+                                title: "Smart Scheduling & Reminders",
+                                desc: "Automate event scheduling, send timely reminders to guests, and avoid last-minute surprises with our intuitive calendar system.",
+                                icon: (
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M8 7V3m8 4V3m-9 8h10m-11 4h12m-5 4h5a2 2 0 002-2V7a2 2 0 00-2-2h-1"
+                                    />
+                                ),
+                            },
+                            {
+                                title: "Vendor & Guest Management",
+                                desc: "Easily track RSVPs, assign tasks to vendors, and manage guest lists in one central dashboard to ensure smooth coordination.",
+                                icon: (
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M17 20h5v-2a4 4 0 00-5-4M9 20H4v-2a4 4 0 015-4m1-4a4 4 0 100-8 4 4 0 000 8zm8 0a4 4 0 100-8 4 4 0 000 8z"
+                                    />
+                                ),
+                            },
+                            {
+                                title: "Real-Time Collaboration Tools",
+                                desc: "Work with your team, clients, or co-hosts in real-time. Share notes, chat, and update event progress without switching platforms.",
+                                icon: (
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                                    />
+                                ),
+                            },
+                        ].map(({ title, desc, icon }, idx) => (
+                            <div key={idx} className="flex items-start space-x-4">
+                                <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center">
+                                    <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        {icon}
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-semibold text-white mb-1">{title}</h3>
+                                    <p className="text-gray-400 leading-relaxed">{desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+
+
             </div>
         </div>
     )
