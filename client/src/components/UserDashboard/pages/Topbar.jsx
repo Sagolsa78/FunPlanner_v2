@@ -34,10 +34,10 @@ const Topbar = ()=>{
               />
             </div>
 
-            {/* Create New */}
+            {/* Create New
             <button className="p-2 hover:bg-gray-800 rounded-md">
               <Plus className="w-4 h-4" />
-            </button>
+            </button> */}
 
             {/* Tabs */}
             <div className="flex items-center space-x-1">

@@ -10,7 +10,7 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const[isLoading,setIsLoading]=useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -68,82 +68,33 @@ const Login = () => {
     return (
         <div className="min-h-screen bg-[#0b0b0f] text-gray-100">
             {/* Header */}
-            <header className="flex justify-between items-center px-8 py-4 border-b border-gray-800">
-                <div className="flex items-center px-20 space-x-2">
-                    <Slack className="w-8 h-8 text-white" />
-                    <span className="text-white font-medium font-sans text-lg">Fun Planner</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                    <span className="text-gray-400">Don’t have an account?</span>
-                    <button
-                        onClick={() => { navigate('/signup') }}
-                        className="bg-purple-600 text-white px-4 py-2 rounded-md font-medium hover:bg-purple-700 transition cursor-pointer">
-                        Sign up
-                    </button>
+            <header className="w-full bg-[#0d0d10] border-b border-gray-800 shadow-sm">
+                <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center px-2 sm:px-6 lg:px-8 py-2">
+
+                    {/* Logo Section */}
+                    <div className="flex items-center gap-3 hover:cursor-pointer hover:opacity-90 transition-opacity duration-200" onClick={() => {
+                        navigate("/")
+                    }}>
+                        <Slack className="w-7 h-7 text-purple-500" />
+                        <span className="text-white text-xl font-semibold tracking-tight" >Fun Planner</span>
+                    </div>
+
+                    {/* CTA for login */}
+                    <div className="mt-4 sm:mt-0 flex items-center space-x-3 text-sm sm:text-base">
+                        <span className="text-gray-400  font-sans-serif whitespace-nowrap">Don't have an account?</span>
+                        <button
+                            onClick={() => navigate('/SignUp')}
+                            className="bg-gradient-to-tr hover:cursor-pointer from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 py-2 rounded-md font-medium transition-all duration-300 shadow hover:shadow-lg"
+                        >
+                            SignUp
+                        </button>
+                    </div>
                 </div>
             </header>
 
             {/* Main Content */}
             <div className="flex flex-col lg:flex-row w-full min-h-[calc(100vh-80px)]">
-                {/* Features Section */}
-                <div className="flex-1 px-10 py-16 lg:px-16 max-w-3xl">
-                    <h1 className="text-4xl font-bold text-white mb-12 leading-tight">
-                        Plan, Organize & Host<br /> Unforgettable Events
-                    </h1>
 
-                    <div className="space-y-10">
-                        {[
-                            {
-                                title: "Smart Scheduling & Reminders",
-                                desc: "Automate event scheduling, send timely reminders to guests, and avoid last-minute surprises with our intuitive calendar system.",
-                                icon: (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M8 7V3m8 4V3m-9 8h10m-11 4h12m-5 4h5a2 2 0 002-2V7a2 2 0 00-2-2h-1"
-                                    />
-                                ),
-                            },
-                            {
-                                title: "Vendor & Guest Management",
-                                desc: "Easily track RSVPs, assign tasks to vendors, and manage guest lists in one central dashboard to ensure smooth coordination.",
-                                icon: (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M17 20h5v-2a4 4 0 00-5-4M9 20H4v-2a4 4 0 015-4m1-4a4 4 0 100-8 4 4 0 000 8zm8 0a4 4 0 100-8 4 4 0 000 8z"
-                                    />
-                                ),
-                            },
-                            {
-                                title: "Real-Time Collaboration Tools",
-                                desc: "Work with your team, clients, or co-hosts in real-time. Share notes, chat, and update event progress without switching platforms.",
-                                icon: (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-                                    />
-                                ),
-                            },
-                        ].map(({ title, desc, icon }, idx) => (
-                            <div key={idx} className="flex items-start space-x-4">
-                                <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        {icon}
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-semibold text-white mb-1">{title}</h3>
-                                    <p className="text-gray-400 leading-relaxed">{desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
 
 
                 {/* Login Form */}
@@ -230,11 +181,11 @@ const Login = () => {
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                               className={`w-full py-2 px-4 border hover:cursor-pointer border-transparent rounded-md shadow-sm text-sm font-medium text-white ${isLoading ? "bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-700"
-                                } `}
-                             
+                                className={`w-full py-2 px-4 border hover:cursor-pointer border-transparent rounded-md shadow-sm text-sm font-medium text-white ${isLoading ? "bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-700"
+                                    } `}
+
                             >
-                                   {isLoading ? "Logging in..." : "Login"}
+                                {isLoading ? "Logging in..." : "Login"}
                             </button>
                         </form>
 
@@ -245,6 +196,65 @@ const Login = () => {
                             </a>
                             .
                         </p>
+                    </div>
+                </div>
+                {/* Features Section */}
+                <div className="flex-1 px-10 py-16 lg:px-16 max-w-3xl">
+                    <h1 className="text-4xl font-bold text-white mb-12 leading-tight">
+                        Plan, Organize & Host<br /> Unforgettable Events
+                    </h1>
+
+                    <div className="space-y-10">
+                        {[
+                            {
+                                title: "Smart Scheduling & Reminders",
+                                desc: "Automate event scheduling, send timely reminders to guests, and avoid last-minute surprises with our intuitive calendar system.",
+                                icon: (
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M8 7V3m8 4V3m-9 8h10m-11 4h12m-5 4h5a2 2 0 002-2V7a2 2 0 00-2-2h-1"
+                                    />
+                                ),
+                            },
+                            {
+                                title: "Vendor & Guest Management",
+                                desc: "Easily track RSVPs, assign tasks to vendors, and manage guest lists in one central dashboard to ensure smooth coordination.",
+                                icon: (
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M17 20h5v-2a4 4 0 00-5-4M9 20H4v-2a4 4 0 015-4m1-4a4 4 0 100-8 4 4 0 000 8zm8 0a4 4 0 100-8 4 4 0 000 8z"
+                                    />
+                                ),
+                            },
+                            {
+                                title: "Real-Time Collaboration Tools",
+                                desc: "Work with your team, clients, or co-hosts in real-time. Share notes, chat, and update event progress without switching platforms.",
+                                icon: (
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                                    />
+                                ),
+                            },
+                        ].map(({ title, desc, icon }, idx) => (
+                            <div key={idx} className="flex items-start space-x-4">
+                                <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center">
+                                    <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        {icon}
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-semibold text-white mb-1">{title}</h3>
+                                    <p className="text-gray-400 leading-relaxed">{desc}</p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

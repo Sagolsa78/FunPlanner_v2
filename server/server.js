@@ -43,7 +43,7 @@ app.use(cors(corsOptions));
 
 // app.options('*', cors(corsOptions)); // ✅ Good
 app.use((req, res, next) => {
-  console.log("🟡 Origin received:", req.headers.origin);
+  // console.log("🟡 Origin received:", req.headers.origin);
   next();
 });
 app.options(/^\/.*$/, cors(corsOptions), (req, res) => {
