@@ -11,24 +11,11 @@ import {
 import Sidebar from "../pages/Sidebar"
 import Topbar from "../pages/Topbar"
 import Dashboard from "../pages/Dashboard"
+import { useState } from "react"
 
 const DashboardLayout = () => {
-  const todoItems = [
-    {
-      id: "INN-1",
-      title: "Welcome to Linear",
-      hasEmoji: true,
-      emoji: "👋",
-    },
-    { id: "INN-2", title: "3 ways to navigate Linear: Command menu, keyboard or mouse" },
-    { id: "INN-3", title: "Connect to Slack" },
-    { id: "INN-4", title: "Connect GitHub or GitLab" },
-    { id: "INN-5", title: "Customize settings" },
-    { id: "INN-6", title: "Use Cycles to focus work over n-weeks" },
-    { id: "INN-7", title: "Use Projects to organize work for features or releases" },
-    { id: "INN-8", title: "Invite your teammates" },
-    { id: "INN-9", title: "Next steps" },
-  ]
+  const[sidevisible,setSidevisible]=useState(false)
+  
 
   return (
     <div className="flex flex-col h-screen bg-[#0d1117] text-white">
@@ -38,10 +25,11 @@ const DashboardLayout = () => {
       {/* Main layout with sidebar + content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <Sidebar />
+        <Sidebar onToggle={(visible)=>{setSidevisible(visible)}} />
 
         {/* Main Content Area */}
-         <main className="flex-1 overflow-auto">
+         <main className={`flex-1 overflow-auto transition-all duration-300 ${sidevisible ? "lg:ml-64 ml-0" : "ml-0"
+            }`}>
         <Dashboard />
       </main>
       </div>

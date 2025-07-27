@@ -5,7 +5,7 @@ Fun Planner V2 is a modern event planning SaaS built with React, Redux, Tailwind
 ---
 
 ## 📂 Project Structure
-
+```
 FunPlanner_v2/
 ├── client/ # React frontend
 │ ├── public/
@@ -25,7 +25,7 @@ FunPlanner_v2/
 └── README.md
 
 
-
+```
 
 
 ---
@@ -37,11 +37,10 @@ FunPlanner_v2/
 - [🛠 Technologies](#-technologies)  
 - [⚙️ Environment Setup](#️-environment-setup)  
 - [🧪 Local Setup](#-local-setup)  
-- [📜 Usage & Scripts](#-usage--scripts)  
 - [🤝 Contributing](#-contributing)  
 - [👤 Author](#-author)  
 - [📄 License](#-license)  
-- [📟 Bash Commands](#-bash-commands)  
+
 
 ---
 
@@ -99,6 +98,7 @@ Fun Planner centralizes the process:
 ## ⚙️ Environment Setup
 
 1. Duplicate `.env.example` and rename it `.env` in both `/client` and `/server`.
+
 2. Fill the following keys:
 
 **Frontend (`client/.env`)**
@@ -109,9 +109,12 @@ VITE_BACKEND_URL=http://localhost:5000
 
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/funplanner
+
 JWT_SECRET=your_jwt_secret
 
 
+
+## local setup
 ```
 # clone and navigate
 git clone https://github.com/Sagolsa78/FunPlanner_v2.git
@@ -131,6 +134,7 @@ npm run dev
 
 ## Access app at:
 Frontend → http://localhost:3000
+
 Backend → http://localhost:5000
 
 
@@ -156,4 +160,5 @@ GitHub: @Sagolsa78
 
 ## 📄 License
 This project is licensed under the MIT License.
+
 You are free to use, modify, and distribute this project as long as the license is included.

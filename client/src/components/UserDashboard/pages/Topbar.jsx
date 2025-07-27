@@ -40,7 +40,7 @@ const Topbar = ()=>{
             </button> */}
 
             {/* Tabs */}
-            <div className="flex items-center space-x-1">
+            {/* <div className="flex items-center space-x-1">
               {tabs.map((tab) => (
                 <button
                   key={tab}
@@ -52,15 +52,31 @@ const Topbar = ()=>{
                   {tab}
                 </button>
               ))}
-            </div>
+            </div> */}
 
+                        
+            
             {/* Additional Controls */}
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-end space-x-2">
               <button className="flex items-center space-x-1 px-2 py-1 text-sm text-gray-400 hover:text-white">
                 <LayoutGrid className="w-4 h-4" />
               </button>
-            </div>
+            </div> */}
           </div>
+
+
+          {/* create CLients */}
+            <button className=" justify-items-end bg-gradient-to-tr from-purple-600 to-indigo-600 hover:from-purple-700 gover:to-indigo text-white px-4 py-2  rounded-md font-medium transition-all duration-300 shadow hver:shadow-lg">
+              Create Client
+            </button>
+
+          {/* create vendors */}
+           <button className="justify-items-end bg-gradient-to-tr from-purple-600 to-indigo-600 hover:from-purple-700 gover:to-indigo text-white px-4 py-2  rounded-md font-medium transition-all duration-300 shadow hver:shadow-lg">
+              Create Vendor
+            </button>
+
+
+
 
           <div className="flex items-center space-x-2">
             <Bell className="w-4 h-4 text-gray-400" />

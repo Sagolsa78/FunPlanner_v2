@@ -48,9 +48,9 @@ const Footer = () => {
   }
 
   const socialLinks = [
-    { name: "Twitter", icon: Twitter, href: "https://x.com/low_Key_noob?t=Chyfvl5S2X_2FbZlBDSp3A&s=08", color: "hover:text-blue-400" },
-    { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/omgupta7632?igsh=MWRjMjExMG5kY2h3NA==", color: "hover:text-pink-500" },
-    { name: "LinkedIn", icon: LinkedIn, href: "https://www.linkedin.com/in/omxdev?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", color: "hover:text-blue-500" },
+    { name: "Twitter", icon: Twitter, href: "https://x.com/Sagolsa78", color: "hover:text-blue-400" },
+    { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/sahani1086", color: "hover:text-pink-500" },
+    { name: "LinkedIn", icon: LinkedIn, href: "https://www.linkedin.com/in/sahani78", color: "hover:text-blue-500" },
   ]
 
   return (
@@ -98,11 +98,11 @@ const Footer = () => {
             <div className="space-y-3 mb-6">
               <div className="flex items-center text-gray-400">
                 <Mail className="w-4 h-4 mr-3 text-purple-400" />
-                <span>omgupta.tech@gmail.com</span>
+                <span>sahanimohit5ed@gmail.com</span>
               </div>
               <div className="flex items-center text-gray-400">
                 <Phone className="w-4 h-4 mr-3 text-purple-400" />
-                <span>+91 7268823424</span>
+                <span>+91 9369*******</span>
               </div>
               <div className="flex items-center text-gray-400">
                 <MapPin className="w-4 h-4 mr-3 text-purple-400" />
